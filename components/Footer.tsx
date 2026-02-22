@@ -155,7 +155,7 @@ export default function Footer() {
                         © {new Date().getFullYear()} Purple Hub. All rights reserved.
                     </p>
                     <p className="text-gray-400 text-sm flex items-center gap-1.5">
-                        Made by <span className="text-primary-brand font-semibold">Aadesh</span>
+                        Made by <Zap className="w-3.5 h-3.5 text-primary-brand" /> <span className="text-primary-brand font-semibold">Aadesh</span>
                     </p>
                 </div>
             </div>
