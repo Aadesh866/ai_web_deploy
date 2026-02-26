@@ -411,6 +411,63 @@ export default function HomePage() {
       </section>
 
       {/* ============================================ */}
+      {/* OUR NAME STORY */}
+      {/* ============================================ */}
+      <section className="py-24 lg:py-32 bg-surface relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Video */}
+            <ScrollReveal>
+              <div className="relative">
+                <video
+                  className="w-full rounded-2xl border border-border shadow-2xl shadow-green-500/10"
+                  controls
+                  playsInline
+                  preload="metadata"
+                  poster=""
+                >
+                  <source src="/purplehub-name-story.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                {/* Glow behind video */}
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary-brand/10 via-secondary/5 to-primary-brand/10 rounded-3xl blur-3xl -z-10" />
+              </div>
+            </ScrollReveal>
+
+            {/* Right: Story Content */}
+            <ScrollReveal delay={0.2}>
+              <p className="section-label">OUR NAME STORY</p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+                Why <span className="gradient-text">Purple Hub</span>?
+              </h2>
+              <div className="space-y-5 text-text-secondary leading-relaxed">
+                <p>
+                  It started with a simple belief: <span className="text-white font-medium">people matter</span>.
+                  Not as resources. Not as headcount. As human beings with
+                  dreams, drive, and purpose.
+                </p>
+                <p>
+                  When someone discovers their <span className="text-primary-brand font-semibold">purpose</span> and
+                  pursues it with <span className="text-primary-brand font-semibold">passion</span>,
+                  something magical happens — time vanishes, effort feels effortless,
+                  and the work stops feeling like work. Pain melts away. Flow takes over.
+                </p>
+                <p>
+                  Purple Hub was born to unlock that feeling at scale — to help
+                  organizations see their people clearly, celebrate their
+                  contributions honestly, and create environments where
+                  purpose-driven work thrives.
+                </p>
+              </div>
+              <p className="mt-6 text-sm text-text-secondary italic border-l-2 border-primary-brand pl-4">
+                For.. people matter
+              </p>
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
       {/* TESTIMONIAL */}
       {/* ============================================ */}
       <section className="py-24 lg:py-32 bg-green-900/20">
