@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -102,6 +103,57 @@ const stats = [
   { value: "3", suffix: "x", label: "more likely to improve with continuous feedback" },
   { value: "40", suffix: "%", label: "reduction in manager bias with AI assistance" },
 ];
+
+function AutoPlayVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [userPaused, setUserPaused] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !userPaused) {
+          video.play().catch(() => { });
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [userPaused]);
+
+  const handleClick = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      setUserPaused(false);
+      video.muted = false;
+      video.play().catch(() => { });
+    } else {
+      setUserPaused(true);
+      video.pause();
+    }
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      className="w-full rounded-2xl border border-border shadow-2xl shadow-green-500/10 cursor-pointer"
+      muted
+      playsInline
+      preload="metadata"
+      onClick={handleClick}
+    >
+      <source src="/purplehub-name-story.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  );
+}
 
 export default function HomePage() {
   return (
@@ -419,16 +471,7 @@ export default function HomePage() {
             {/* Left: Video */}
             <ScrollReveal>
               <div className="relative">
-                <video
-                  className="w-full rounded-2xl border border-border shadow-2xl shadow-green-500/10"
-                  controls
-                  playsInline
-                  preload="metadata"
-                  poster=""
-                >
-                  <source src="/purplehub-name-story.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
+                <AutoPlayVideo />
                 {/* Glow behind video */}
                 <div className="absolute -inset-4 bg-gradient-to-r from-primary-brand/10 via-secondary/5 to-primary-brand/10 rounded-3xl blur-3xl -z-10" />
               </div>
