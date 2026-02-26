@@ -106,6 +106,7 @@ const stats = [
 
 function AutoPlayVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [showControls, setShowControls] = useState(false);
   const [userPaused, setUserPaused] = useState(false);
 
   useEffect(() => {
@@ -115,7 +116,13 @@ function AutoPlayVideo() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !userPaused) {
-          video.play().catch(() => { });
+          // Try with audio first, fall back to muted
+          video.muted = false;
+          video.play().catch(() => {
+            video.muted = true;
+            video.play().catch(() => { });
+          });
+          setShowControls(false);
         } else {
           video.pause();
         }
@@ -132,10 +139,11 @@ function AutoPlayVideo() {
     if (!video) return;
     if (video.paused) {
       setUserPaused(false);
-      video.muted = false;
+      setShowControls(false);
       video.play().catch(() => { });
     } else {
       setUserPaused(true);
+      setShowControls(true);
       video.pause();
     }
   }, []);
@@ -144,7 +152,7 @@ function AutoPlayVideo() {
     <video
       ref={videoRef}
       className="w-full rounded-2xl border border-border shadow-2xl shadow-green-500/10 cursor-pointer"
-      muted
+      controls={showControls}
       playsInline
       preload="metadata"
       onClick={handleClick}
