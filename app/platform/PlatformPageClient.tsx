@@ -109,7 +109,7 @@ function TimelineSection() {
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <ScrollReveal className="text-center mb-16">
                     <p className="section-label">HOW IT WORKS</p>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark">
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
                         From chaos to <span className="gradient-text">clarity</span> in 4 steps
                     </h2>
                 </ScrollReveal>
@@ -138,7 +138,7 @@ function TimelineSection() {
                                     <step.icon className="w-8 h-8 text-primary-brand" />
                                 </div>
                                 <p className="text-xs font-mono text-primary-brand font-bold mb-2">{step.num}</p>
-                                <h3 className="text-xl font-bold text-primary-dark font-heading mb-2">{step.title}</h3>
+                                <h3 className="text-xl font-bold text-white font-heading mb-2">{step.title}</h3>
                                 <p className="text-text-secondary text-sm">{step.description}</p>
                             </motion.div>
                         ))}
@@ -216,7 +216,7 @@ export default function PlatformPageClient() {
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">CAPABILITIES</p>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
                             Everything you need for{" "}
                             <span className="gradient-text">modern performance</span>
                         </h2>
@@ -229,7 +229,7 @@ export default function PlatformPageClient() {
                                     <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center card-icon transition-all duration-400 shadow-lg`}>
                                         <feature.icon className="w-7 h-7 text-white" />
                                     </div>
-                                    <h3 className="text-xl font-bold text-primary-dark font-heading">
+                                    <h3 className="text-xl font-bold text-white font-heading">
                                         {feature.title}
                                     </h3>
                                     <p className="text-text-secondary leading-relaxed">
@@ -284,7 +284,7 @@ export default function PlatformPageClient() {
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">INTEGRATIONS</p>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
                             Works with your <span className="gradient-text">existing tools</span>
                         </h2>
                     </ScrollReveal>
@@ -314,7 +314,7 @@ export default function PlatformPageClient() {
             <section className="py-24 lg:py-32">
                 <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
                     <ScrollReveal>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark mb-6">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
                             See it in action
                         </h2>
                         <p className="text-lg text-text-secondary mb-10">

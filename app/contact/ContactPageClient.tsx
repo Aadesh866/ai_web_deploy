@@ -68,7 +68,7 @@ function FAQItem({ faq, isOpen, onToggle }: { faq: typeof faqs[0]; isOpen: boole
                 className="w-full flex items-center justify-between p-6 text-left hover:bg-surface/50 transition-colors"
                 aria-expanded={isOpen}
             >
-                <span className="text-base font-heading font-bold text-primary-dark pr-4">{faq.question}</span>
+                <span className="text-base font-heading font-bold text-white pr-4">{faq.question}</span>
                 <ChevronDown
                     className={`w-5 h-5 text-text-secondary flex-shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
                 />
@@ -301,7 +301,7 @@ export default function ContactPageClient() {
                                             <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-6">
                                                 <Send className="w-8 h-8 text-green-500" />
                                             </div>
-                                            <h3 className="text-2xl font-bold text-primary-dark font-heading mb-3">
+                                            <h3 className="text-2xl font-bold text-white font-heading mb-3">
                                                 Message Sent!
                                             </h3>
                                             <p className="text-text-secondary max-w-md mx-auto">
@@ -318,7 +318,7 @@ export default function ContactPageClient() {
                             <ScrollReveal delay={0.2}>
                                 <div className="interactive-card p-6">
                                     <Calendar className="w-8 h-8 text-primary-brand mb-4" />
-                                    <h3 className="text-lg font-bold text-primary-dark font-heading mb-2">
+                                    <h3 className="text-lg font-bold text-white font-heading mb-2">
                                         Prefer to talk?
                                     </h3>
                                     <p className="text-text-secondary text-sm mb-4">
@@ -333,7 +333,7 @@ export default function ContactPageClient() {
                             <ScrollReveal delay={0.3}>
                                 <div className="interactive-card p-6">
                                     <MessageCircle className="w-8 h-8 text-secondary mb-4" />
-                                    <h3 className="text-lg font-bold text-primary-dark font-heading mb-2">
+                                    <h3 className="text-lg font-bold text-white font-heading mb-2">
                                         Need immediate help?
                                     </h3>
                                     <p className="text-text-secondary text-sm mb-4">
@@ -347,7 +347,7 @@ export default function ContactPageClient() {
 
                             <ScrollReveal delay={0.4}>
                                 <div className="p-6 rounded-2xl bg-surface">
-                                    <h3 className="text-sm font-heading font-semibold text-primary-dark uppercase tracking-wider mb-4">
+                                    <h3 className="text-sm font-heading font-semibold text-white uppercase tracking-wider mb-4">
                                         Get in touch
                                     </h3>
                                     <div className="space-y-3">
@@ -387,7 +387,7 @@ export default function ContactPageClient() {
                 <div className="max-w-3xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">FAQ</p>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
                             Frequently asked <span className="gradient-text">questions</span>
                         </h2>
                     </ScrollReveal>

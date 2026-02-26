@@ -193,7 +193,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="section-label">THE PROBLEM</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
               Legacy systems weren't built for{" "}
               <span className="gradient-text">modern work</span>
             </h2>
@@ -212,7 +212,7 @@ export default function HomePage() {
                   <div className="w-14 h-14 rounded-2xl bg-green-900/30 flex items-center justify-center card-icon transition-all duration-400">
                     <card.icon className="w-7 h-7 text-text-secondary" />
                   </div>
-                  <h3 className="text-xl font-bold text-primary-dark font-heading">
+                  <h3 className="text-xl font-bold text-white font-heading">
                     {card.title}
                   </h3>
                   <p className="text-text-secondary leading-relaxed">
@@ -234,7 +234,7 @@ export default function HomePage() {
             {/* Left Content */}
             <ScrollReveal>
               <p className="section-label">THE SHIFT</p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark mb-8">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-8">
                 Work has changed.{" "}
                 <span className="gradient-text">Has your performance system?</span>
               </h2>
@@ -280,7 +280,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="section-label">THE PLATFORM</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
               Finally, answers to the{" "}
               <span className="gradient-text">hard questions</span>
             </h2>
@@ -293,7 +293,7 @@ export default function HomePage() {
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-900/30 to-blue-900/30 flex items-center justify-center card-icon transition-all duration-400">
                     <card.icon className="w-8 h-8 text-primary-brand" />
                   </div>
-                  <h3 className="text-xl font-bold text-primary-dark font-heading">
+                  <h3 className="text-xl font-bold text-white font-heading">
                     {card.title}
                   </h3>
                   <p className="text-text-secondary leading-relaxed flex-1">
@@ -320,7 +320,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <ScrollReveal>
               <p className="section-label">THE DIFFERENCE</p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark mb-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
                 Not Another{" "}
                 <span className="gradient-text">HRMS Add-On</span>
               </h2>
@@ -376,7 +376,7 @@ export default function HomePage() {
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center mb-4 card-icon transition-all duration-400 shadow-lg`}>
                       <item.icon className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className="text-base font-bold text-primary-dark font-heading mb-2">
+                    <h3 className="text-base font-bold text-white font-heading mb-2">
                       {item.title}
                     </h3>
                     <p className="text-sm text-text-secondary leading-relaxed">
@@ -417,7 +417,7 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center">
             <Quote className="w-16 h-16 text-primary-brand/20 mx-auto mb-8" />
-            <blockquote className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-primary-dark leading-snug mb-8">
+            <blockquote className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-white leading-snug mb-8">
               &ldquo;For the first time, we can see performance clearly across
               our matrix organization without relying on a single manager&apos;s
               perspective.&rdquo;
@@ -427,7 +427,7 @@ export default function HomePage() {
                 JC
               </div>
               <div className="text-left">
-                <p className="font-semibold text-primary-dark">Jessica Chen</p>
+                <p className="font-semibold text-white">Jessica Chen</p>
                 <p className="text-sm text-text-secondary">
                   VP of People, TechCorp Inc.
                 </p>

@@ -157,7 +157,7 @@ export default function ResourcesPageClient() {
                                     <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-brand/10 text-primary-brand text-xs font-semibold w-fit mb-4">
                                         <BarChart3 className="w-3 h-3" /> Featured Report
                                     </span>
-                                    <h2 className="text-2xl lg:text-3xl font-bold text-primary-dark font-heading mb-4">
+                                    <h2 className="text-2xl lg:text-3xl font-bold text-white font-heading mb-4">
                                         The State of Continuous Performance Management 2024
                                     </h2>
                                     <p className="text-text-secondary leading-relaxed mb-6">
@@ -175,7 +175,7 @@ export default function ResourcesPageClient() {
                                             <div className="flex justify-between items-start mb-6">
                                                 <div>
                                                     <p className="text-xs text-text-secondary">Annual Report</p>
-                                                    <p className="text-lg font-bold text-primary-dark font-heading">2024</p>
+                                                    <p className="text-lg font-bold text-white font-heading">2024</p>
                                                 </div>
                                                 <div className="w-10 h-10 rounded-xl bg-primary-brand/10 flex items-center justify-center">
                                                     <BarChart3 className="w-5 h-5 text-primary-brand" />
@@ -194,7 +194,7 @@ export default function ResourcesPageClient() {
                                         </div>
                                         <div className="absolute -bottom-4 -right-4 w-32 h-20 bg-white rounded-xl shadow-lg border border-border p-3">
                                             <p className="text-[8px] text-text-secondary mb-1">Key Finding</p>
-                                            <p className="text-xs font-bold text-primary-dark">3x improvement</p>
+                                            <p className="text-xs font-bold text-white">3x improvement</p>
                                             <p className="text-[8px] text-text-secondary">with AI feedback</p>
                                         </div>
                                     </div>
@@ -210,7 +210,7 @@ export default function ResourcesPageClient() {
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-12">
                         <p className="section-label">BROWSE RESOURCES</p>
-                        <h2 className="text-3xl sm:text-4xl font-bold text-primary-dark">
+                        <h2 className="text-3xl sm:text-4xl font-bold text-white">
                             Latest insights
                         </h2>
                     </ScrollReveal>
@@ -250,7 +250,7 @@ export default function ResourcesPageClient() {
                                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface text-text-secondary text-xs font-medium w-fit mb-4">
                                                 <Icon className="w-3 h-3" /> {article.category}
                                             </span>
-                                            <h3 className="text-lg font-bold text-primary-dark font-heading mb-3 group-hover:text-primary-brand transition-colors">
+                                            <h3 className="text-lg font-bold text-white font-heading mb-3 group-hover:text-primary-brand transition-colors">
                                                 {article.title}
                                             </h3>
                                             <p className="text-text-secondary text-sm leading-relaxed mb-6 flex-1">
@@ -284,7 +284,7 @@ export default function ResourcesPageClient() {
                             <div className="w-16 h-16 rounded-2xl bg-green-900/30 flex items-center justify-center mx-auto mb-6">
                                 <Mail className="w-8 h-8 text-primary-brand" />
                             </div>
-                            <h2 className="text-2xl sm:text-3xl font-bold text-primary-dark font-heading mb-3">
+                            <h2 className="text-2xl sm:text-3xl font-bold text-white font-heading mb-3">
                                 Stay in the loop
                             </h2>
                             <p className="text-text-secondary mb-8">
@@ -311,7 +311,7 @@ export default function ResourcesPageClient() {
                 <div className="max-w-4xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">UPCOMING EVENTS</p>
-                        <h2 className="text-3xl sm:text-4xl font-bold text-primary-dark">
+                        <h2 className="text-3xl sm:text-4xl font-bold text-white">
                             Learn from the experts
                         </h2>
                     </ScrollReveal>
@@ -326,7 +326,7 @@ export default function ResourcesPageClient() {
                                         </div>
                                         <div>
                                             <p className="text-xs text-text-secondary mb-1">{event.date} · {event.type}</p>
-                                            <h3 className="font-heading font-bold text-primary-dark">{event.title}</h3>
+                                            <h3 className="font-heading font-bold text-white">{event.title}</h3>
                                         </div>
                                     </div>
                                     <button className="px-5 py-2.5 border-2 border-primary-brand text-primary-brand rounded-xl font-semibold text-sm hover:bg-primary-brand hover:text-white transition-all duration-300 whitespace-nowrap">

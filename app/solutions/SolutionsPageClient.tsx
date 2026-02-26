@@ -112,7 +112,7 @@ function AccordionItem({ item, isOpen, onToggle }: { item: typeof useCases[0]; i
                 className="w-full flex items-center justify-between p-6 text-left hover:bg-surface/50 transition-colors"
                 aria-expanded={isOpen}
             >
-                <span className="text-lg font-heading font-bold text-primary-dark">{item.title}</span>
+                <span className="text-lg font-heading font-bold text-white">{item.title}</span>
                 <ChevronDown
                     className={`w-5 h-5 text-text-secondary transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
                 />
@@ -186,7 +186,7 @@ export default function SolutionsPageClient() {
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">BY INDUSTRY</p>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
                             Tailored for your <span className="gradient-text">sector</span>
                         </h2>
                     </ScrollReveal>
@@ -203,7 +203,7 @@ export default function SolutionsPageClient() {
                                             {industry.metric}
                                         </span>
                                     </div>
-                                    <h3 className="text-xl font-bold text-primary-dark font-heading">{industry.title}</h3>
+                                    <h3 className="text-xl font-bold text-white font-heading">{industry.title}</h3>
                                     <p className="text-text-secondary leading-relaxed">{industry.description}</p>
                                     <Link
                                         href="/contact"
@@ -223,7 +223,7 @@ export default function SolutionsPageClient() {
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">BY ROLE</p>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
                             Solutions for every <span className="gradient-text">stakeholder</span>
                         </h2>
                     </ScrollReveal>
@@ -236,7 +236,7 @@ export default function SolutionsPageClient() {
                                         <div className="w-12 h-12 rounded-2xl bg-green-900/30 flex items-center justify-center card-icon transition-all duration-400">
                                             <role.icon className="w-6 h-6 text-primary-brand" />
                                         </div>
-                                        <h3 className="text-xl font-bold text-primary-dark font-heading">{role.title}</h3>
+                                        <h3 className="text-xl font-bold text-white font-heading">{role.title}</h3>
                                     </div>
                                     <div className="mb-5">
                                         <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-3">Pain Points</p>
@@ -267,7 +267,7 @@ export default function SolutionsPageClient() {
                 <div className="max-w-3xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">USE CASES</p>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
                             Solving real <span className="gradient-text">challenges</span>
                         </h2>
                     </ScrollReveal>
@@ -295,7 +295,7 @@ export default function SolutionsPageClient() {
                                 <div>
                                     <p className="section-label">SUCCESS STORY</p>
                                     <Quote className="w-10 h-10 text-primary-brand/20 mb-4" />
-                                    <blockquote className="text-xl font-heading font-bold text-primary-dark leading-snug mb-6">
+                                    <blockquote className="text-xl font-heading font-bold text-white leading-snug mb-6">
                                         &ldquo;Purple Hub transformed how we think about talent
                                         development. Our manager effectiveness scores jumped 45% in the
                                         first year.&rdquo;
@@ -305,7 +305,7 @@ export default function SolutionsPageClient() {
                                             RM
                                         </div>
                                         <div>
-                                            <p className="font-semibold text-primary-dark text-sm">Rachel Martinez</p>
+                                            <p className="font-semibold text-white text-sm">Rachel Martinez</p>
                                             <p className="text-xs text-text-secondary">CHRO, ScaleUp Inc.</p>
                                         </div>
                                     </div>
@@ -325,7 +325,7 @@ export default function SolutionsPageClient() {
                                     ].map((metric) => (
                                         <div key={metric.label} className="p-4 rounded-xl bg-surface border border-border text-center">
                                             <metric.icon className="w-6 h-6 text-primary-brand mx-auto mb-2" />
-                                            <p className="text-2xl font-bold text-primary-dark font-heading">{metric.value}</p>
+                                            <p className="text-2xl font-bold text-white font-heading">{metric.value}</p>
                                             <p className="text-xs text-text-secondary">{metric.label}</p>
                                         </div>
                                     ))}
@@ -341,7 +341,7 @@ export default function SolutionsPageClient() {
                 <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
                     <ScrollReveal>
                         <p className="section-label">ROI CALCULATOR</p>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-dark mb-6">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
                             Calculate your <span className="gradient-text">potential savings</span>
                         </h2>
                         <p className="text-lg text-text-secondary mb-10">
