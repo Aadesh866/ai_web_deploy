@@ -119,7 +119,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm text-sm text-blue-200 mb-8"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm text-sm text-green-200 mb-8"
             >
               <Sparkles className="w-4 h-4" />
               AI-Powered Performance Intelligence
@@ -131,7 +131,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.6 }}
-              className="mt-8 text-lg sm:text-xl text-blue-200/80 max-w-2xl mx-auto leading-relaxed"
+              className="mt-8 text-lg sm:text-xl text-green-200/80 max-w-2xl mx-auto leading-relaxed"
             >
               The performance intelligence platform built for how work actually
               happens today
@@ -145,7 +145,7 @@ export default function HomePage() {
             >
               <Link
                 href="/contact"
-                className="group inline-flex items-center gap-2 px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-base hover:bg-blue-600 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-1"
+                className="group inline-flex items-center gap-2 px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-base hover:bg-green-600 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-1"
               >
                 Get a Demo
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -169,7 +169,7 @@ export default function HomePage() {
         </div>
 
         {/* Bottom gradient fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
       </section>
 
       {/* ============================================ */}
@@ -189,7 +189,7 @@ export default function HomePage() {
       {/* ============================================ */}
       {/* PROBLEM SECTION */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32 bg-white">
+      <section className="py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="section-label">THE PROBLEM</p>
@@ -209,7 +209,7 @@ export default function HomePage() {
                 className={i >= 3 ? "lg:col-span-1 lg:mx-auto lg:max-w-md" : ""}
               >
                 <div className="interactive-card group h-full flex flex-col items-start gap-4 p-8">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center card-icon transition-all duration-400">
+                  <div className="w-14 h-14 rounded-2xl bg-green-900/30 flex items-center justify-center card-icon transition-all duration-400">
                     <card.icon className="w-7 h-7 text-text-secondary" />
                   </div>
                   <h3 className="text-xl font-bold text-primary-dark font-heading">
@@ -257,7 +257,7 @@ export default function HomePage() {
                   </motion.div>
                 ))}
               </div>
-              <div className="p-6 rounded-2xl bg-white border border-border shadow-sm">
+              <div className="p-6 rounded-2xl bg-surface border border-border shadow-sm">
                 <p className="text-text-secondary leading-relaxed italic">
                   &ldquo;Expecting a single manager to evaluate performance
                   holistically is unrealistic—and unfair.&rdquo;
@@ -276,7 +276,7 @@ export default function HomePage() {
       {/* ============================================ */}
       {/* PLATFORM PREVIEW */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32 bg-white">
+      <section className="py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="section-label">THE PLATFORM</p>
@@ -290,7 +290,7 @@ export default function HomePage() {
             {platformCards.map((card) => (
               <StaggerItem key={card.title}>
                 <div className="interactive-card group h-full flex flex-col items-start gap-5 p-8">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center card-icon transition-all duration-400">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-900/30 to-blue-900/30 flex items-center justify-center card-icon transition-all duration-400">
                     <card.icon className="w-8 h-8 text-primary-brand" />
                   </div>
                   <h3 className="text-xl font-bold text-primary-dark font-heading">
@@ -337,7 +337,7 @@ export default function HomePage() {
               </p>
               <Link
                 href="/platform"
-                className="group inline-flex items-center gap-2 px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-base hover:bg-blue-600 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-1"
+                className="group inline-flex items-center gap-2 px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-base hover:bg-green-600 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-1"
               >
                 See the Platform
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -413,7 +413,7 @@ export default function HomePage() {
       {/* ============================================ */}
       {/* TESTIMONIAL */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32 bg-blue-50">
+      <section className="py-24 lg:py-32 bg-green-900/20">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center">
             <Quote className="w-16 h-16 text-primary-brand/20 mx-auto mb-8" />
@@ -455,7 +455,7 @@ export default function HomePage() {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
               Turn the page on broken performance management
             </h2>
-            <p className="text-lg text-blue-200/70 mb-10">
+            <p className="text-lg text-green-200/70 mb-10">
               If you believe these questions deserve clear answers, let&apos;s
               talk.
             </p>
@@ -467,7 +467,7 @@ export default function HomePage() {
               />
               <Link
                 href="/contact"
-                className="w-full sm:w-auto px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold hover:bg-blue-600 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-1 text-center"
+                className="w-full sm:w-auto px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold hover:bg-green-600 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-1 text-center"
               >
                 Get Started
               </Link>

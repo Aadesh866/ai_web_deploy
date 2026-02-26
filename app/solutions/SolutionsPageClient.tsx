@@ -29,7 +29,7 @@ const industries = [
         title: "Technology & SaaS",
         description: "Manage performance across agile, cross-functional product teams with dynamic goal tracking.",
         metric: "42% faster review cycles",
-        gradient: "from-purple-500 to-violet-400",
+        gradient: "from-green-500 to-emerald-400",
     },
     {
         icon: Factory,
@@ -43,7 +43,7 @@ const industries = [
         title: "Professional Services",
         description: "Track impact across multiple client engagements and project-based work.",
         metric: "28% improvement in utilization",
-        gradient: "from-purple-500 to-violet-400",
+        gradient: "from-green-500 to-emerald-400",
     },
     {
         icon: HeartPulse,
@@ -141,7 +141,7 @@ export default function SolutionsPageClient() {
     return (
         <>
             {/* HERO */}
-            <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-gradient-to-br from-primary-dark via-purple-900 to-primary-dark overflow-hidden">
+            <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-gradient-to-br from-primary-dark via-green-900 to-primary-dark overflow-hidden">
                 <div className="absolute inset-0 opacity-20">
                     <div
                         className="absolute inset-0"
@@ -154,7 +154,7 @@ export default function SolutionsPageClient() {
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-purple-200 mb-6"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-green-200 mb-6"
                     >
                         <Sparkles className="w-4 h-4" />
                         Solutions
@@ -174,7 +174,7 @@ export default function SolutionsPageClient() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
-                        className="mt-6 text-lg text-purple-200/80 max-w-2xl mx-auto"
+                        className="mt-6 text-lg text-green-200/80 max-w-2xl mx-auto"
                     >
                         Industry-specific solutions that address your unique challenges
                     </motion.p>
@@ -182,7 +182,7 @@ export default function SolutionsPageClient() {
             </section>
 
             {/* BY INDUSTRY */}
-            <section className="py-24 lg:py-32 bg-white">
+            <section className="py-24 lg:py-32">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">BY INDUSTRY</p>
@@ -233,7 +233,7 @@ export default function SolutionsPageClient() {
                             <StaggerItem key={role.title}>
                                 <div className="interactive-card group h-full p-8">
                                     <div className="flex items-center gap-4 mb-6">
-                                        <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center card-icon transition-all duration-400">
+                                        <div className="w-12 h-12 rounded-2xl bg-green-900/30 flex items-center justify-center card-icon transition-all duration-400">
                                             <role.icon className="w-6 h-6 text-primary-brand" />
                                         </div>
                                         <h3 className="text-xl font-bold text-primary-dark font-heading">{role.title}</h3>
@@ -249,7 +249,7 @@ export default function SolutionsPageClient() {
                                             ))}
                                         </ul>
                                     </div>
-                                    <div className="p-4 rounded-xl bg-purple-50/50 border border-purple-100">
+                                    <div className="p-4 rounded-xl bg-green-900/20 border border-green-900/30">
                                         <p className="text-sm text-text-primary leading-relaxed">
                                             <span className="font-semibold text-primary-brand">Solution:</span>{" "}
                                             {role.solution}
@@ -263,7 +263,7 @@ export default function SolutionsPageClient() {
             </section>
 
             {/* USE CASES */}
-            <section className="py-24 lg:py-32 bg-white">
+            <section className="py-24 lg:py-32">
                 <div className="max-w-3xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">USE CASES</p>
@@ -287,10 +287,10 @@ export default function SolutionsPageClient() {
             </section>
 
             {/* SUCCESS STORY */}
-            <section className="py-24 lg:py-32 bg-purple-50">
+            <section className="py-24 lg:py-32 bg-green-900/20">
                 <div className="max-w-5xl mx-auto px-6 lg:px-8">
                     <ScrollReveal>
-                        <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-xl shadow-purple-500/5 border border-border">
+                        <div className="bg-surface rounded-3xl p-8 lg:p-12 shadow-xl shadow-green-500/5 border border-border">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                                 <div>
                                     <p className="section-label">SUCCESS STORY</p>
@@ -337,7 +337,7 @@ export default function SolutionsPageClient() {
             </section>
 
             {/* ROI SECTION */}
-            <section className="py-24 lg:py-32 bg-white">
+            <section className="py-24 lg:py-32">
                 <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
                     <ScrollReveal>
                         <p className="section-label">ROI CALCULATOR</p>
@@ -350,7 +350,7 @@ export default function SolutionsPageClient() {
                         </p>
                         <Link
                             href="/contact"
-                            className="inline-flex items-center gap-2 px-10 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-lg hover:bg-purple-600 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/30 hover:-translate-y-1"
+                            className="inline-flex items-center gap-2 px-10 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-lg hover:bg-green-600 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-1"
                         >
                             Get Your ROI Estimate <ArrowRight className="w-5 h-5" />
                         </Link>

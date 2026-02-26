@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
     Zap,
     Twitter,
@@ -40,21 +41,25 @@ const socialLinks = [
 
 export default function Footer() {
     return (
-        <footer className="bg-primary-dark text-white">
+        <footer className="bg-primary-dark text-white border-t border-border">
             {/* Main Footer */}
             <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
                     {/* Brand Column */}
                     <div className="lg:col-span-1">
-                        <Link href="/" className="flex items-center gap-2 mb-5">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-brand to-secondary flex items-center justify-center">
-                                <Zap className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="font-heading text-xl font-bold text-white">
-                                Purple Hub
-                            </span>
+                        <Link href="/" className="inline-block mb-5">
+                            <Image
+                                src="/logo.png"
+                                alt="Purple Hub Logo"
+                                width={140}
+                                height={40}
+                                className="h-9 w-auto"
+                            />
                         </Link>
-                        <p className="text-gray-300 text-sm leading-relaxed mb-6">
+                        <p className="text-gray-400 text-sm leading-relaxed mb-2">
+                            For.. people matter
+                        </p>
+                        <p className="text-gray-400 text-sm leading-relaxed mb-6">
                             The performance intelligence platform built for how work actually
                             happens today.
                         </p>
@@ -64,7 +69,7 @@ export default function Footer() {
                                     key={social.label}
                                     href={social.href}
                                     aria-label={social.label}
-                                    className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-300 hover:text-primary-brand hover:bg-white/10 transition-all duration-300"
+                                    className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-primary-brand hover:bg-white/10 transition-all duration-300"
                                 >
                                     <social.icon className="w-4 h-4" />
                                 </a>
@@ -82,7 +87,7 @@ export default function Footer() {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
-                                        className="text-gray-300 text-sm hover:text-white transition-colors duration-300"
+                                        className="text-gray-400 text-sm hover:text-primary-brand transition-colors duration-300"
                                     >
                                         {link.label}
                                     </Link>
@@ -101,7 +106,7 @@ export default function Footer() {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
-                                        className="text-gray-300 text-sm hover:text-white transition-colors duration-300"
+                                        className="text-gray-400 text-sm hover:text-primary-brand transition-colors duration-300"
                                     >
                                         {link.label}
                                     </Link>
@@ -116,15 +121,15 @@ export default function Footer() {
                             Get in Touch
                         </h3>
                         <ul className="space-y-3 mb-8">
-                            <li className="flex items-center gap-3 text-gray-300 text-sm">
+                            <li className="flex items-center gap-3 text-gray-400 text-sm">
                                 <Mail className="w-4 h-4 text-primary-brand flex-shrink-0" />
                                 purplehub@gmail.com
                             </li>
-                            <li className="flex items-center gap-3 text-gray-300 text-sm">
+                            <li className="flex items-center gap-3 text-gray-400 text-sm">
                                 <Phone className="w-4 h-4 text-primary-brand flex-shrink-0" />
                                 +91 8904096161
                             </li>
-                            <li className="flex items-start gap-3 text-gray-300 text-sm">
+                            <li className="flex items-start gap-3 text-gray-400 text-sm">
                                 <MapPin className="w-4 h-4 text-primary-brand flex-shrink-0 mt-0.5" />
                                 Bangalore, India
                             </li>
@@ -137,7 +142,7 @@ export default function Footer() {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
-                                        className="text-gray-300 text-sm hover:text-white transition-colors duration-300"
+                                        className="text-gray-400 text-sm hover:text-primary-brand transition-colors duration-300"
                                     >
                                         {link.label}
                                     </Link>
@@ -151,10 +156,10 @@ export default function Footer() {
             {/* Bottom Bar */}
             <div className="border-t border-white/10">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-gray-500 text-sm">
                         © {new Date().getFullYear()} Purple Hub. All rights reserved.
                     </p>
-                    <p className="text-gray-400 text-sm flex items-center gap-1.5">
+                    <p className="text-gray-500 text-sm flex items-center gap-1.5">
                         Made by <Zap className="w-3.5 h-3.5 text-primary-brand" /> <span className="text-primary-brand font-semibold">Aadesh</span>
                     </p>
                 </div>

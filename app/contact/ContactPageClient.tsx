@@ -111,12 +111,12 @@ export default function ContactPageClient() {
     };
 
     const inputClasses =
-        "w-full px-5 py-3.5 rounded-xl border border-border text-text-primary bg-white placeholder-text-secondary/50 focus:outline-none focus:border-primary-brand focus:ring-2 focus:ring-primary-brand/20 transition-all font-[var(--font-body)]";
+        "w-full px-5 py-3.5 rounded-xl border border-border text-text-primary bg-surface placeholder-text-secondary/50 focus:outline-none focus:border-primary-brand focus:ring-2 focus:ring-primary-brand/20 transition-all font-[var(--font-body)]";
 
     return (
         <>
             {/* HERO */}
-            <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-gradient-to-br from-primary-dark via-purple-900 to-primary-dark overflow-hidden">
+            <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-gradient-to-br from-primary-dark via-green-900 to-primary-dark overflow-hidden">
                 <div className="absolute inset-0 opacity-20">
                     <div
                         className="absolute inset-0"
@@ -129,7 +129,7 @@ export default function ContactPageClient() {
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-purple-200 mb-6"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-green-200 mb-6"
                     >
                         <Sparkles className="w-4 h-4" />
                         Contact
@@ -149,7 +149,7 @@ export default function ContactPageClient() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
-                        className="mt-6 text-lg text-purple-200/80 max-w-2xl mx-auto"
+                        className="mt-6 text-lg text-green-200/80 max-w-2xl mx-auto"
                     >
                         Ready to transform how your organization approaches talent?
                     </motion.p>
@@ -157,7 +157,7 @@ export default function ContactPageClient() {
             </section>
 
             {/* CONTACT FORM + SIDEBAR */}
-            <section className="py-24 lg:py-32 bg-white">
+            <section className="py-24 lg:py-32">
                 <div className="max-w-6xl mx-auto px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
                         {/* Form */}
@@ -285,7 +285,7 @@ export default function ContactPageClient() {
 
                                             <button
                                                 type="submit"
-                                                className="group inline-flex items-center gap-2 px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-base hover:bg-purple-600 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/30 hover:-translate-y-1"
+                                                className="group inline-flex items-center gap-2 px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-base hover:bg-green-600 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-1"
                                             >
                                                 <Send className="w-4 h-4" />
                                                 Send Message
@@ -369,7 +369,7 @@ export default function ContactPageClient() {
                                             <a
                                                 key={i}
                                                 href="#"
-                                                className="w-9 h-9 rounded-lg bg-white border border-border flex items-center justify-center text-text-secondary hover:text-primary-brand hover:border-primary-brand transition-all"
+                                                className="w-9 h-9 rounded-lg bg-surface border border-border flex items-center justify-center text-text-secondary hover:text-primary-brand hover:border-primary-brand transition-all"
                                             >
                                                 <Icon className="w-4 h-4" />
                                             </a>
@@ -421,12 +421,12 @@ export default function ContactPageClient() {
                         <h2 className="text-3xl sm:text-4xl font-bold text-white mb-8">
                             Ready to get started?
                         </h2>
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-purple-200/70">
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-green-200/70">
                             <div className="flex items-center gap-2">
                                 <Mail className="w-5 h-5 text-primary-brand" />
                                 purplehub@gmail.com
                             </div>
-                            <div className="hidden sm:block w-1 h-1 rounded-full bg-purple-200/30" />
+                            <div className="hidden sm:block w-1 h-1 rounded-full bg-green-200/30" />
                             <div className="flex items-center gap-2">
                                 <Phone className="w-5 h-5 text-primary-brand" />
                                 +91 8904096161

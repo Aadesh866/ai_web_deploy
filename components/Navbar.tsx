@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -41,12 +42,14 @@ export default function Navbar() {
                 <div className="flex items-center justify-between h-20">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-brand to-secondary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <Zap className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="font-heading text-xl font-bold text-primary-dark">
-                            Purple Hub
-                        </span>
+                        <Image
+                            src="/logo.png"
+                            alt="Purple Hub Logo"
+                            width={160}
+                            height={45}
+                            className="h-10 w-auto group-hover:scale-105 transition-transform duration-300"
+                            priority
+                        />
                     </Link>
 
                     {/* Desktop Nav */}
@@ -58,8 +61,8 @@ export default function Navbar() {
                                 className={cn(
                                     "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300",
                                     pathname === link.href
-                                        ? "text-primary-brand bg-purple-50"
-                                        : "text-text-secondary hover:text-primary-brand hover:bg-purple-50/50"
+                                        ? "text-primary-brand bg-green-900/30"
+                                        : "text-gray-300 hover:text-primary-brand hover:bg-green-900/20"
                                 )}
                             >
                                 {link.label}
@@ -71,13 +74,13 @@ export default function Navbar() {
                     <div className="flex items-center gap-3">
                         <Link
                             href="/contact"
-                            className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-primary-brand text-white rounded-xl font-medium text-sm hover:bg-purple-600 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:-translate-y-0.5"
+                            className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-primary-brand text-white rounded-xl font-medium text-sm hover:bg-green-600 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25 hover:-translate-y-0.5"
                         >
                             Get a Demo
                         </Link>
                         <button
                             onClick={() => setMobileOpen(!mobileOpen)}
-                            className="md:hidden p-2 rounded-lg hover:bg-surface transition-colors"
+                            className="md:hidden p-2 rounded-lg text-gray-300 hover:bg-surface transition-colors"
                             aria-label="Toggle menu"
                         >
                             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -93,7 +96,7 @@ export default function Navbar() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-white border-t border-border overflow-hidden"
+                        className="md:hidden bg-surface border-t border-border overflow-hidden"
                     >
                         <div className="px-6 py-4 space-y-1">
                             {navLinks.map((link) => (
@@ -103,8 +106,8 @@ export default function Navbar() {
                                     className={cn(
                                         "block px-4 py-3 rounded-lg text-sm font-medium transition-colors",
                                         pathname === link.href
-                                            ? "text-primary-brand bg-purple-50"
-                                            : "text-text-secondary hover:text-primary-brand hover:bg-surface"
+                                            ? "text-primary-brand bg-green-900/30"
+                                            : "text-gray-300 hover:text-primary-brand hover:bg-surface"
                                     )}
                                 >
                                     {link.label}
@@ -112,7 +115,7 @@ export default function Navbar() {
                             ))}
                             <Link
                                 href="/contact"
-                                className="block mt-4 text-center px-5 py-3 bg-primary-brand text-white rounded-xl font-medium text-sm hover:bg-purple-600 transition-colors"
+                                className="block mt-4 text-center px-5 py-3 bg-primary-brand text-white rounded-xl font-medium text-sm hover:bg-green-600 transition-colors"
                             >
                                 Get a Demo
                             </Link>

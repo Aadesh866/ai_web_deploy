@@ -37,8 +37,8 @@ export function ParticleField() {
             <svg className="absolute inset-0 w-full h-full opacity-10">
                 <defs>
                     <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.5" />
-                        <stop offset="100%" stopColor="#06B6D4" stopOpacity="0" />
+                        <stop offset="0%" stopColor="#22C55E" stopOpacity="0.5" />
+                        <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
                     </linearGradient>
                 </defs>
                 {Array.from({ length: 12 }).map((_, i) => {
@@ -65,18 +65,18 @@ export function DashboardMockup() {
     return (
         <div className="relative w-full max-w-4xl mx-auto">
             <div
-                className="relative bg-white rounded-2xl shadow-2xl shadow-blue-500/10 border border-border overflow-hidden"
+                className="relative bg-surface rounded-2xl shadow-2xl shadow-green-500/10 border border-border overflow-hidden"
                 style={{ transform: "perspective(1200px) rotateY(-2deg) rotateX(3deg)" }}
             >
                 {/* Title Bar */}
-                <div className="flex items-center gap-2 px-4 py-3 bg-surface border-b border-border">
+                <div className="flex items-center gap-2 px-4 py-3 bg-primary-dark border-b border-border">
                     <div className="flex gap-1.5">
                         <div className="w-3 h-3 rounded-full bg-red-400" />
                         <div className="w-3 h-3 rounded-full bg-yellow-400" />
                         <div className="w-3 h-3 rounded-full bg-green-400" />
                     </div>
                     <div className="flex-1 flex justify-center">
-                        <div className="px-4 py-1 bg-white rounded-md text-xs text-text-secondary border border-border">
+                        <div className="px-4 py-1 bg-surface rounded-md text-xs text-text-secondary border border-border">
                             app.purplehub.ai/dashboard
                         </div>
                     </div>
@@ -104,7 +104,7 @@ export function DashboardMockup() {
                                 { label: "Reviews", value: "42", color: "from-accent-warm to-amber-400" },
                                 { label: "Insights", value: "18", color: "from-purple-400 to-violet-500" },
                             ].map((stat) => (
-                                <div key={stat.label} className="p-3 rounded-xl bg-white border border-border shadow-sm">
+                                <div key={stat.label} className="p-3 rounded-xl bg-primary-dark border border-border shadow-sm">
                                     <p className="text-[10px] text-text-secondary mb-1">{stat.label}</p>
                                     <p className={`text-lg font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
                                         {stat.value}
@@ -116,7 +116,7 @@ export function DashboardMockup() {
                         {/* Charts Row */}
                         <div className="grid grid-cols-2 gap-3">
                             {/* Line Chart */}
-                            <div className="p-4 rounded-xl bg-white border border-border shadow-sm">
+                            <div className="p-4 rounded-xl bg-primary-dark border border-border shadow-sm">
                                 <p className="text-xs font-semibold text-text-primary mb-3">Performance Trend</p>
                                 <div className="h-24 flex items-end gap-1">
                                     {[40, 55, 45, 60, 70, 65, 80, 75, 85, 90, 82, 95].map((h, i) => (
@@ -130,7 +130,7 @@ export function DashboardMockup() {
                             </div>
 
                             {/* Circular Progress */}
-                            <div className="p-4 rounded-xl bg-white border border-border shadow-sm">
+                            <div className="p-4 rounded-xl bg-primary-dark border border-border shadow-sm">
                                 <p className="text-xs font-semibold text-text-primary mb-3">AI Insights</p>
                                 <div className="flex items-center gap-4">
                                     <div className="w-20 h-20 relative">
@@ -138,13 +138,13 @@ export function DashboardMockup() {
                                             <path
                                                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                                 fill="none"
-                                                stroke="#E2E8F0"
+                                                stroke="#334155"
                                                 strokeWidth="2.5"
                                             />
                                             <path
                                                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                                 fill="none"
-                                                stroke="#3B82F6"
+                                                stroke="#22C55E"
                                                 strokeWidth="2.5"
                                                 strokeDasharray="78, 100"
                                                 strokeLinecap="round"
@@ -167,7 +167,7 @@ export function DashboardMockup() {
                         </div>
 
                         {/* Feedback Timeline */}
-                        <div className="p-4 rounded-xl bg-white border border-border shadow-sm">
+                        <div className="p-4 rounded-xl bg-primary-dark border border-border shadow-sm">
                             <p className="text-xs font-semibold text-text-primary mb-3">Recent Feedback</p>
                             <div className="space-y-2">
                                 {[
@@ -268,12 +268,12 @@ export function NetworkVisualization() {
             <svg className="w-full h-full" viewBox="0 0 100 100">
                 <defs>
                     <linearGradient id="connGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="#06B6D4" stopOpacity="0.2" />
+                        <stop offset="0%" stopColor="#22C55E" stopOpacity="0.4" />
+                        <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.2" />
                     </linearGradient>
                     <radialGradient id="nodeGrad">
-                        <stop offset="0%" stopColor="#3B82F6" />
-                        <stop offset="100%" stopColor="#06B6D4" />
+                        <stop offset="0%" stopColor="#22C55E" />
+                        <stop offset="100%" stopColor="#3B82F6" />
                     </radialGradient>
                     <filter id="glow">
                         <feGaussianBlur stdDeviation="1.5" result="blur" />
@@ -324,7 +324,7 @@ export function NetworkVisualization() {
                                 y={node.y + node.size / 2 + 4}
                                 textAnchor="middle"
                                 className="text-[3px] font-medium"
-                                fill="#64748B"
+                                fill="#94A3B8"
                             >
                                 {node.label}
                             </text>
@@ -346,8 +346,8 @@ export function LogoMarquee() {
 
     return (
         <div className="relative overflow-hidden py-8">
-            <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
-            <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
+            <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10" />
             <div className="flex gap-16 animate-marquee">
                 {[...logos, ...logos].map((logo, i) => (
                     <div

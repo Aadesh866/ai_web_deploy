@@ -27,7 +27,7 @@ const articles = [
         excerpt: "New data shows organizations with real-time feedback see 31% lower turnover rates across all demographics.",
         author: "Dr. Maya Patel",
         readTime: "8 min read",
-        gradient: "from-purple-500 to-violet-400",
+        gradient: "from-green-500 to-emerald-400",
     },
     {
         category: "Guides",
@@ -107,7 +107,7 @@ export default function ResourcesPageClient() {
     return (
         <>
             {/* HERO */}
-            <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-gradient-to-br from-primary-dark via-purple-900 to-primary-dark overflow-hidden">
+            <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-gradient-to-br from-primary-dark via-green-900 to-primary-dark overflow-hidden">
                 <div className="absolute inset-0 opacity-20">
                     <div
                         className="absolute inset-0"
@@ -120,7 +120,7 @@ export default function ResourcesPageClient() {
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-purple-200 mb-6"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-green-200 mb-6"
                     >
                         <Sparkles className="w-4 h-4" />
                         Resources
@@ -140,7 +140,7 @@ export default function ResourcesPageClient() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
-                        className="mt-6 text-lg text-purple-200/80 max-w-2xl mx-auto"
+                        className="mt-6 text-lg text-green-200/80 max-w-2xl mx-auto"
                     >
                         Research, guides, and best practices from performance management experts
                     </motion.p>
@@ -148,7 +148,7 @@ export default function ResourcesPageClient() {
             </section>
 
             {/* FEATURED CONTENT */}
-            <section className="py-24 lg:py-32 bg-white">
+            <section className="py-24 lg:py-32">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal>
                         <div className="interactive-card group p-0 overflow-hidden">
@@ -165,11 +165,11 @@ export default function ResourcesPageClient() {
                                         practices, tools, and strategies driving superior performance
                                         outcomes. Learn what separates leaders from laggards.
                                     </p>
-                                    <button className="inline-flex items-center gap-2 px-6 py-3 bg-primary-brand text-white rounded-xl font-semibold text-sm hover:bg-purple-600 transition-all duration-300 w-fit hover:shadow-lg hover:shadow-purple-500/25 hover:-translate-y-0.5">
+                                    <button className="inline-flex items-center gap-2 px-6 py-3 bg-primary-brand text-white rounded-xl font-semibold text-sm hover:bg-green-600 transition-all duration-300 w-fit hover:shadow-lg hover:shadow-green-500/25 hover:-translate-y-0.5">
                                         <Download className="w-4 h-4" /> Download Now
                                     </button>
                                 </div>
-                                <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-8 lg:p-12 flex items-center justify-center min-h-[280px]">
+                                <div className="bg-gradient-to-br from-green-900/30 to-blue-900/30 p-8 lg:p-12 flex items-center justify-center min-h-[280px]">
                                     <div className="relative w-full max-w-xs">
                                         <div className="bg-white rounded-2xl shadow-xl p-8 border border-border">
                                             <div className="flex justify-between items-start mb-6">
@@ -222,7 +222,7 @@ export default function ResourcesPageClient() {
                                 key={cat}
                                 onClick={() => setActiveFilter(cat)}
                                 className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${activeFilter === cat
-                                    ? "bg-primary-brand text-white shadow-lg shadow-purple-500/25"
+                                    ? "bg-primary-brand text-white shadow-lg shadow-green-500/25"
                                     : "bg-white text-text-secondary border border-border hover:border-primary-brand hover:text-primary-brand"
                                     }`}
                             >
@@ -277,11 +277,11 @@ export default function ResourcesPageClient() {
             </section>
 
             {/* NEWSLETTER */}
-            <section className="py-24 lg:py-32 bg-white">
+            <section className="py-24 lg:py-32">
                 <div className="max-w-2xl mx-auto px-6 lg:px-8">
                     <ScrollReveal>
                         <div className="interactive-card text-center p-10 lg:p-14">
-                            <div className="w-16 h-16 rounded-2xl bg-purple-50 flex items-center justify-center mx-auto mb-6">
+                            <div className="w-16 h-16 rounded-2xl bg-green-900/30 flex items-center justify-center mx-auto mb-6">
                                 <Mail className="w-8 h-8 text-primary-brand" />
                             </div>
                             <h2 className="text-2xl sm:text-3xl font-bold text-primary-dark font-heading mb-3">
@@ -297,7 +297,7 @@ export default function ResourcesPageClient() {
                                     placeholder="Your work email"
                                     className="flex-1 px-5 py-3 rounded-xl border border-border text-text-primary placeholder-text-secondary/50 focus:outline-none focus:border-primary-brand focus:ring-2 focus:ring-primary-brand/20 transition-all"
                                 />
-                                <button className="px-6 py-3 bg-primary-brand text-white rounded-xl font-semibold text-sm hover:bg-purple-600 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:-translate-y-0.5 whitespace-nowrap">
+                                <button className="px-6 py-3 bg-primary-brand text-white rounded-xl font-semibold text-sm hover:bg-green-600 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25 hover:-translate-y-0.5 whitespace-nowrap">
                                     Subscribe
                                 </button>
                             </div>
@@ -321,7 +321,7 @@ export default function ResourcesPageClient() {
                             <StaggerItem key={event.title}>
                                 <div className="interactive-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-14 h-14 rounded-xl bg-purple-50 flex flex-col items-center justify-center text-primary-brand flex-shrink-0">
+                                        <div className="w-14 h-14 rounded-xl bg-green-900/30 flex flex-col items-center justify-center text-primary-brand flex-shrink-0">
                                             <Calendar className="w-5 h-5" />
                                         </div>
                                         <div>
