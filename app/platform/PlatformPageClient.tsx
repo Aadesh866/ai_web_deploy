@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import {
     MessageSquare,
@@ -101,51 +101,67 @@ const integrations = [
 ];
 
 function TimelineSection() {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start start", "end end"],
+    });
+
+    // Line width follows scroll
+    const lineWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
     return (
-        <section className="py-24 lg:py-32" ref={ref}>
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                <ScrollReveal className="text-center mb-16">
-                    <p className="section-label">HOW IT WORKS</p>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-                        From chaos to <span className="gradient-text">clarity</span> in 4 steps
-                    </h2>
-                </ScrollReveal>
-
-                <div className="relative">
-                    {/* Connecting Line */}
-                    <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-[2px] bg-border -translate-y-1/2">
-                        <motion.div
-                            className="h-full bg-gradient-to-r from-primary-brand to-secondary"
-                            initial={{ width: "0%" }}
-                            animate={isInView ? { width: "100%" } : {}}
-                            transition={{ duration: 2, delay: 0.5, ease: "easeInOut" }}
-                        />
+        <div ref={containerRef} style={{ height: `${(steps.length + 1) * 100}vh` }} className="relative">
+            <div className="sticky top-0 h-screen flex items-center">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+                    <div className="text-center mb-16">
+                        <p className="section-label">HOW IT WORKS</p>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+                            From chaos to <span className="gradient-text">clarity</span> in 4 steps
+                        </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-                        {steps.map((step, i) => (
+                    <div className="relative">
+                        {/* Connecting Line */}
+                        <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-[2px] bg-border -translate-y-1/2">
                             <motion.div
-                                key={step.num}
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                                transition={{ delay: 0.5 + i * 0.3, duration: 0.6 }}
-                                className="text-center"
-                            >
-                                <div className="w-20 h-20 rounded-2xl bg-surface border-2 border-border shadow-lg mx-auto mb-6 flex items-center justify-center group hover:border-primary-brand hover:shadow-xl hover:shadow-green-500/10 transition-all duration-400">
-                                    <step.icon className="w-8 h-8 text-primary-brand" />
-                                </div>
-                                <p className="text-xs font-mono text-primary-brand font-bold mb-2">{step.num}</p>
-                                <h3 className="text-xl font-bold text-white font-heading mb-2">{step.title}</h3>
-                                <p className="text-text-secondary text-sm">{step.description}</p>
-                            </motion.div>
-                        ))}
+                                className="h-full bg-gradient-to-r from-primary-brand to-secondary"
+                                style={{ width: lineWidth }}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+                            {steps.map((step, i) => (
+                                <TimelineStep key={step.num} step={step} index={i} total={steps.length} scrollYProgress={scrollYProgress} />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    );
+}
+
+function TimelineStep({ step, index, total, scrollYProgress }: {
+    step: typeof steps[0];
+    index: number;
+    total: number;
+    scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
+}) {
+    const start = (index + 0.5) / (total + 1);
+    const end = (index + 1) / (total + 1);
+    const opacity = useTransform(scrollYProgress, [start, end], [0, 1]);
+    const y = useTransform(scrollYProgress, [start, end], [40, 0]);
+
+    return (
+        <motion.div style={{ opacity, y }} className="text-center">
+            <div className="w-20 h-20 rounded-2xl bg-surface border-2 border-border shadow-lg mx-auto mb-6 flex items-center justify-center group hover:border-primary-brand hover:shadow-xl hover:shadow-green-500/10 transition-all duration-400">
+                <step.icon className="w-8 h-8 text-primary-brand" />
+            </div>
+            <p className="text-xs font-mono text-primary-brand font-bold mb-2">{step.num}</p>
+            <h3 className="text-xl font-bold text-white font-heading mb-2">{step.title}</h3>
+            <p className="text-text-secondary text-sm">{step.description}</p>
+        </motion.div>
     );
 }
 
