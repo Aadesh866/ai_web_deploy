@@ -21,7 +21,6 @@ import {
     Sparkles,
 } from "lucide-react";
 import ScrollReveal, { StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
-import ScrollPinnedSteps from "@/components/ScrollPinnedSteps";
 
 const features = [
     {
@@ -102,20 +101,50 @@ const integrations = [
 ];
 
 function TimelineSection() {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-100px" });
+
     return (
-        <section className="bg-background">
-            <div className="max-w-5xl mx-auto px-6 lg:px-8">
-                <ScrollReveal className="text-center pt-24 pb-8">
+        <section className="py-24 lg:py-32" ref={ref}>
+            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                <ScrollReveal className="text-center mb-16">
                     <p className="section-label">HOW IT WORKS</p>
                     <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
                         From chaos to <span className="gradient-text">clarity</span> in 4 steps
                     </h2>
-                    <p className="mt-4 text-text-secondary max-w-2xl mx-auto">
-                        Scroll down to discover each step
-                    </p>
                 </ScrollReveal>
+
+                <div className="relative">
+                    {/* Connecting Line */}
+                    <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-[2px] bg-border -translate-y-1/2">
+                        <motion.div
+                            className="h-full bg-gradient-to-r from-primary-brand to-secondary"
+                            initial={{ width: "0%" }}
+                            animate={isInView ? { width: "100%" } : {}}
+                            transition={{ duration: 2, delay: 0.5, ease: "easeInOut" }}
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+                        {steps.map((step, i) => (
+                            <motion.div
+                                key={step.num}
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                                transition={{ delay: 0.5 + i * 0.3, duration: 0.6 }}
+                                className="text-center"
+                            >
+                                <div className="w-20 h-20 rounded-2xl bg-surface border-2 border-border shadow-lg mx-auto mb-6 flex items-center justify-center group hover:border-primary-brand hover:shadow-xl hover:shadow-green-500/10 transition-all duration-400">
+                                    <step.icon className="w-8 h-8 text-primary-brand" />
+                                </div>
+                                <p className="text-xs font-mono text-primary-brand font-bold mb-2">{step.num}</p>
+                                <h3 className="text-xl font-bold text-white font-heading mb-2">{step.title}</h3>
+                                <p className="text-text-secondary text-sm">{step.description}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
             </div>
-            <ScrollPinnedSteps steps={steps} />
         </section>
     );
 }
