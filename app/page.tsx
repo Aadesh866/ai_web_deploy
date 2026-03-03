@@ -37,6 +37,7 @@ import {
   LayoutGrid,
 } from "lucide-react";
 import ScrollReveal, { StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
+import ScrollPinnedSteps from "@/components/ScrollPinnedSteps";
 import {
   ParticleField,
   AnimatedCounter,
@@ -563,43 +564,21 @@ export default function HomePage() {
       </section>
 
       {/* ============================================ */}
-      {/* HOW DOES IT WORK? (from brochure 003) */}
+      {/* HOW DOES IT WORK? - Scroll Pinned (from brochure 003) */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
+      <section className="bg-background">
+        <div className="max-w-5xl mx-auto px-6 lg:px-8">
+          <ScrollReveal className="text-center pt-24 pb-8">
             <p className="section-label">THE PROCESS</p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
               How does it <span className="gradient-text">work</span>?
             </h2>
+            <p className="mt-4 text-text-secondary max-w-2xl mx-auto">
+              Scroll down to discover each step of the journey
+            </p>
           </ScrollReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {howItWorks.map((step, i) => (
-              <ScrollReveal key={step.num} delay={i * 0.1}>
-                <motion.div
-                  className="interactive-card group p-8 h-full relative overflow-hidden"
-                  whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
-                >
-                  {/* Step number watermark */}
-                  <span className="absolute top-4 right-6 text-6xl font-bold text-white/5 font-heading">{step.num}</span>
-                  <div className="relative z-10">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-900/40 to-blue-900/40 flex items-center justify-center mb-4 group-hover:shadow-lg group-hover:shadow-green-500/10 transition-all duration-300">
-                      <step.icon className="w-7 h-7 text-primary-brand" />
-                    </div>
-                    <p className="text-xs font-mono text-primary-brand font-bold mb-2">STEP {step.num}</p>
-                    <h3 className="text-lg font-bold text-white font-heading mb-2">{step.title}</h3>
-                    <p className="text-sm text-text-secondary leading-relaxed">{step.description}</p>
-                  </div>
-                  {/* Connector line for flow */}
-                  {i < howItWorks.length - 1 && (
-                    <div className="hidden lg:block absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-[2px] bg-gradient-to-r from-primary-brand/40 to-transparent z-20" />
-                  )}
-                </motion.div>
-              </ScrollReveal>
-            ))}
-          </div>
         </div>
+        <ScrollPinnedSteps steps={howItWorks} />
       </section>
 
       {/* ============================================ */}
