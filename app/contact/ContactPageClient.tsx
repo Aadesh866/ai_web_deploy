@@ -40,15 +40,15 @@ const faqs = [
     },
     {
         question: "Can you integrate with our existing HRIS?",
-        answer: "Yes! Purple Hub integrates with 50+ HRIS and productivity tools including Workday, BambooHR, SAP SuccessFactors, ADP, Slack, Microsoft Teams, and more. Our API also supports custom integrations.",
+        answer: "Yes! PurpleHub integrates with 50+ HRIS and productivity tools including Workday, BambooHR, SAP SuccessFactors, ADP, Slack, Microsoft Teams, and more. Our API also supports custom integrations.",
     },
     {
         question: "How do you handle data security?",
-        answer: "We take security seriously. Purple Hub is SOC 2 Type II certified, GDPR compliant, and ISO 27001 certified. All data is encrypted at rest and in transit. We offer single-tenant deployment options for enterprise clients.",
+        answer: "We take security seriously. PurpleHub is SOC 2 Type II certified, GDPR compliant, and ISO 27001 certified. All data is encrypted at rest and in transit. We offer single-tenant deployment options for enterprise clients.",
     },
     {
         question: "What's the pricing model?",
-        answer: "Purple Hub uses a per-employee-per-month pricing model with volume discounts. We offer Starter, Professional, and Enterprise tiers. Contact us for a custom quote based on your team size and needs.",
+        answer: "PurpleHub uses a per-employee-per-month pricing model with volume discounts. We offer Starter, Professional, and Enterprise tiers. Contact us for a custom quote based on your team size and needs.",
     },
     {
         question: "Do you offer change management support?",
@@ -56,7 +56,7 @@ const faqs = [
     },
     {
         question: "Is there a minimum team size?",
-        answer: "Purple Hub is designed for organizations with 50+ employees. For teams of 50-200, our Starter plan provides all core features. Larger organizations benefit from our Professional and Enterprise plans with advanced analytics and customization.",
+        answer: "PurpleHub is designed for organizations with 50+ employees. For teams of 50-200, our Starter plan provides all core features. Larger organizations benefit from our Professional and Enterprise plans with advanced analytics and customization.",
     },
 ];
 

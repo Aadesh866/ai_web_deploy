@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ResourcesPageClient from "./ResourcesPageClient";
 
 export const metadata: Metadata = {
-    title: "Resources | Purple Hub",
+    title: "Resources | PurpleHub",
     description:
         "Research, guides, and best practices from performance management experts. Stay ahead with insights on continuous feedback, AI in HR, and modern talent strategies.",
 };

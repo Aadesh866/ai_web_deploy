@@ -50,7 +50,7 @@ export default function Footer() {
                         <Link href="/" className="inline-block mb-5">
                             <Image
                                 src="/logo.png"
-                                alt="Purple Hub Logo"
+                                alt="PurpleHub Logo"
                                 width={140}
                                 height={40}
                                 className="h-9 w-auto"
@@ -157,7 +157,7 @@ export default function Footer() {
             <div className="border-t border-white/10">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
                     <p className="text-gray-500 text-sm">
-                        © {new Date().getFullYear()} Purple Hub. All rights reserved.
+                        © {new Date().getFullYear()} PurpleHub. All rights reserved.
                     </p>
                     <p className="text-gray-500 text-sm flex items-center gap-1.5">
                         Made by <Zap className="w-3.5 h-3.5 text-primary-brand" /> <span className="text-primary-brand font-semibold">Aadesh</span>

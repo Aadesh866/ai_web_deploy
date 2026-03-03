@@ -41,7 +41,7 @@ const articles = [
         category: "Case Studies",
         title: "How ScaleUp Inc. Transformed Performance Culture",
         excerpt: "From annual reviews to continuous intelligence: a 2,000-person company's 18-month transformation journey.",
-        author: "Purple Hub Team",
+        author: "PurpleHub Team",
         readTime: "6 min read",
         gradient: "from-green-500 to-emerald-400",
     },

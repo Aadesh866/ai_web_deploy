@@ -318,7 +318,7 @@ export default function PlatformPageClient() {
                             See it in action
                         </h2>
                         <p className="text-lg text-text-secondary mb-10">
-                            Schedule a personalized demo and see how Purple Hub can transform
+                            Schedule a personalized demo and see how PurpleHub can transform
                             your organization&apos;s performance management.
                         </p>
                         <Link
