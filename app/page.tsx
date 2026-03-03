@@ -265,7 +265,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.8, duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
-            className="floating relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-green-500/10"
+            className="relative max-w-5xl mx-auto rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-green-500/10"
           >
             <Image
               src="/brochure-hero.jpg"
@@ -275,7 +275,7 @@ export default function HomePage() {
               className="w-full h-auto"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-background/10 to-transparent" />
           </motion.div>
         </div>
 
