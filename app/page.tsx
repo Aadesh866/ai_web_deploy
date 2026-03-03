@@ -39,7 +39,6 @@ import {
 import ScrollReveal, { StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 import {
   ParticleField,
-  DashboardMockup,
   AnimatedCounter,
   NetworkVisualization,
   LogoMarquee,
@@ -261,14 +260,22 @@ export default function HomePage() {
             </motion.div>
           </div>
 
-          {/* Dashboard Mockup */}
+          {/* Hero Image */}
           <motion.div
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.8, duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
-            className="floating"
+            className="floating relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-green-500/10"
           >
-            <DashboardMockup />
+            <Image
+              src="/brochure-hero.jpg"
+              alt="PurpleHub — AI-Powered Performance Intelligence"
+              width={1400}
+              height={800}
+              className="w-full h-auto"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
           </motion.div>
         </div>
 
@@ -460,11 +467,11 @@ export default function HomePage() {
       </section>
 
       {/* ============================================ */}
-      {/* SALIENT FEATURES (from brochure 003) */}
+      {/* SALIENT FEATURES - Animated Timeline (from brochure 003) */}
       {/* ============================================ */}
       <section className="py-24 lg:py-32 bg-surface">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
+        <div className="max-w-5xl mx-auto px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-20">
             <p className="section-label">SALIENT FEATURES</p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
               A performance management system that&apos;s{" "}
@@ -472,22 +479,85 @@ export default function HomePage() {
             </h2>
           </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {salientFeatures.map((feature, i) => (
-              <ScrollReveal key={feature.num} delay={i * 0.1}>
-                <motion.div
-                  className="interactive-card group p-6 text-center h-full flex flex-col items-center"
-                  whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                >
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500/20 to-blue-500/20 border-2 border-primary-brand/30 flex items-center justify-center mb-4 group-hover:border-primary-brand group-hover:shadow-lg group-hover:shadow-green-500/20 transition-all duration-300">
-                    <feature.icon className="w-7 h-7 text-primary-brand" />
+          {/* Vertical Timeline */}
+          <div className="relative">
+            {/* Center line */}
+            <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary-brand/50 via-secondary/30 to-primary-brand/50 -translate-x-1/2 hidden lg:block" />
+
+            <div className="space-y-16 lg:space-y-0">
+              {salientFeatures.map((feature, i) => {
+                const isLeft = i % 2 === 0;
+                return (
+                  <div key={feature.num} className="relative lg:mb-24 last:lg:mb-0">
+                    {/* Center Circle with Number */}
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      viewport={{ once: true, margin: "-80px" }}
+                      transition={{ duration: 0.5, delay: 0.1, type: "spring", stiffness: 200 }}
+                      className="hidden lg:flex absolute left-1/2 top-0 -translate-x-1/2 z-10 w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-blue-500 items-center justify-center shadow-xl shadow-green-500/30 border-4 border-background"
+                    >
+                      <span className="text-white font-bold text-lg font-heading">{i + 1}</span>
+                    </motion.div>
+
+                    {/* Content Card - alternating sides */}
+                    <div className={`lg:grid lg:grid-cols-2 lg:gap-16 items-center`}>
+                      {/* Left side */}
+                      <motion.div
+                        initial={{ opacity: 0, x: isLeft ? -60 : 0 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
+                        className={`${isLeft ? '' : 'hidden lg:block'}`}
+                      >
+                        {isLeft ? (
+                          <div className="interactive-card group p-8 lg:text-right">
+                            <div className="flex items-center gap-3 lg:justify-end mb-4">
+                              <div className="lg:hidden w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center shadow-lg">
+                                <span className="text-white font-bold font-heading">{i + 1}</span>
+                              </div>
+                              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-900/40 to-blue-900/40 flex items-center justify-center group-hover:shadow-lg group-hover:shadow-green-500/10 transition-all duration-300">
+                                <feature.icon className="w-6 h-6 text-primary-brand" />
+                              </div>
+                            </div>
+                            <h3 className="text-xl font-bold text-white font-heading mb-3">{feature.title}</h3>
+                            <p className="text-text-secondary leading-relaxed">{feature.description}</p>
+                          </div>
+                        ) : (
+                          <div />
+                        )}
+                      </motion.div>
+
+                      {/* Right side */}
+                      <motion.div
+                        initial={{ opacity: 0, x: isLeft ? 0 : 60 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
+                        className={`${!isLeft ? '' : 'hidden lg:block'}`}
+                      >
+                        {!isLeft ? (
+                          <div className="interactive-card group p-8">
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className="lg:hidden w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center shadow-lg">
+                                <span className="text-white font-bold font-heading">{i + 1}</span>
+                              </div>
+                              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-900/40 to-blue-900/40 flex items-center justify-center group-hover:shadow-lg group-hover:shadow-green-500/10 transition-all duration-300">
+                                <feature.icon className="w-6 h-6 text-primary-brand" />
+                              </div>
+                            </div>
+                            <h3 className="text-xl font-bold text-white font-heading mb-3">{feature.title}</h3>
+                            <p className="text-text-secondary leading-relaxed">{feature.description}</p>
+                          </div>
+                        ) : (
+                          <div />
+                        )}
+                      </motion.div>
+                    </div>
                   </div>
-                  <span className="text-xs font-mono text-primary-brand font-bold mb-2">{feature.num}</span>
-                  <h3 className="text-base font-bold text-white font-heading mb-2">{feature.title}</h3>
-                  <p className="text-xs text-text-secondary leading-relaxed">{feature.description}</p>
-                </motion.div>
-              </ScrollReveal>
-            ))}
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -619,54 +689,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ============================================ */}
-      {/* INSIGHTFUL ANALYTICS - Platform UI (brochure 004) */}
-      {/* ============================================ */}
-      <section className="py-24 lg:py-32 bg-surface">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <p className="section-label">INSIGHTFUL ANALYTICS</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-              Insightful Analytics for{" "}
-              <span className="gradient-text">Organization</span>
-            </h2>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-              From competency profiles to talent landscapes — see everything that matters at a glance
-            </p>
-          </ScrollReveal>
 
-          <ScrollReveal>
-            <div className="relative rounded-2xl overflow-hidden border border-border shadow-2xl shadow-green-500/5">
-              <Image
-                src="/platform-ui.jpg"
-                alt="PurpleHub Platform — Insightful Analytics Dashboard"
-                width={1200}
-                height={900}
-                className="w-full h-auto"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
-            </div>
-          </ScrollReveal>
-
-          {/* UI Highlights */}
-          <StaggerContainer staggerDelay={0.1} className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-            {[
-              { label: "Competency Profile", desc: "Track skills across dimensions" },
-              { label: "Values Manifested", desc: "Radar view of cultural alignment" },
-              { label: "Assignment Velocity", desc: "Speed vs. company benchmarks" },
-              { label: "Talent Landscape", desc: "Identify top 30% performers live" },
-            ].map((item) => (
-              <StaggerItem key={item.label}>
-                <div className="text-center p-4 rounded-xl bg-surface border border-border">
-                  <p className="text-sm font-bold text-white font-heading mb-1">{item.label}</p>
-                  <p className="text-xs text-text-secondary">{item.desc}</p>
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
 
       {/* ============================================ */}
       {/* THE DIFFERENCE SECTION */}
