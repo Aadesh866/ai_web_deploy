@@ -370,7 +370,7 @@ export default function ContactPageClient() {
                                         {[Twitter, Linkedin].map((Icon, i) => (
                                             <a
                                                 key={i}
-                                                href={i === 1 ? "https://www.linkedin.com/company/purplehub-official" : "#"}
+                                                href={i === 1 ? "https://in.linkedin.com/company/ph-techindia" : "#"}
                                                 target={i === 1 ? "_blank" : undefined}
                                                 rel={i === 1 ? "noopener noreferrer" : undefined}
                                                 className="w-9 h-9 rounded-lg bg-surface border border-border flex items-center justify-center text-text-secondary hover:text-primary-brand hover:border-primary-brand transition-all"

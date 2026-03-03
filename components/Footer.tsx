@@ -34,7 +34,7 @@ const footerLinks = {
 
 const socialLinks = [
     { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    { icon: Linkedin, href: "https://in.linkedin.com/company/ph-techindia", label: "LinkedIn" },
     { icon: Github, href: "#", label: "GitHub" },
     { icon: Youtube, href: "#", label: "YouTube" },
 ];
