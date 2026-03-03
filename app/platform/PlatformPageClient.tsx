@@ -107,12 +107,8 @@ function TimelineSection() {
         offset: ["start start", "end end"],
     });
 
-    // Line snaps in 25% chunks per step
-    const lineWidth = useTransform(
-        scrollYProgress,
-        [0, 0.2, 0.21, 0.45, 0.46, 0.7, 0.71, 1],
-        ["25%", "25%", "50%", "50%", "75%", "75%", "100%", "100%"]
-    );
+    // Line progresses smoothly across the full scroll
+    const lineWidth = useTransform(scrollYProgress, [0, 0.85], ["25%", "100%"]);
 
     return (
         <div ref={containerRef} style={{ height: "400vh" }} className="relative">
@@ -152,18 +148,18 @@ function TimelineStep({ step, index, scrollYProgress }: {
     scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
 }) {
     // Step 1 (index 0) is always visible
-    // Steps 2-4 snap in at specific scroll thresholds
-    const thresholds = [0, 0.2, 0.45, 0.7];
+    // Steps 2-4 ease in with a smooth window (~8% scroll range each)
+    const thresholds = [0, 0.15, 0.40, 0.65];
     const threshold = thresholds[index] || 0;
+    const window = 0.08;
 
-    // Snap: 0 opacity before threshold, 1 at threshold (sharp transition)
     const opacity = index === 0
         ? useTransform(scrollYProgress, [0], [1])
-        : useTransform(scrollYProgress, [threshold - 0.01, threshold], [0, 1]);
+        : useTransform(scrollYProgress, [threshold, threshold + window], [0, 1]);
 
     const y = index === 0
         ? useTransform(scrollYProgress, [0], [0])
-        : useTransform(scrollYProgress, [threshold - 0.01, threshold], [30, 0]);
+        : useTransform(scrollYProgress, [threshold, threshold + window], [30, 0]);
 
     return (
         <motion.div style={{ opacity, y }} className="text-center">
