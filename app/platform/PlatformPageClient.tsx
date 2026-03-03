@@ -107,11 +107,15 @@ function TimelineSection() {
         offset: ["start start", "end end"],
     });
 
-    // Line width follows scroll
-    const lineWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+    // Line snaps in 25% chunks per step
+    const lineWidth = useTransform(
+        scrollYProgress,
+        [0, 0.2, 0.21, 0.45, 0.46, 0.7, 0.71, 1],
+        ["25%", "25%", "50%", "50%", "75%", "75%", "100%", "100%"]
+    );
 
     return (
-        <div ref={containerRef} style={{ height: `${(steps.length + 1) * 100}vh` }} className="relative">
+        <div ref={containerRef} style={{ height: "400vh" }} className="relative">
             <div className="sticky top-0 h-screen flex items-center">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
                     <div className="text-center mb-16">
@@ -132,7 +136,7 @@ function TimelineSection() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
                             {steps.map((step, i) => (
-                                <TimelineStep key={step.num} step={step} index={i} total={steps.length} scrollYProgress={scrollYProgress} />
+                                <TimelineStep key={step.num} step={step} index={i} scrollYProgress={scrollYProgress} />
                             ))}
                         </div>
                     </div>
@@ -142,16 +146,24 @@ function TimelineSection() {
     );
 }
 
-function TimelineStep({ step, index, total, scrollYProgress }: {
+function TimelineStep({ step, index, scrollYProgress }: {
     step: typeof steps[0];
     index: number;
-    total: number;
     scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
 }) {
-    const start = (index + 0.5) / (total + 1);
-    const end = (index + 1) / (total + 1);
-    const opacity = useTransform(scrollYProgress, [start, end], [0, 1]);
-    const y = useTransform(scrollYProgress, [start, end], [40, 0]);
+    // Step 1 (index 0) is always visible
+    // Steps 2-4 snap in at specific scroll thresholds
+    const thresholds = [0, 0.2, 0.45, 0.7];
+    const threshold = thresholds[index] || 0;
+
+    // Snap: 0 opacity before threshold, 1 at threshold (sharp transition)
+    const opacity = index === 0
+        ? useTransform(scrollYProgress, [0], [1])
+        : useTransform(scrollYProgress, [threshold - 0.01, threshold], [0, 1]);
+
+    const y = index === 0
+        ? useTransform(scrollYProgress, [0], [0])
+        : useTransform(scrollYProgress, [threshold - 0.01, threshold], [30, 0]);
 
     return (
         <motion.div style={{ opacity, y }} className="text-center">
