@@ -123,7 +123,7 @@ export default function Footer() {
                         <ul className="space-y-3 mb-8">
                             <li className="flex items-center gap-3 text-gray-400 text-sm">
                                 <Mail className="w-4 h-4 text-primary-brand flex-shrink-0" />
-                                purplehub@gmail.com
+                                contactus@purplehub.co.in
                             </li>
                             <li className="flex items-center gap-3 text-gray-400 text-sm">
                                 <Phone className="w-4 h-4 text-primary-brand flex-shrink-0" />

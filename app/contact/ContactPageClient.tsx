@@ -353,7 +353,7 @@ export default function ContactPageClient() {
                                     <div className="space-y-3">
                                         <div className="flex items-center gap-3 text-sm text-text-secondary">
                                             <Mail className="w-4 h-4 text-primary-brand" />
-                                            purplehub@gmail.com
+                                            contactus@purplehub.co.in
                                         </div>
                                         <div className="flex items-center gap-3 text-sm text-text-secondary">
                                             <Phone className="w-4 h-4 text-primary-brand" />
@@ -361,14 +361,16 @@ export default function ContactPageClient() {
                                         </div>
                                         <div className="flex items-start gap-3 text-sm text-text-secondary">
                                             <MapPin className="w-4 h-4 text-primary-brand mt-0.5" />
-                                            San Francisco, CA
+                                            Bengaluru, India
                                         </div>
                                     </div>
                                     <div className="flex gap-3 mt-5">
                                         {[Twitter, Linkedin].map((Icon, i) => (
                                             <a
                                                 key={i}
-                                                href="#"
+                                                href={i === 1 ? "https://www.linkedin.com/company/purplehub-official" : "#"}
+                                                target={i === 1 ? "_blank" : undefined}
+                                                rel={i === 1 ? "noopener noreferrer" : undefined}
                                                 className="w-9 h-9 rounded-lg bg-surface border border-border flex items-center justify-center text-text-secondary hover:text-primary-brand hover:border-primary-brand transition-all"
                                             >
                                                 <Icon className="w-4 h-4" />
@@ -424,7 +426,7 @@ export default function ContactPageClient() {
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-green-200/70">
                             <div className="flex items-center gap-2">
                                 <Mail className="w-5 h-5 text-primary-brand" />
-                                purplehub@gmail.com
+                                contactus@purplehub.co.in
                             </div>
                             <div className="hidden sm:block w-1 h-1 rounded-full bg-green-200/30" />
                             <div className="flex items-center gap-2">
