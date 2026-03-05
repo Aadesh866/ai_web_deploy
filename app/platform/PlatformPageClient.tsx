@@ -126,31 +126,15 @@ const comparisonData: { feature: string; tools: string[]; purplehub: string }[] 
 function ComparisonBadge({ value }: { value: string }) {
     const lower = value.toLowerCase();
     if (lower === "—" || lower === "not available" || lower === "not integrated" || lower === "unknown") {
-        return (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-medium">
-                ✕ {value}
-            </span>
-        );
+        return <span className="text-red-400 text-xs">✕ {value}</span>;
     }
     if (lower.includes("difficult") || lower.includes("very high") || lower.includes("very very high") || lower === "high") {
-        return (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-medium">
-                ⚠ {value}
-            </span>
-        );
+        return <span className="text-red-400 text-xs">⚠ {value}</span>;
     }
     if (lower.includes("depends") || lower.includes("partially") || lower.includes("only through") || lower.includes("if driven") || lower.includes("process level")) {
-        return (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-medium">
-                ◐ {value}
-            </span>
-        );
+        return <span className="text-amber-400 text-xs">◐ {value}</span>;
     }
-    return (
-        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium">
-            ✓ {value}
-        </span>
-    );
+    return <span className="text-green-400 text-xs">✓ {value}</span>;
 }
 
 function TimelineSection() {
@@ -359,7 +343,84 @@ export default function PlatformPageClient() {
                         ))}
                     </StaggerContainer>
                 </div>
-            </section >
+            </section>
+
+            {/* HOSTINGER-STYLE COMPARISON TABLE */}
+            <section className="py-24 lg:py-32">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <ScrollReveal className="text-center mb-16">
+                        <p className="section-label">COMPARE</p>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+                            Compare <span className="gradient-text">PurpleHub</span> with the rest
+                        </h2>
+                        <p className="mt-4 text-text-secondary max-w-2xl mx-auto">
+                            See at a glance how PurpleHub delivers where others fall short
+                        </p>
+                    </ScrollReveal>
+
+                    <div className="rounded-2xl border border-border overflow-hidden">
+                        {/* Sticky Header */}
+                        <div className="sticky top-16 z-20 bg-surface/95 backdrop-blur-md border-b border-border">
+                            <div className="grid grid-cols-7 min-w-[900px]">
+                                <div className="col-span-2 p-5 text-sm font-semibold text-text-secondary">Feature</div>
+                                {["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"].map((tool) => (
+                                    <div key={tool} className="p-5 text-center text-sm font-medium text-text-secondary border-l border-border/50">
+                                        {tool}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        {/* PurpleHub sticky bar */}
+                        <div className="sticky top-[calc(4rem+60px)] z-20 bg-primary-brand/10 backdrop-blur-md border-b-2 border-primary-brand/30">
+                            <div className="grid grid-cols-7 min-w-[900px]">
+                                <div className="col-span-2 p-4 flex items-center gap-2">
+                                    <span className="text-primary-brand font-bold text-sm font-heading">🟢 PurpleHub</span>
+                                </div>
+                                {Array(5).fill(null).map((_, i) => (
+                                    <div key={i} className="p-4 text-center border-l border-primary-brand/20 text-primary-brand text-xs font-semibold">
+                                        vs
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Feature Rows */}
+                        <div className="overflow-x-auto">
+                            {comparisonData.map((row, i) => (
+                                <div key={i} className={`grid grid-cols-7 min-w-[900px] border-b border-border/30 ${i % 2 === 0 ? '' : 'bg-white/[0.02]'} hover:bg-white/[0.04] transition-colors`}>
+                                    <div className="col-span-2 p-5 flex items-center">
+                                        <span className="text-sm text-white font-medium">{row.feature}</span>
+                                    </div>
+                                    {row.tools.map((val, j) => {
+                                        const lower = val.toLowerCase();
+                                        const isGood = lower === 'yes';
+                                        const isBad = lower === '—' || lower === 'not available' || lower === 'not integrated' || lower === 'unknown';
+                                        return (
+                                            <div key={j} className="p-5 text-center border-l border-border/30 flex items-center justify-center">
+                                                {isBad ? (
+                                                    <span className="text-text-secondary/40 text-sm">—</span>
+                                                ) : isGood ? (
+                                                    <CheckCircle2 className="w-4 h-4 text-green-500" />
+                                                ) : (
+                                                    <span className="text-text-secondary text-xs">{val}</span>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* PurpleHub Row Summary */}
+                        <div className="bg-primary-brand/10 border-t-2 border-primary-brand/30">
+                            <div className="p-6 text-center">
+                                <p className="text-primary-brand font-bold text-lg font-heading">PurpleHub delivers on every single feature</p>
+                                <p className="text-text-secondary text-sm mt-1">20 out of 20 capabilities — intuitively designed, not bolted on</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* FEATURE GRID */}
             < section id="features" className="py-24 lg:py-32" >
