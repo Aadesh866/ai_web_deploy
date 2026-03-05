@@ -881,8 +881,8 @@ export default function HomePage() {
               Turn the page on broken performance management
             </h2>
             <p className="text-lg text-green-200/70 mb-10">
-              If you believe these questions deserve clear answers, let&apos;s
-              talk.
+              Your people deserve a system that sees them clearly. Let&apos;s
+              build it together.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-lg mx-auto">
               <input
