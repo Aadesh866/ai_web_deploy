@@ -397,11 +397,9 @@ export default function PlatformPageClient() {
                                             </div>
                                         );
                                     })}
-                                    <div className="p-5 text-center border-l-2 border-primary-brand/30 bg-green-500/5 flex items-center justify-center">
-                                        <span className="inline-flex items-center gap-1 text-green-400 text-xs font-semibold">
-                                            <CheckCircle2 className="w-4 h-4" />
-                                            {row.purplehub}
-                                        </span>
+                                    <div className="p-5 text-center border-l-2 border-primary-brand/30 bg-green-500/5 flex flex-col items-center justify-center gap-1">
+                                        <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                        <span className="text-green-400/70 text-[10px]">({row.purplehub})</span>
                                     </div>
                                 </div>
                             ))}
