@@ -100,6 +100,59 @@ const integrations = [
     "ADP", "Google Workspace", "Jira", "Asana", "Salesforce", "Zoom", "Okta",
 ];
 
+const comparisonData: { feature: string; tools: string[]; purplehub: string }[] = [
+    { feature: "Role Blueprinting with clear lane for people", tools: ["Only through KRAs & OKRs", "Only through KRAs & OKRs", "Only through KRAs & OKRs", "Only through KRAs & OKRs", "Only through KRAs & OKRs"], purplehub: "Intuitively designed" },
+    { feature: "Real-time check-ins on contribution", tools: ["—", "—", "Yes", "Yes", "—"], purplehub: "Intuitively designed" },
+    { feature: "Performance and productivity metrics", tools: ["—", "Yes", "Yes", "Yes", "Yes"], purplehub: "Intuitively designed" },
+    { feature: "Recognition as a culture", tools: ["If driven by internal teams", "Yes", "Yes", "Yes", "Yes"], purplehub: "Intuitively designed" },
+    { feature: "People's engagement and pulse through work", tools: ["—", "Yes", "Yes", "Yes", "Yes"], purplehub: "Intuitively designed" },
+    { feature: "Potential Mapping of talent", tools: ["Partially available", "Partially available", "Yes", "Yes", "Partially available"], purplehub: "Intuitively designed" },
+    { feature: "Analytics tailored to persona & stakeholders", tools: ["Depends on maturity", "Depends on maturity", "Depends on maturity", "Partially available", "Unknown"], purplehub: "Intuitively designed" },
+    { feature: "Talent Mastery Mapping", tools: ["Depends on maturity", "Depends on maturity", "Depends on maturity", "Depends on maturity", "Depends on maturity"], purplehub: "Intuitively designed" },
+    { feature: "Career architecting", tools: ["Depends on maturity", "Depends on maturity", "Depends on maturity", "Depends on maturity", "Depends on maturity"], purplehub: "Intuitively designed" },
+    { feature: "Leadership capacity consumed in execution", tools: ["Very very high", "Very very high", "Very high", "High", "High"], purplehub: "Very very low" },
+    { feature: "Driving culture & values-centric behaviours", tools: ["Extremely difficult", "Extremely difficult", "Difficult", "Difficult", "Difficult"], purplehub: "Intuitively designed" },
+    { feature: "Capacity to pivot with changing priorities", tools: ["Only through KRAs & OKRs", "Only through KRAs & OKRs", "Only through KRAs & OKRs", "Only through KRAs & OKRs", "Only through KRAs & OKRs"], purplehub: "Intuitively designed" },
+    { feature: "One Interface. Multiple Talent Outcomes", tools: ["Extremely difficult", "Extremely difficult", "Difficult", "Difficult", "Unknown"], purplehub: "Yes" },
+    { feature: "Operational simplicity for HR", tools: ["Extremely difficult", "Extremely difficult", "Yes", "Difficult", "Difficult"], purplehub: "Extremely easy" },
+    { feature: "Multidimensional performance intelligence", tools: ["Only through KRAs & OKRs", "Only through KRAs & OKRs", "Only through KRAs & OKRs", "Only through KRAs & OKRs", "Only through KRAs & OKRs"], purplehub: "Intuitively designed" },
+    { feature: "Built-in mechanisms to shape performance culture", tools: ["Depends on maturity", "Depends on maturity", "Depends on maturity", "Depends on maturity", "Not available"], purplehub: "Intuitively designed" },
+    { feature: "Quantifying contributions for clarity", tools: ["Not available", "Not available", "Not available", "Not available", "Not available"], purplehub: "Yes" },
+    { feature: "Leveraging AI to capture impact", tools: ["Not available", "Not available", "Not available", "Partially available", "Unknown"], purplehub: "Yes" },
+    { feature: "Autonomous Agentic AI for Insights", tools: ["Not available", "Not available", "Not available", "Not available", "Not available"], purplehub: "Yes" },
+    { feature: "Better measure of L&D investment & outcomes", tools: ["Not integrated", "Not integrated", "Not integrated", "Process level only", "Unknown"], purplehub: "Intuitively designed" },
+];
+
+function ComparisonBadge({ value }: { value: string }) {
+    const lower = value.toLowerCase();
+    if (lower === "—" || lower === "not available" || lower === "not integrated" || lower === "unknown") {
+        return (
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-medium">
+                ✕ {value}
+            </span>
+        );
+    }
+    if (lower.includes("difficult") || lower.includes("very high") || lower.includes("very very high") || lower === "high") {
+        return (
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-medium">
+                ⚠ {value}
+            </span>
+        );
+    }
+    if (lower.includes("depends") || lower.includes("partially") || lower.includes("only through") || lower.includes("if driven") || lower.includes("process level")) {
+        return (
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-medium">
+                ◐ {value}
+            </span>
+        );
+    }
+    return (
+        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium">
+            ✓ {value}
+        </span>
+    );
+}
+
 function TimelineSection() {
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
@@ -232,6 +285,81 @@ export default function PlatformPageClient() {
                             Watch Demo
                         </button>
                     </motion.div>
+                </div>
+            </section>
+
+            {/* COMPARISON TABLE */}
+            <section className="py-24 lg:py-32 bg-surface overflow-hidden">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                    <ScrollReveal className="text-center mb-16">
+                        <p className="section-label">WHY PURPLEHUB</p>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+                            See how PurpleHub{" "}
+                            <span className="gradient-text">outperforms</span> the rest
+                        </h2>
+                        <p className="mt-4 text-text-secondary max-w-2xl mx-auto">
+                            A side-by-side comparison of 20 critical performance management capabilities
+                        </p>
+                    </ScrollReveal>
+
+                    <div className="overflow-x-auto rounded-2xl border border-border">
+                        <table className="w-full min-w-[900px] text-sm">
+                            <thead>
+                                <tr className="bg-primary-dark/80">
+                                    <th className="text-left p-4 text-white font-heading font-semibold min-w-[250px] sticky left-0 bg-primary-dark/80 z-10">
+                                        Feature
+                                    </th>
+                                    {["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"].map((tool) => (
+                                        <th key={tool} className="p-4 text-center text-text-secondary font-medium min-w-[130px]">
+                                            {tool}
+                                        </th>
+                                    ))}
+                                    <th className="p-4 text-center font-heading font-bold min-w-[150px] bg-green-500/20 text-primary-brand border-l-2 border-primary-brand/30 sticky right-0 z-10">
+                                        🟢 PurpleHub
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {comparisonData.map((row, i) => (
+                                    <ScrollReveal key={i} delay={i * 0.03}>
+                                        <tr className={`border-t border-border/50 ${i % 2 === 0 ? "bg-surface" : "bg-primary-dark/20"} hover:bg-primary-dark/40 transition-colors`}>
+                                            <td className={`p-4 font-medium text-white sticky left-0 z-10 ${i % 2 === 0 ? "bg-surface" : "bg-[#111827]"}`}>
+                                                {row.feature}
+                                            </td>
+                                            {row.tools.map((val, j) => (
+                                                <td key={j} className="p-4 text-center">
+                                                    <ComparisonBadge value={val} />
+                                                </td>
+                                            ))}
+                                            <td className={`p-4 text-center border-l-2 border-primary-brand/30 sticky right-0 z-10 ${i % 2 === 0 ? "bg-green-500/10" : "bg-green-500/5"}`}>
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 font-semibold text-xs">
+                                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                                    {row.purplehub}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </ScrollReveal>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Summary stats */}
+                    <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                        {[
+                            { num: "20/20", label: "Features Available" },
+                            { num: "100%", label: "AI-Powered Capabilities" },
+                            { num: "0", label: "Features Unavailable" },
+                            { num: "#1", label: "Across All Categories" },
+                        ].map((stat) => (
+                            <StaggerItem key={stat.label}>
+                                <div className="text-center p-6 rounded-2xl bg-primary-dark/40 border border-border">
+                                    <p className="text-2xl lg:text-3xl font-bold gradient-text font-heading">{stat.num}</p>
+                                    <p className="text-sm text-text-secondary mt-1">{stat.label}</p>
+                                </div>
+                            </StaggerItem>
+                        ))}
+                    </StaggerContainer>
                 </div>
             </section>
 
