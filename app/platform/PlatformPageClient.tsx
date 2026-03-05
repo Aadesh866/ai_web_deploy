@@ -260,20 +260,23 @@ export default function PlatformPageClient() {
                         className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4"
                     >
                         <Link
-                            href="#features"
+                            href="#compare"
                             className="inline-flex items-center gap-2 px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold hover:bg-green-600 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-1"
                         >
                             Explore Features <ChevronRight className="w-4 h-4" />
                         </Link>
-                        <button className="inline-flex items-center gap-2 px-8 py-4 border-2 border-white/30 text-white rounded-2xl font-semibold hover:bg-white/10 transition-all duration-300">
+                        <Link
+                            href="/contact"
+                            className="inline-flex items-center gap-2 px-8 py-4 border-2 border-white/30 text-white rounded-2xl font-semibold hover:bg-white/10 transition-all duration-300"
+                        >
                             Watch Demo
-                        </button>
+                        </Link>
                     </motion.div>
                 </div>
             </section>
 
             {/* HOSTINGER-STYLE COMPARISON TABLE */}
-            <section className="py-24 lg:py-32">
+            <section id="compare" className="py-24 lg:py-32">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">COMPARE</p>
