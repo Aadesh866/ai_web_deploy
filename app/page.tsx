@@ -260,23 +260,6 @@ export default function HomePage() {
             </motion.div>
           </div>
 
-          {/* Hero Image */}
-          <motion.div
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.8, duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
-            className="relative max-w-5xl mx-auto rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-green-500/10"
-          >
-            <Image
-              src="/brochure-hero.jpg"
-              alt="PurpleHub — AI-Powered Performance Intelligence"
-              width={1400}
-              height={800}
-              className="w-full h-auto"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-background/10 to-transparent" />
-          </motion.div>
         </div>
 
         {/* Bottom gradient fade */}
@@ -613,6 +596,24 @@ export default function HomePage() {
               })}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Platform Screenshot */}
+      <section className="py-16 lg:py-24">
+        <div className="max-w-5xl mx-auto px-6 lg:px-8">
+          <ScrollReveal>
+            <div className="relative rounded-2xl overflow-hidden border border-border shadow-2xl shadow-green-500/10">
+              <Image
+                src="/brochure-hero.jpg"
+                alt="PurpleHub — Intelligent Talent Platform"
+                width={1400}
+                height={800}
+                className="w-full h-auto"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-background/10 to-transparent" />
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
