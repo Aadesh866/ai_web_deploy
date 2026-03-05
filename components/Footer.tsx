@@ -16,12 +16,10 @@ const footerLinks = {
         { label: "Platform", href: "/platform" },
         { label: "Solutions", href: "/solutions" },
         { label: "Resources", href: "/resources" },
+        { label: "Brochure", href: "/brochure" },
     ],
-    company: [
-        { label: "About Us", href: "/solutions" },
+    support: [
         { label: "Contact", href: "/contact" },
-    ],
-    legal: [
         { label: "Privacy Policy", href: "#" },
         { label: "Terms of Service", href: "#" },
     ],
@@ -91,13 +89,13 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    {/* Company */}
+                    {/* Support */}
                     <div>
                         <h3 className="font-heading text-sm font-semibold text-white uppercase tracking-wider mb-5">
-                            Company
+                            Support
                         </h3>
                         <ul className="space-y-3">
-                            {footerLinks.company.map((link) => (
+                            {footerLinks.support.map((link) => (
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
@@ -110,12 +108,12 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    {/* Contact & Legal */}
+                    {/* Get in Touch */}
                     <div>
                         <h3 className="font-heading text-sm font-semibold text-white uppercase tracking-wider mb-5">
                             Get in Touch
                         </h3>
-                        <ul className="space-y-3 mb-8">
+                        <ul className="space-y-3">
                             <li className="flex items-center gap-3 text-gray-400 text-sm">
                                 <Mail className="w-4 h-4 text-primary-brand flex-shrink-0" />
                                 contactus@purplehub.co.in
@@ -128,21 +126,6 @@ export default function Footer() {
                                 <MapPin className="w-4 h-4 text-primary-brand flex-shrink-0 mt-0.5" />
                                 Bangalore, India
                             </li>
-                        </ul>
-                        <h3 className="font-heading text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                            Legal
-                        </h3>
-                        <ul className="space-y-2">
-                            {footerLinks.legal.map((link) => (
-                                <li key={link.label}>
-                                    <Link
-                                        href={link.href}
-                                        className="text-gray-400 text-sm hover:text-primary-brand transition-colors duration-300"
-                                    >
-                                        {link.label}
-                                    </Link>
-                                </li>
-                            ))}
                         </ul>
                     </div>
                 </div>

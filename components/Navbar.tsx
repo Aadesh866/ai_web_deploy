@@ -13,6 +13,7 @@ const navLinks = [
     { href: "/platform", label: "Platform" },
     { href: "/solutions", label: "Solutions" },
     { href: "/resources", label: "Resources" },
+    { href: "/brochure", label: "Brochure" },
     { href: "/contact", label: "Contact" },
 ];
 
