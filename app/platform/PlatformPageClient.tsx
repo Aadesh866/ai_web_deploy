@@ -361,33 +361,23 @@ export default function PlatformPageClient() {
                     <div className="rounded-2xl border border-border overflow-hidden">
                         {/* Sticky Header */}
                         <div className="sticky top-16 z-20 bg-surface/95 backdrop-blur-md border-b border-border">
-                            <div className="grid grid-cols-7 min-w-[900px]">
+                            <div className="grid grid-cols-8 min-w-[1050px]">
                                 <div className="col-span-2 p-5 text-sm font-semibold text-text-secondary">Feature</div>
                                 {["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"].map((tool) => (
                                     <div key={tool} className="p-5 text-center text-sm font-medium text-text-secondary border-l border-border/50">
                                         {tool}
                                     </div>
                                 ))}
-                            </div>
-                        </div>
-                        {/* PurpleHub sticky bar */}
-                        <div className="sticky top-[calc(4rem+60px)] z-20 bg-primary-brand/10 backdrop-blur-md border-b-2 border-primary-brand/30">
-                            <div className="grid grid-cols-7 min-w-[900px]">
-                                <div className="col-span-2 p-4 flex items-center gap-2">
-                                    <span className="text-primary-brand font-bold text-sm font-heading">🟢 PurpleHub</span>
+                                <div className="p-5 text-center text-sm font-bold text-primary-brand border-l-2 border-primary-brand/30 bg-green-500/10">
+                                    🟢 PurpleHub
                                 </div>
-                                {Array(5).fill(null).map((_, i) => (
-                                    <div key={i} className="p-4 text-center border-l border-primary-brand/20 text-primary-brand text-xs font-semibold">
-                                        vs
-                                    </div>
-                                ))}
                             </div>
                         </div>
 
                         {/* Feature Rows */}
                         <div className="overflow-x-auto">
                             {comparisonData.map((row, i) => (
-                                <div key={i} className={`grid grid-cols-7 min-w-[900px] border-b border-border/30 ${i % 2 === 0 ? '' : 'bg-white/[0.02]'} hover:bg-white/[0.04] transition-colors`}>
+                                <div key={i} className={`grid grid-cols-8 min-w-[1050px] border-b border-border/30 ${i % 2 === 0 ? '' : 'bg-white/[0.02]'} hover:bg-white/[0.04] transition-colors`}>
                                     <div className="col-span-2 p-5 flex items-center">
                                         <span className="text-sm text-white font-medium">{row.feature}</span>
                                     </div>
@@ -407,6 +397,12 @@ export default function PlatformPageClient() {
                                             </div>
                                         );
                                     })}
+                                    <div className="p-5 text-center border-l-2 border-primary-brand/30 bg-green-500/5 flex items-center justify-center">
+                                        <span className="inline-flex items-center gap-1 text-green-400 text-xs font-semibold">
+                                            <CheckCircle2 className="w-4 h-4" />
+                                            {row.purplehub}
+                                        </span>
+                                    </div>
                                 </div>
                             ))}
                         </div>
