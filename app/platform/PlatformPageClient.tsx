@@ -321,24 +321,22 @@ export default function PlatformPageClient() {
                             </thead>
                             <tbody>
                                 {comparisonData.map((row, i) => (
-                                    <ScrollReveal key={i} delay={i * 0.03}>
-                                        <tr className={`border-t border-border/50 ${i % 2 === 0 ? "bg-surface" : "bg-primary-dark/20"} hover:bg-primary-dark/40 transition-colors`}>
-                                            <td className={`p-4 font-medium text-white sticky left-0 z-10 ${i % 2 === 0 ? "bg-surface" : "bg-[#111827]"}`}>
-                                                {row.feature}
+                                    <tr key={i} className={`border-t border-border/50 ${i % 2 === 0 ? "bg-surface" : "bg-primary-dark/20"} hover:bg-primary-dark/40 transition-colors`}>
+                                        <td className={`p-4 font-medium text-white sticky left-0 z-10 ${i % 2 === 0 ? "bg-surface" : "bg-[#111827]"}`}>
+                                            {row.feature}
+                                        </td>
+                                        {row.tools.map((val, j) => (
+                                            <td key={j} className="p-4 text-center">
+                                                <ComparisonBadge value={val} />
                                             </td>
-                                            {row.tools.map((val, j) => (
-                                                <td key={j} className="p-4 text-center">
-                                                    <ComparisonBadge value={val} />
-                                                </td>
-                                            ))}
-                                            <td className={`p-4 text-center border-l-2 border-primary-brand/30 sticky right-0 z-10 ${i % 2 === 0 ? "bg-green-500/10" : "bg-green-500/5"}`}>
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 font-semibold text-xs">
-                                                    <CheckCircle2 className="w-3.5 h-3.5" />
-                                                    {row.purplehub}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </ScrollReveal>
+                                        ))}
+                                        <td className={`p-4 text-center border-l-2 border-primary-brand/30 sticky right-0 z-10 ${i % 2 === 0 ? "bg-green-500/10" : "bg-green-500/5"}`}>
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 font-semibold text-xs">
+                                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                                {row.purplehub}
+                                            </span>
+                                        </td>
+                                    </tr>
                                 ))}
                             </tbody>
                         </table>
@@ -361,10 +359,10 @@ export default function PlatformPageClient() {
                         ))}
                     </StaggerContainer>
                 </div>
-            </section>
+            </section >
 
             {/* FEATURE GRID */}
-            <section id="features" className="py-24 lg:py-32">
+            < section id="features" className="py-24 lg:py-32" >
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">CAPABILITIES</p>
@@ -392,13 +390,13 @@ export default function PlatformPageClient() {
                         ))}
                     </StaggerContainer>
                 </div>
-            </section>
+            </section >
 
             {/* HOW IT WORKS - TIMELINE */}
-            <TimelineSection />
+            < TimelineSection />
 
             {/* TECH STACK */}
-            <section id="tech-stack" className="py-24 lg:py-32 bg-primary-dark relative overflow-hidden">
+            < section id="tech-stack" className="py-24 lg:py-32 bg-primary-dark relative overflow-hidden" >
                 <div
                     className="absolute inset-0 opacity-5"
                     style={{
@@ -429,10 +427,10 @@ export default function PlatformPageClient() {
                         ))}
                     </StaggerContainer>
                 </div>
-            </section>
+            </section >
 
             {/* INTEGRATIONS */}
-            <section className="py-24 lg:py-32 bg-surface">
+            < section className="py-24 lg:py-32 bg-surface" >
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">INTEGRATIONS</p>
@@ -460,10 +458,10 @@ export default function PlatformPageClient() {
                         </p>
                     </ScrollReveal>
                 </div>
-            </section>
+            </section >
 
             {/* CTA */}
-            <section className="py-24 lg:py-32">
+            < section className="py-24 lg:py-32" >
                 <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
                     <ScrollReveal>
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
@@ -481,7 +479,7 @@ export default function PlatformPageClient() {
                         </Link>
                     </ScrollReveal>
                 </div>
-            </section>
+            </section >
         </>
     );
 }
