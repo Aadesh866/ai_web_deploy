@@ -306,6 +306,36 @@ export default function ResourcesPageClient() {
                 </div>
             </section>
 
+            {/* BROCHURE VIEWER */}
+            <section className="py-24 lg:py-32">
+                <div className="max-w-5xl mx-auto px-6 lg:px-8">
+                    <ScrollReveal className="text-center mb-12">
+                        <p className="section-label">BROCHURE</p>
+                        <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                            Explore the <span className="gradient-text">PurpleHub Brochure</span>
+                        </h2>
+                        <p className="text-text-secondary max-w-2xl mx-auto">
+                            A comprehensive look at how PurpleHub transforms performance management — scroll through the full brochure below.
+                        </p>
+                    </ScrollReveal>
+
+                    <ScrollReveal>
+                        <div
+                            className="rounded-2xl border border-border overflow-hidden bg-surface shadow-xl"
+                            onContextMenu={(e) => e.preventDefault()}
+                            style={{ userSelect: "none" }}
+                        >
+                            <iframe
+                                src="/purplehub-brochure.pdf#toolbar=0&navpanes=0&scrollbar=1"
+                                className="w-full"
+                                style={{ height: "80vh", minHeight: "600px", border: "none" }}
+                                title="PurpleHub Brochure"
+                            />
+                        </div>
+                    </ScrollReveal>
+                </div>
+            </section>
+
             {/* EVENTS */}
             <section className="py-24 lg:py-32 bg-surface">
                 <div className="max-w-4xl mx-auto px-6 lg:px-8">

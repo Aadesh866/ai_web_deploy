@@ -290,7 +290,7 @@ export default function ContactPageClient() {
                                                 className="group inline-flex items-center gap-2 px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-base hover:bg-green-600 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-1"
                                             >
                                                 <Send className="w-4 h-4" />
-                                                Send Message
+                                                Request Demo
                                             </button>
                                         </motion.form>
                                     ) : (

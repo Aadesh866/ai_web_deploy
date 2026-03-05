@@ -142,7 +142,7 @@ const platformCards = [
 const stats = [
   { value: "90", suffix: "%", label: "of HRMS platforms treat performance as an afterthought" },
   { value: "55", suffix: "%", label: "average feature adoption in traditional systems" },
-  { value: "3", suffix: "x", label: "more likely to improve with continuous feedback" },
+  { value: "3", suffix: "x", label: "faster employee performance growth with continuous feedback" },
   { value: "40", suffix: "%", label: "reduction in manager bias with AI assistance" },
 ];
 
@@ -223,7 +223,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm text-sm text-green-200 mb-8"
             >
               <Sparkles className="w-4 h-4" />
-              AI-Powered Performance Intelligence
+              Intelligent Talent Platform
             </motion.div>
 
             <HeroHeadline />
@@ -298,54 +298,7 @@ export default function HomePage() {
       </section>
 
       {/* ============================================ */}
-      {/* OUR NAME STORY (moved up) */}
-      {/* ============================================ */}
-      <section id="name-story" className="py-24 lg:py-32 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left: Video */}
-            <ScrollReveal>
-              <div className="relative">
-                <AutoPlayVideo src="/purplehub-name-story.mp4" />
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary-brand/10 via-secondary/5 to-primary-brand/10 rounded-3xl blur-3xl -z-10" />
-              </div>
-            </ScrollReveal>
-
-            {/* Right: Story Content */}
-            <ScrollReveal delay={0.2}>
-              <p className="section-label">OUR NAME STORY</p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-                Why <span className="gradient-text">PurpleHub</span>?
-              </h2>
-              <div className="space-y-5 text-text-secondary leading-relaxed">
-                <p>
-                  It started with a simple belief: <span className="text-white font-medium">people matter</span>.
-                  Not as resources. Not as headcount. As human beings with
-                  dreams, drive, and purpose.
-                </p>
-                <p>
-                  When someone discovers their <span className="text-primary-brand font-semibold">purpose</span> and
-                  pursues it with <span className="text-primary-brand font-semibold">passion</span>,
-                  something magical happens — time vanishes, effort feels effortless,
-                  and the work stops feeling like work. Pain melts away. Flow takes over.
-                </p>
-                <p>
-                  PurpleHub was born to unlock that feeling at scale — to help
-                  organizations see their people clearly, celebrate their
-                  contributions honestly, and create environments where
-                  purpose-driven work thrives.
-                </p>
-              </div>
-              <p className="mt-6 text-sm text-text-secondary italic border-l-2 border-primary-brand pl-4">
-                For.. people matter
-              </p>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================ */}
-      {/* CEO QUESTIONS (from brochure 001) */}
+      {/* 1. CEO QUESTIONS — THE REAL QUESTION */}
       {/* ============================================ */}
       <section className="py-24 lg:py-32 bg-surface">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -377,7 +330,7 @@ export default function HomePage() {
       </section>
 
       {/* ============================================ */}
-      {/* INDUSTRY PROBLEM & GAP (from brochure 002) */}
+      {/* 2. THE PROBLEM — first 3 cards only */}
       {/* ============================================ */}
       <section className="py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -389,7 +342,7 @@ export default function HomePage() {
             </h2>
           </ScrollReveal>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* What we have today */}
             <ScrollReveal>
               <div className="interactive-card p-8 h-full">
@@ -438,8 +391,22 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
           </div>
+        </div>
+      </section>
 
-          {/* Problem cards */}
+      {/* ============================================ */}
+      {/* 3. WHAT'S PLAGUING PERFORMANCE MANAGEMENT */}
+      {/* ============================================ */}
+      <section className="py-24 lg:py-32 bg-surface">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-16">
+            <p className="section-label">THE REALITY CHECK</p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+              What&apos;s plaguing today&apos;s{" "}
+              <span className="gradient-text">performance systems</span>?
+            </h2>
+          </ScrollReveal>
+
           <StaggerContainer
             staggerDelay={0.15}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -467,9 +434,96 @@ export default function HomePage() {
       </section>
 
       {/* ============================================ */}
-      {/* SALIENT FEATURES - Animated Timeline (from brochure 003) */}
+      {/* 4. THE SHIFT SECTION */}
+      {/* ============================================ */}
+      <section className="py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left Content */}
+            <ScrollReveal>
+              <p className="section-label">THE SHIFT</p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-8">
+                Work has changed.{" "}
+                <span className="gradient-text">Has your performance system?</span>
+              </h2>
+              <div className="space-y-5 mb-8">
+                {[
+                  "Structurally fluid and cross-functional",
+                  "Driven by rapid innovation and deep-tech roles",
+                  "Interconnected impact across teams and geographies",
+                ].map((point, i) => (
+                  <motion.div
+                    key={point}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 + i * 0.15 }}
+                    className="flex items-start gap-4"
+                  >
+                    <CheckCircle2 className="w-6 h-6 text-primary-brand flex-shrink-0 mt-0.5" />
+                    <span className="text-lg text-text-primary">{point}</span>
+                  </motion.div>
+                ))}
+              </div>
+              <div className="p-6 rounded-2xl bg-surface border border-border shadow-sm">
+                <p className="text-text-secondary leading-relaxed italic">
+                  &ldquo;Expecting a single manager to evaluate performance
+                  holistically is unrealistic—and unfair.&rdquo;
+                </p>
+              </div>
+            </ScrollReveal>
+
+            {/* Right Visualization */}
+            <ScrollReveal delay={0.3}>
+              <NetworkVisualization />
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* 5. PLATFORM PREVIEW */}
       {/* ============================================ */}
       <section className="py-24 lg:py-32 bg-surface">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-16">
+            <p className="section-label">THE PLATFORM</p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+              Finally, answers to the{" "}
+              <span className="gradient-text">hard questions</span>
+            </h2>
+          </ScrollReveal>
+
+          <StaggerContainer staggerDelay={0.15} className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {platformCards.map((card) => (
+              <StaggerItem key={card.title}>
+                <div className="interactive-card group h-full flex flex-col items-start gap-5 p-8">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-900/30 to-blue-900/30 flex items-center justify-center card-icon transition-all duration-400">
+                    <card.icon className="w-8 h-8 text-primary-brand" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white font-heading">
+                    {card.title}
+                  </h3>
+                  <p className="text-text-secondary leading-relaxed flex-1">
+                    {card.description}
+                  </p>
+                  <Link
+                    href="/platform"
+                    className="inline-flex items-center gap-1 text-sm font-semibold text-primary-brand hover:gap-2 transition-all duration-300"
+                  >
+                    Learn more <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* 6. SALIENT FEATURES — Animated Timeline */}
+      {/* ============================================ */}
+      <section className="py-24 lg:py-32">
         <div className="max-w-5xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20">
             <p className="section-label">SALIENT FEATURES</p>
@@ -563,128 +617,54 @@ export default function HomePage() {
       </section>
 
       {/* ============================================ */}
-      {/* HOW DOES IT WORK? (from brochure 003) */}
+      {/* 7. OUR NAME STORY */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <p className="section-label">THE PROCESS</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-              How does it <span className="gradient-text">work</span>?
-            </h2>
-          </ScrollReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {howItWorks.map((step, i) => (
-              <ScrollReveal key={step.num} delay={i * 0.1}>
-                <div className="interactive-card group p-8 h-full relative overflow-hidden">
-                  <span className="absolute top-4 right-6 text-6xl font-bold text-white/5 font-heading">{step.num}</span>
-                  <div className="relative z-10">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-900/40 to-blue-900/40 flex items-center justify-center mb-4 group-hover:shadow-lg group-hover:shadow-green-500/10 transition-all duration-300">
-                      <step.icon className="w-7 h-7 text-primary-brand" />
-                    </div>
-                    <p className="text-xs font-mono text-primary-brand font-bold mb-2">STEP {step.num}</p>
-                    <h3 className="text-lg font-bold text-white font-heading mb-2">{step.title}</h3>
-                    <p className="text-sm text-text-secondary leading-relaxed">{step.description}</p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================ */}
-      {/* THE SHIFT SECTION */}
-      {/* ============================================ */}
-      <section className="py-24 lg:py-32 bg-surface">
+      <section id="name-story" className="py-24 lg:py-32 bg-surface relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left Content */}
+            {/* Left: Video */}
             <ScrollReveal>
-              <p className="section-label">THE SHIFT</p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-8">
-                Work has changed.{" "}
-                <span className="gradient-text">Has your performance system?</span>
-              </h2>
-              <div className="space-y-5 mb-8">
-                {[
-                  "Structurally fluid and cross-functional",
-                  "Driven by rapid innovation and deep-tech roles",
-                  "Interconnected impact across teams and geographies",
-                ].map((point, i) => (
-                  <motion.div
-                    key={point}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3 + i * 0.15 }}
-                    className="flex items-start gap-4"
-                  >
-                    <CheckCircle2 className="w-6 h-6 text-primary-brand flex-shrink-0 mt-0.5" />
-                    <span className="text-lg text-text-primary">{point}</span>
-                  </motion.div>
-                ))}
-              </div>
-              <div className="p-6 rounded-2xl bg-surface border border-border shadow-sm">
-                <p className="text-text-secondary leading-relaxed italic">
-                  &ldquo;Expecting a single manager to evaluate performance
-                  holistically is unrealistic—and unfair.&rdquo;
-                </p>
+              <div className="relative">
+                <AutoPlayVideo src="/purplehub-name-story.mp4" />
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary-brand/10 via-secondary/5 to-primary-brand/10 rounded-3xl blur-3xl -z-10" />
               </div>
             </ScrollReveal>
 
-            {/* Right Visualization */}
-            <ScrollReveal delay={0.3}>
-              <NetworkVisualization />
+            {/* Right: Story Content */}
+            <ScrollReveal delay={0.2}>
+              <p className="section-label">OUR NAME STORY</p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+                Why <span className="gradient-text">PurpleHub</span>?
+              </h2>
+              <div className="space-y-5 text-text-secondary leading-relaxed">
+                <p>
+                  It started with a simple belief: <span className="text-white font-medium">people matter</span>.
+                  Not as resources. Not as headcount. As human beings with
+                  dreams, drive, and purpose.
+                </p>
+                <p>
+                  When someone discovers their <span className="text-primary-brand font-semibold">purpose</span> and
+                  pursues it with <span className="text-primary-brand font-semibold">passion</span>,
+                  something magical happens — time vanishes, effort feels effortless,
+                  and the work stops feeling like work. Pain melts away. Flow takes over.
+                </p>
+                <p>
+                  PurpleHub was born to unlock that feeling at scale — to help
+                  organizations see their people clearly, celebrate their
+                  contributions honestly, and create environments where
+                  purpose-driven work thrives.
+                </p>
+              </div>
+              <p className="mt-6 text-sm text-text-secondary italic border-l-2 border-primary-brand pl-4">
+                For.. people matter
+              </p>
             </ScrollReveal>
           </div>
         </div>
       </section>
 
       {/* ============================================ */}
-      {/* PLATFORM PREVIEW */}
-      {/* ============================================ */}
-      <section className="py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <p className="section-label">THE PLATFORM</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-              Finally, answers to the{" "}
-              <span className="gradient-text">hard questions</span>
-            </h2>
-          </ScrollReveal>
-
-          <StaggerContainer staggerDelay={0.15} className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {platformCards.map((card) => (
-              <StaggerItem key={card.title}>
-                <div className="interactive-card group h-full flex flex-col items-start gap-5 p-8">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-900/30 to-blue-900/30 flex items-center justify-center card-icon transition-all duration-400">
-                    <card.icon className="w-8 h-8 text-primary-brand" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white font-heading">
-                    {card.title}
-                  </h3>
-                  <p className="text-text-secondary leading-relaxed flex-1">
-                    {card.description}
-                  </p>
-                  <Link
-                    href="/platform"
-                    className="inline-flex items-center gap-1 text-sm font-semibold text-primary-brand hover:gap-2 transition-all duration-300"
-                  >
-                    Learn more <ChevronRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
-
-
-
-      {/* ============================================ */}
-      {/* THE DIFFERENCE SECTION */}
+      {/* 8. THE DIFFERENCE SECTION */}
       {/* ============================================ */}
       <section className="py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -762,7 +742,41 @@ export default function HomePage() {
       </section>
 
       {/* ============================================ */}
-      {/* GOING BEYOND VISIBILITY - Second Video */}
+      {/* THE PROCESS — HIDDEN / DRAFT */}
+      {/* ============================================ */}
+      {/*
+      <section className="py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-16">
+            <p className="section-label">THE PROCESS</p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+              How does it <span className="gradient-text">work</span>?
+            </h2>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {howItWorks.map((step, i) => (
+              <ScrollReveal key={step.num} delay={i * 0.1}>
+                <div className="interactive-card group p-8 h-full relative overflow-hidden">
+                  <span className="absolute top-4 right-6 text-6xl font-bold text-white/5 font-heading">{step.num}</span>
+                  <div className="relative z-10">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-900/40 to-blue-900/40 flex items-center justify-center mb-4 group-hover:shadow-lg group-hover:shadow-green-500/10 transition-all duration-300">
+                      <step.icon className="w-7 h-7 text-primary-brand" />
+                    </div>
+                    <p className="text-xs font-mono text-primary-brand font-bold mb-2">STEP {step.num}</p>
+                    <h3 className="text-lg font-bold text-white font-heading mb-2">{step.title}</h3>
+                    <p className="text-sm text-text-secondary leading-relaxed">{step.description}</p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+      */}
+
+      {/* ============================================ */}
+      {/* GOING BEYOND VISIBILITY — Second Video */}
       {/* ============================================ */}
       <section className="py-24 lg:py-32 bg-surface">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">

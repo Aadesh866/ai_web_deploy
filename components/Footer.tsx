@@ -15,20 +15,15 @@ const footerLinks = {
     product: [
         { label: "Platform", href: "/platform" },
         { label: "Solutions", href: "/solutions" },
-        { label: "Pricing", href: "/contact" },
-        { label: "Security", href: "/platform#tech-stack" },
+        { label: "Resources", href: "/resources" },
     ],
     company: [
         { label: "About Us", href: "/solutions" },
-        { label: "Careers", href: "/contact" },
         { label: "Contact", href: "/contact" },
-        { label: "Partners", href: "/solutions" },
     ],
     legal: [
         { label: "Privacy Policy", href: "#" },
         { label: "Terms of Service", href: "#" },
-        { label: "Cookie Policy", href: "#" },
-        { label: "Accessibility", href: "#" },
     ],
 };
 
