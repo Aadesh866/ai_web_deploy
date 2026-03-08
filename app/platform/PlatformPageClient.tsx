@@ -288,46 +288,49 @@ export default function PlatformPageClient() {
                         </p>
                     </ScrollReveal>
 
+                    {/* Mobile scroll hint */}
+                    <p className="text-center text-xs text-text-secondary mb-3 md:hidden">← Swipe to see all tools →</p>
+
                     <div className="rounded-2xl border border-border overflow-hidden">
-                        {/* Sticky Header */}
-                        <div className="sticky top-16 z-20 bg-surface/95 backdrop-blur-md border-b border-border">
-                            <div className="grid grid-cols-8 min-w-[1050px]">
-                                <div className="col-span-2 p-5 text-sm font-semibold text-text-secondary">Feature</div>
-                                {["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"].map((tool) => (
-                                    <div key={tool} className="p-5 text-center text-sm font-medium text-text-secondary border-l border-border/50">
-                                        {tool}
+                        <div className="overflow-x-auto">
+                            {/* Sticky Header */}
+                            <div className="sticky top-16 z-20 bg-surface/95 backdrop-blur-md border-b border-border">
+                                <div className="grid grid-cols-8 min-w-[900px]">
+                                    <div className="col-span-2 p-4 lg:p-5 text-xs lg:text-sm font-semibold text-text-secondary">Feature</div>
+                                    {["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"].map((tool) => (
+                                        <div key={tool} className="p-4 lg:p-5 text-center text-xs lg:text-sm font-medium text-text-secondary border-l border-border/50">
+                                            {tool}
+                                        </div>
+                                    ))}
+                                    <div className="p-4 lg:p-5 text-center text-xs lg:text-sm font-bold text-primary-brand border-l-2 border-primary-brand/30 bg-green-500/10">
+                                        🟢 PurpleHub
                                     </div>
-                                ))}
-                                <div className="p-5 text-center text-sm font-bold text-primary-brand border-l-2 border-primary-brand/30 bg-green-500/10">
-                                    🟢 PurpleHub
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Feature Rows */}
-                        <div className="overflow-x-auto">
+                            {/* Feature Rows */}
                             {comparisonData.map((row, i) => (
-                                <div key={i} className={`grid grid-cols-8 min-w-[1050px] border-b border-border/30 ${i % 2 === 0 ? '' : 'bg-white/[0.02]'} hover:bg-white/[0.04] transition-colors`}>
-                                    <div className="col-span-2 p-5 flex items-center">
-                                        <span className="text-sm text-white font-medium">{row.feature}</span>
+                                <div key={i} className={`grid grid-cols-8 min-w-[900px] border-b border-border/30 ${i % 2 === 0 ? '' : 'bg-white/[0.02]'} hover:bg-white/[0.04] transition-colors`}>
+                                    <div className="col-span-2 p-4 lg:p-5 flex items-center">
+                                        <span className="text-xs lg:text-sm text-white font-medium">{row.feature}</span>
                                     </div>
                                     {row.tools.map((val, j) => {
                                         const lower = val.toLowerCase();
                                         const isGood = lower === 'yes';
                                         const isBad = lower === '—' || lower === 'not available' || lower === 'not integrated' || lower === 'unknown';
                                         return (
-                                            <div key={j} className="p-5 text-center border-l border-border/30 flex items-center justify-center">
+                                            <div key={j} className="p-4 lg:p-5 text-center border-l border-border/30 flex items-center justify-center">
                                                 {isBad ? (
                                                     <span className="text-text-secondary/40 text-sm">—</span>
                                                 ) : isGood ? (
                                                     <CheckCircle2 className="w-4 h-4 text-green-500" />
                                                 ) : (
-                                                    <span className="text-text-secondary text-xs">{val}</span>
+                                                    <span className="text-text-secondary text-[10px] lg:text-xs">{val}</span>
                                                 )}
                                             </div>
                                         );
                                     })}
-                                    <div className="p-5 text-center border-l-2 border-primary-brand/30 bg-green-500/5 flex flex-col items-center justify-center gap-1">
+                                    <div className="p-4 lg:p-5 text-center border-l-2 border-primary-brand/30 bg-green-500/5 flex flex-col items-center justify-center gap-1">
                                         <CheckCircle2 className="w-4 h-4 text-green-400" />
                                         <span className="text-green-400/70 text-[10px]">({row.purplehub})</span>
                                     </div>
@@ -337,9 +340,9 @@ export default function PlatformPageClient() {
 
                         {/* PurpleHub Row Summary */}
                         <div className="bg-primary-brand/10 border-t-2 border-primary-brand/30">
-                            <div className="p-6 text-center">
-                                <p className="text-primary-brand font-bold text-lg font-heading">PurpleHub delivers on every single feature</p>
-                                <p className="text-text-secondary text-sm mt-1">20 out of 20 capabilities — intuitively designed, not bolted on</p>
+                            <div className="p-5 lg:p-6 text-center">
+                                <p className="text-primary-brand font-bold text-base lg:text-lg font-heading">PurpleHub delivers on every single feature</p>
+                                <p className="text-text-secondary text-xs lg:text-sm mt-1">20 out of 20 capabilities — intuitively designed, not bolted on</p>
                             </div>
                         </div>
                     </div>
