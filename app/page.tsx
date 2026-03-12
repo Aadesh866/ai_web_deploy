@@ -779,7 +779,7 @@ export default function HomePage() {
       {/* ============================================ */}
       {/* GOING BEYOND VISIBILITY — Second Video */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32 bg-surface">
+      <section id="going-beyond" className="py-24 lg:py-32 bg-surface">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left: Content */}

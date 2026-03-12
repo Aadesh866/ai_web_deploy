@@ -26,6 +26,7 @@ const homeSections = [
     { id: "salient-features", label: "Salient Features" },
     { id: "name-story", label: "Our Name Story" },
     { id: "the-difference", label: "The Difference" },
+    { id: "going-beyond", label: "Going Beyond" },
 ];
 
 export default function Navbar() {
