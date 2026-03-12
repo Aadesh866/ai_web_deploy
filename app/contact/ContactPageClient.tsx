@@ -365,9 +365,9 @@ export default function ContactPageClient() {
                                     <p className="text-text-secondary text-sm mb-4">
                                         Schedule a 30-minute call with our team at a time that works for you.
                                     </p>
-                                    <button className="inline-flex items-center gap-2 text-sm font-semibold text-primary-brand hover:gap-3 transition-all">
+                                    <a href="https://calendly.com/purplehubweb/30min" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold text-primary-brand hover:gap-3 transition-all">
                                         Schedule a call <Calendar className="w-4 h-4" />
-                                    </button>
+                                    </a>
                                 </div>
                             </ScrollReveal>
 
