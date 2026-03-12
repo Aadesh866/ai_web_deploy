@@ -105,11 +105,45 @@ export default function ContactPageClient() {
         newsletter: false,
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSubmitted(true);
-        // In production, this would send to an API
+        setIsLoading(true);
+        setError("");
+
+        try {
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    access_key: "be787a0f-01f3-4f2f-84c8-1c7a301a129b",
+                    subject: "New Demo Request — PurpleHub Website",
+                    from_name: formData.name,
+                    name: formData.name,
+                    email: formData.email,
+                    company: formData.company,
+                    jobTitle: formData.jobTitle,
+                    teamSize: formData.teamSize,
+                    message: formData.message,
+                    newsletter: formData.newsletter ? "Yes" : "No",
+                }),
+            });
+
+            const data = await response.json();
+            console.log("Web3Forms response:", data);
+
+            if (data.success) {
+                setIsSubmitted(true);
+            } else {
+                setError(data.message || "Something went wrong. Please try again or email us directly.");
+            }
+        } catch {
+            setError("Network error. Please try again or email us directly.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const inputClasses =
@@ -287,11 +321,16 @@ export default function ContactPageClient() {
 
                                             <button
                                                 type="submit"
-                                                className="group inline-flex items-center gap-2 px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-base hover:bg-green-600 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-1"
+                                                disabled={isLoading}
+                                                className="group inline-flex items-center gap-2 px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-base hover:bg-green-600 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
                                             >
-                                                <Send className="w-4 h-4" />
-                                                Request Demo
+                                                <Send className={`w-4 h-4 ${isLoading ? "animate-pulse" : ""}`} />
+                                                {isLoading ? "Sending..." : "Request Demo"}
                                             </button>
+
+                                            {error && (
+                                                <p className="text-red-400 text-sm mt-2">{error}</p>
+                                            )}
                                         </motion.form>
                                     ) : (
                                         <motion.div

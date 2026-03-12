@@ -66,12 +66,12 @@ function HeroHeadline() {
 
 // CEO Questions data (from brochure 001)
 const ceoQuestions = [
-  "Do our performance systems help leaders make confident talent decisions, or do they mainly focus on documentation?",
-  "Would managers voluntarily use the system if compliance wasn't enforced?",
-  "After a full cycle, can HR confidently say behaviour or capability has improved?",
-  "Does feedback reach employees when behaviour can still change, or weeks/months later?",
-  "Can employees clearly see how their contribution translates into outcomes?",
-  "After a full cycle, can HR confidently say capability has improved?",
+  "Are you intentionally developing high performers — or discovering them by accident?",
+  "Is your talent management system truly helping leaders make better people decisions?",
+  "Would your employees and managers still use the performance system if compliance wasn't enforced?",
+  "Is feedback reaching people when it matters — or after it's too late?",
+  "Can your people see clearly how their contributions drive their growth?",
+  "Is your performance management system driving performance or simply tracking it?",
 ];
 
 // Salient Features data (from brochure 003)
@@ -288,7 +288,7 @@ export default function HomePage() {
           <ScrollReveal className="text-center mb-16">
             <p className="section-label">THE REAL QUESTION</p>
             <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-6 max-w-4xl mx-auto">
-              Do you have <span className="gradient-text">real-time visibility</span> into top performers?
+              Do you know if the perceived top talent in your organization is truly the <span className="gradient-text">talent driving results</span>?
             </h2>
             <p className="text-lg text-text-secondary max-w-2xl mx-auto">
               Every CEO should be asking these questions. If you can&apos;t answer them confidently, your performance system is failing you.

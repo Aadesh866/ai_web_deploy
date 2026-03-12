@@ -1,6 +1,65 @@
 "use client";
 
+import { useRef, useState, useEffect, useCallback } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
+
+function AutoPlayVideo({ src }: { src: string }) {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [showControls, setShowControls] = useState(false);
+    const [userPaused, setUserPaused] = useState(false);
+
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && !userPaused) {
+                    video.muted = false;
+                    video.play().catch(() => {
+                        video.muted = true;
+                        video.play().catch(() => { });
+                    });
+                    setShowControls(false);
+                } else {
+                    video.pause();
+                }
+            },
+            { threshold: 0.4 }
+        );
+
+        observer.observe(video);
+        return () => observer.disconnect();
+    }, [userPaused]);
+
+    const handleClick = useCallback(() => {
+        const video = videoRef.current;
+        if (!video) return;
+        if (video.paused) {
+            setUserPaused(false);
+            setShowControls(false);
+            video.play().catch(() => { });
+        } else {
+            setUserPaused(true);
+            setShowControls(true);
+            video.pause();
+        }
+    }, []);
+
+    return (
+        <video
+            ref={videoRef}
+            className="w-full rounded-2xl border border-border shadow-2xl shadow-green-500/10 cursor-pointer"
+            controls={showControls}
+            playsInline
+            preload="metadata"
+            onClick={handleClick}
+        >
+            <source src={src} type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+    );
+}
 
 export default function BrochurePage() {
     return (
@@ -21,18 +80,9 @@ export default function BrochurePage() {
 
             <section className="pb-24 lg:pb-32">
                 <div className="max-w-5xl mx-auto px-6 lg:px-8">
-                    <div
-                        className="rounded-2xl border border-border overflow-hidden bg-surface shadow-xl"
-                        onContextMenu={(e) => e.preventDefault()}
-                        style={{ userSelect: "none" }}
-                    >
-                        <iframe
-                            src="/purplehub-brochure.pdf#toolbar=0&navpanes=0&scrollbar=1"
-                            className="w-full"
-                            style={{ height: "85vh", minHeight: "700px", border: "none" }}
-                            title="PurpleHub Brochure"
-                        />
-                    </div>
+                    <ScrollReveal>
+                        <AutoPlayVideo src="/purplehub-brochure-video.mp4" />
+                    </ScrollReveal>
                 </div>
             </section>
         </>
