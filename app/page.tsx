@@ -283,7 +283,7 @@ export default function HomePage() {
       {/* ============================================ */}
       {/* 1. CEO QUESTIONS — THE REAL QUESTION */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32 bg-surface">
+      <section id="real-question" className="py-24 lg:py-32 bg-surface">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="section-label">THE REAL QUESTION</p>
@@ -315,7 +315,7 @@ export default function HomePage() {
       {/* ============================================ */}
       {/* 2. THE PROBLEM — first 3 cards only */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32">
+      <section id="the-problem" className="py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="section-label">THE PROBLEM</p>
@@ -380,7 +380,7 @@ export default function HomePage() {
       {/* ============================================ */}
       {/* 3. WHAT'S PLAGUING PERFORMANCE MANAGEMENT */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32 bg-surface">
+      <section id="reality-check" className="py-24 lg:py-32 bg-surface">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="section-label">THE REALITY CHECK</p>
@@ -419,7 +419,7 @@ export default function HomePage() {
       {/* ============================================ */}
       {/* 4. THE SHIFT SECTION */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32">
+      <section id="the-shift" className="py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Content */}
@@ -467,7 +467,7 @@ export default function HomePage() {
       {/* ============================================ */}
       {/* 5. PLATFORM PREVIEW */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32 bg-surface">
+      <section id="the-platform" className="py-24 lg:py-32 bg-surface">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="section-label">THE PLATFORM</p>
@@ -506,7 +506,7 @@ export default function HomePage() {
       {/* ============================================ */}
       {/* 6. SALIENT FEATURES — Animated Timeline */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32">
+      <section id="salient-features" className="py-24 lg:py-32">
         <div className="max-w-5xl mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20">
             <p className="section-label">SALIENT FEATURES</p>
@@ -667,7 +667,7 @@ export default function HomePage() {
       {/* ============================================ */}
       {/* 8. THE DIFFERENCE SECTION */}
       {/* ============================================ */}
-      <section className="py-24 lg:py-32">
+      <section id="the-difference" className="py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <ScrollReveal>
