@@ -47,17 +47,22 @@ function AutoPlayVideo({ src }: { src: string }) {
     }, []);
 
     return (
-        <video
-            ref={videoRef}
-            className="w-full rounded-2xl border border-border shadow-2xl shadow-green-500/10 cursor-pointer"
-            controls={showControls}
-            playsInline
-            preload="metadata"
-            onClick={handleClick}
-        >
-            <source src={src} type="video/mp4" />
-            Your browser does not support the video tag.
-        </video>
+        <div onContextMenu={(e) => e.preventDefault()} style={{ userSelect: "none" }}>
+            <video
+                ref={videoRef}
+                className="w-full rounded-2xl border border-border shadow-2xl shadow-green-500/10 cursor-pointer"
+                controls={showControls}
+                controlsList="nodownload"
+                disablePictureInPicture
+                playsInline
+                preload="metadata"
+                onClick={handleClick}
+                onContextMenu={(e) => e.preventDefault()}
+            >
+                <source src={src} type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+        </div>
     );
 }
 
