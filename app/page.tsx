@@ -599,19 +599,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Platform Screenshot */}
-      <section className="py-16 lg:py-24">
+      {/* Insightful Analytics Video */}
+      <section id="insightful-analytics" className="py-16 lg:py-24">
         <div className="max-w-5xl mx-auto px-6 lg:px-8">
           <ScrollReveal>
-            <div className="relative rounded-2xl overflow-hidden border border-border shadow-2xl shadow-green-500/10">
-              <Image
-                src="/brochure-hero.jpg"
-                alt="PurpleHub — Intelligent Talent Platform"
-                width={1400}
-                height={800}
-                className="w-full h-auto"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-background/10 to-transparent" />
+            <div onContextMenu={(e) => e.preventDefault()} style={{ userSelect: "none" }}>
+              <AutoPlayVideo src="/insightful-analytics.mp4" />
             </div>
           </ScrollReveal>
         </div>

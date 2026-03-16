@@ -121,6 +121,7 @@ export default function ContactPageClient() {
                     access_key: "be787a0f-01f3-4f2f-84c8-1c7a301a129b",
                     subject: "New Demo Request — PurpleHub Website",
                     from_name: formData.name,
+                    ccs: "info@purplehub.co.in,smitha.sks@gmail.com,smitha@purplehub.co.in,krshreedevi@gmail.com",
                     name: formData.name,
                     email: formData.email,
                     company: formData.company,
@@ -128,6 +129,7 @@ export default function ContactPageClient() {
                     teamSize: formData.teamSize,
                     message: formData.message,
                     newsletter: formData.newsletter ? "Yes" : "No",
+                    botcheck: "",
                 }),
             });
 
@@ -162,14 +164,13 @@ export default function ContactPageClient() {
                     />
                 </div>
                 <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-green-200 mb-6"
+                    <a
+                        href="#contact-form"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-green-200 mb-6 cursor-pointer hover:bg-white/20 transition-colors"
                     >
                         <Sparkles className="w-4 h-4" />
                         Contact
-                    </motion.div>
+                    </a>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -193,7 +194,7 @@ export default function ContactPageClient() {
             </section>
 
             {/* CONTACT FORM + SIDEBAR */}
-            <section className="py-24 lg:py-32">
+            <section id="contact-form" className="py-24 lg:py-32">
                 <div className="max-w-6xl mx-auto px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
                         {/* Form */}

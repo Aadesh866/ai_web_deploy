@@ -133,12 +133,14 @@ export default function Navbar() {
 
                     {/* CTA + Mobile Toggle */}
                     <div className="flex items-center gap-3">
-                        <Link
-                            href="/contact"
+                        <a
+                            href="https://calendly.com/purplehubweb/30min"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-primary-brand text-white rounded-xl font-medium text-sm hover:bg-green-600 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25 hover:-translate-y-0.5"
                         >
-                            Get a Demo
-                        </Link>
+                            REQUEST DEMO
+                        </a>
                         <button
                             onClick={() => setMobileOpen(!mobileOpen)}
                             className="md:hidden p-2 rounded-lg text-gray-300 hover:bg-surface transition-colors"
@@ -211,12 +213,14 @@ export default function Navbar() {
                                     </Link>
                                 )
                             )}
-                            <Link
-                                href="/contact"
+                            <a
+                                href="https://calendly.com/purplehubweb/30min"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="block mt-4 text-center px-5 py-3 bg-primary-brand text-white rounded-xl font-medium text-sm hover:bg-green-600 transition-colors"
                             >
-                                Get a Demo
-                            </Link>
+                                REQUEST DEMO
+                            </a>
                         </div>
                     </motion.div>
                 )}
