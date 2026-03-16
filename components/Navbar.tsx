@@ -139,7 +139,7 @@ export default function Navbar() {
                             rel="noopener noreferrer"
                             className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-primary-brand text-white rounded-xl font-medium text-sm hover:bg-green-600 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25 hover:-translate-y-0.5"
                         >
-                            REQUEST DEMO
+                            Request a demo
                         </a>
                         <button
                             onClick={() => setMobileOpen(!mobileOpen)}
