@@ -148,7 +148,7 @@ function TimelineSection() {
     const lineWidth = useTransform(scrollYProgress, [0, 0.85], ["25%", "100%"]);
 
     return (
-        <div ref={containerRef} style={{ height: "400vh" }} className="relative">
+        <div id="how-it-works" ref={containerRef} style={{ height: "400vh" }} className="relative">
             <div className="sticky top-0 h-screen flex items-center">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
                     <div className="text-center mb-16">
@@ -418,7 +418,7 @@ export default function PlatformPageClient() {
             </section >
 
             {/* INTEGRATIONS */}
-            < section className="py-24 lg:py-32 bg-surface" >
+            < section id="integrations" className="py-24 lg:py-32 bg-surface" >
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">INTEGRATIONS</p>
@@ -449,7 +449,7 @@ export default function PlatformPageClient() {
             </section >
 
             {/* CTA */}
-            < section className="py-24 lg:py-32" >
+            < section id="cta" className="py-24 lg:py-32" >
                 <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
                     <ScrollReveal>
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">

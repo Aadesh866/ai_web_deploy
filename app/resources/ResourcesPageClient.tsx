@@ -148,7 +148,7 @@ export default function ResourcesPageClient() {
             </section>
 
             {/* FEATURED CONTENT */}
-            <section className="py-24 lg:py-32">
+            <section id="featured" className="py-24 lg:py-32">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal>
                         <div className="interactive-card group p-0 overflow-hidden">
@@ -206,7 +206,7 @@ export default function ResourcesPageClient() {
             </section>
 
             {/* CONTENT GRID */}
-            <section className="py-24 lg:py-32 bg-surface">
+            <section id="browse" className="py-24 lg:py-32 bg-surface">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-12">
                         <p className="section-label">BROWSE RESOURCES</p>
@@ -277,7 +277,7 @@ export default function ResourcesPageClient() {
             </section>
 
             {/* NEWSLETTER */}
-            <section className="py-24 lg:py-32">
+            <section id="newsletter" className="py-24 lg:py-32">
                 <div className="max-w-2xl mx-auto px-6 lg:px-8">
                     <ScrollReveal>
                         <div className="interactive-card text-center p-10 lg:p-14">
@@ -307,7 +307,7 @@ export default function ResourcesPageClient() {
             </section>
 
             {/* BROCHURE VIEWER */}
-            <section className="py-24 lg:py-32">
+            <section id="brochure" className="py-24 lg:py-32">
                 <div className="max-w-5xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-12">
                         <p className="section-label">BROCHURE</p>
@@ -337,7 +337,7 @@ export default function ResourcesPageClient() {
             </section>
 
             {/* EVENTS */}
-            <section className="py-24 lg:py-32 bg-surface">
+            <section id="events" className="py-24 lg:py-32 bg-surface">
                 <div className="max-w-4xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">UPCOMING EVENTS</p>

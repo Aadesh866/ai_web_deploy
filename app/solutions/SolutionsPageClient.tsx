@@ -182,7 +182,7 @@ export default function SolutionsPageClient() {
             </section>
 
             {/* BY INDUSTRY */}
-            <section className="py-24 lg:py-32">
+            <section id="by-industry" className="py-24 lg:py-32">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">BY INDUSTRY</p>
@@ -219,7 +219,7 @@ export default function SolutionsPageClient() {
             </section>
 
             {/* BY ROLE */}
-            <section className="py-24 lg:py-32 bg-surface">
+            <section id="by-role" className="py-24 lg:py-32 bg-surface">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">BY ROLE</p>
@@ -263,7 +263,7 @@ export default function SolutionsPageClient() {
             </section>
 
             {/* USE CASES */}
-            <section className="py-24 lg:py-32">
+            <section id="use-cases" className="py-24 lg:py-32">
                 <div className="max-w-3xl mx-auto px-6 lg:px-8">
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">USE CASES</p>
@@ -287,7 +287,7 @@ export default function SolutionsPageClient() {
             </section>
 
             {/* SUCCESS STORY */}
-            <section className="py-24 lg:py-32 bg-green-900/20">
+            <section id="success-story" className="py-24 lg:py-32 bg-green-900/20">
                 <div className="max-w-5xl mx-auto px-6 lg:px-8">
                     <ScrollReveal>
                         <div className="bg-surface rounded-3xl p-8 lg:p-12 shadow-xl shadow-green-500/5 border border-border">
@@ -337,7 +337,7 @@ export default function SolutionsPageClient() {
             </section>
 
             {/* ROI SECTION */}
-            <section className="py-24 lg:py-32">
+            <section id="roi-calculator" className="py-24 lg:py-32">
                 <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
                     <ScrollReveal>
                         <p className="section-label">ROI CALCULATOR</p>

@@ -17,23 +17,47 @@ const navLinks = [
     { href: "/contact", label: "Contact" },
 ];
 
-const homeSections = [
-    { id: "real-question", label: "The Real Question" },
-    { id: "the-problem", label: "The Problem" },
-    { id: "reality-check", label: "Reality Check" },
-    { id: "the-shift", label: "The Shift" },
-    { id: "the-platform", label: "The Platform" },
-    { id: "salient-features", label: "Salient Features" },
-    { id: "name-story", label: "Our Name Story" },
-    { id: "the-difference", label: "The Difference" },
-    { id: "going-beyond", label: "Going Beyond" },
-];
+/* Section maps for pages that have dropdowns */
+const pageSections: Record<string, { id: string; label: string }[]> = {
+    "/": [
+        { id: "real-question", label: "The Real Question" },
+        { id: "the-problem", label: "The Problem" },
+        { id: "reality-check", label: "Reality Check" },
+        { id: "the-shift", label: "The Shift" },
+        { id: "the-platform", label: "The Platform" },
+        { id: "salient-features", label: "Salient Features" },
+        { id: "name-story", label: "Our Name Story" },
+        { id: "the-difference", label: "The Difference" },
+        { id: "going-beyond", label: "Going Beyond" },
+    ],
+    "/platform": [
+        { id: "compare", label: "Compare" },
+        { id: "features", label: "Capabilities" },
+        { id: "how-it-works", label: "How It Works" },
+        { id: "tech-stack", label: "Tech Stack" },
+        { id: "integrations", label: "Integrations" },
+    ],
+    "/solutions": [
+        { id: "by-industry", label: "By Industry" },
+        { id: "by-role", label: "By Role" },
+        { id: "use-cases", label: "Use Cases" },
+        { id: "success-story", label: "Success Story" },
+        { id: "roi-calculator", label: "ROI Calculator" },
+    ],
+    "/resources": [
+        { id: "featured", label: "Featured Report" },
+        { id: "browse", label: "Browse Resources" },
+        { id: "newsletter", label: "Newsletter" },
+        { id: "brochure", label: "Brochure" },
+        { id: "events", label: "Events" },
+    ],
+};
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [homeDropdown, setHomeDropdown] = useState(false);
-    const [mobileHomeOpen, setMobileHomeOpen] = useState(false);
+    const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+    const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -44,7 +68,7 @@ export default function Navbar() {
 
     useEffect(() => {
         setMobileOpen(false);
-        setMobileHomeOpen(false);
+        setMobileAccordion(null);
     }, [pathname]);
 
     return (
@@ -70,51 +94,64 @@ export default function Navbar() {
 
                     {/* Desktop Nav */}
                     <div className="hidden md:flex items-center gap-1">
-                        {navLinks.map((link) =>
-                            link.label === "Home" ? (
-                                <div
-                                    key={link.href}
-                                    className="relative"
-                                    onMouseEnter={() => setHomeDropdown(true)}
-                                    onMouseLeave={() => setHomeDropdown(false)}
-                                >
-                                    <Link
-                                        href={link.href}
-                                        className={cn(
-                                            "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 inline-flex items-center gap-1",
-                                            pathname === link.href
-                                                ? "text-primary-brand bg-green-900/30"
-                                                : "text-gray-300 hover:text-primary-brand hover:bg-green-900/20"
-                                        )}
-                                    >
-                                        {link.label}
-                                        <ChevronDown className={cn("w-3 h-3 transition-transform duration-300", homeDropdown ? "rotate-180" : "")} />
-                                    </Link>
+                        {navLinks.map((link) => {
+                            const sections = pageSections[link.href];
 
-                                    <AnimatePresence>
-                                        {homeDropdown && (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: 8 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: 8 }}
-                                                transition={{ duration: 0.2 }}
-                                                className="absolute top-full left-0 mt-1 w-56 py-2 rounded-xl bg-surface/95 backdrop-blur-xl border border-border shadow-2xl shadow-black/30"
-                                            >
-                                                {homeSections.map((section) => (
-                                                    <Link
-                                                        key={section.id}
-                                                        href={`/#${section.id}`}
-                                                        className="block px-4 py-2.5 text-sm text-gray-300 hover:text-primary-brand hover:bg-green-900/20 transition-all duration-200"
-                                                        onClick={() => setHomeDropdown(false)}
-                                                    >
-                                                        {section.label}
-                                                    </Link>
-                                                ))}
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            ) : (
+                            if (sections) {
+                                /* Link WITH dropdown */
+                                return (
+                                    <div
+                                        key={link.href}
+                                        className="relative"
+                                        onMouseEnter={() => setActiveDropdown(link.href)}
+                                        onMouseLeave={() => setActiveDropdown(null)}
+                                    >
+                                        <Link
+                                            href={link.href}
+                                            className={cn(
+                                                "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 inline-flex items-center gap-1",
+                                                pathname === link.href
+                                                    ? "text-primary-brand bg-green-900/30"
+                                                    : "text-gray-300 hover:text-primary-brand hover:bg-green-900/20"
+                                            )}
+                                        >
+                                            {link.label}
+                                            <ChevronDown
+                                                className={cn(
+                                                    "w-3 h-3 transition-transform duration-300",
+                                                    activeDropdown === link.href ? "rotate-180" : ""
+                                                )}
+                                            />
+                                        </Link>
+
+                                        <AnimatePresence>
+                                            {activeDropdown === link.href && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: 8 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, y: 8 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    className="absolute top-full left-0 mt-1 w-56 py-2 rounded-xl bg-surface/95 backdrop-blur-xl border border-border shadow-2xl shadow-black/30"
+                                                >
+                                                    {sections.map((section) => (
+                                                        <Link
+                                                            key={section.id}
+                                                            href={`${link.href}#${section.id}`}
+                                                            className="block px-4 py-2.5 text-sm text-gray-300 hover:text-primary-brand hover:bg-green-900/20 transition-all duration-200"
+                                                            onClick={() => setActiveDropdown(null)}
+                                                        >
+                                                            {section.label}
+                                                        </Link>
+                                                    ))}
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+                                );
+                            }
+
+                            /* Link WITHOUT dropdown */
+                            return (
                                 <Link
                                     key={link.href}
                                     href={link.href}
@@ -127,8 +164,8 @@ export default function Navbar() {
                                 >
                                     {link.label}
                                 </Link>
-                            )
-                        )}
+                            );
+                        })}
                     </div>
 
                     {/* CTA + Mobile Toggle */}
@@ -162,43 +199,59 @@ export default function Navbar() {
                         className="md:hidden bg-surface border-t border-border overflow-hidden"
                     >
                         <div className="px-6 py-4 space-y-1">
-                            {navLinks.map((link) =>
-                                link.label === "Home" ? (
-                                    <div key={link.href}>
-                                        <button
-                                            onClick={() => setMobileHomeOpen(!mobileHomeOpen)}
-                                            className={cn(
-                                                "w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-colors",
-                                                pathname === link.href
-                                                    ? "text-primary-brand bg-green-900/30"
-                                                    : "text-gray-300 hover:text-primary-brand hover:bg-surface"
-                                            )}
-                                        >
-                                            {link.label}
-                                            <ChevronDown className={cn("w-4 h-4 transition-transform duration-300", mobileHomeOpen ? "rotate-180" : "")} />
-                                        </button>
-                                        <AnimatePresence>
-                                            {mobileHomeOpen && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, height: 0 }}
-                                                    animate={{ opacity: 1, height: "auto" }}
-                                                    exit={{ opacity: 0, height: 0 }}
-                                                    className="pl-4 overflow-hidden"
-                                                >
-                                                    {homeSections.map((section) => (
-                                                        <Link
-                                                            key={section.id}
-                                                            href={`/#${section.id}`}
-                                                            className="block px-4 py-2.5 text-sm text-gray-400 hover:text-primary-brand transition-colors"
-                                                        >
-                                                            {section.label}
-                                                        </Link>
-                                                    ))}
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </div>
-                                ) : (
+                            {navLinks.map((link) => {
+                                const sections = pageSections[link.href];
+
+                                if (sections) {
+                                    /* Mobile link WITH accordion */
+                                    const isOpen = mobileAccordion === link.href;
+                                    return (
+                                        <div key={link.href}>
+                                            <button
+                                                onClick={() =>
+                                                    setMobileAccordion(isOpen ? null : link.href)
+                                                }
+                                                className={cn(
+                                                    "w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+                                                    pathname === link.href
+                                                        ? "text-primary-brand bg-green-900/30"
+                                                        : "text-gray-300 hover:text-primary-brand hover:bg-surface"
+                                                )}
+                                            >
+                                                {link.label}
+                                                <ChevronDown
+                                                    className={cn(
+                                                        "w-4 h-4 transition-transform duration-300",
+                                                        isOpen ? "rotate-180" : ""
+                                                    )}
+                                                />
+                                            </button>
+                                            <AnimatePresence>
+                                                {isOpen && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, height: 0 }}
+                                                        animate={{ opacity: 1, height: "auto" }}
+                                                        exit={{ opacity: 0, height: 0 }}
+                                                        className="pl-4 overflow-hidden"
+                                                    >
+                                                        {sections.map((section) => (
+                                                            <Link
+                                                                key={section.id}
+                                                                href={`${link.href}#${section.id}`}
+                                                                className="block px-4 py-2.5 text-sm text-gray-400 hover:text-primary-brand transition-colors"
+                                                            >
+                                                                {section.label}
+                                                            </Link>
+                                                        ))}
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+                                    );
+                                }
+
+                                /* Mobile link WITHOUT accordion */
+                                return (
                                     <Link
                                         key={link.href}
                                         href={link.href}
@@ -211,8 +264,8 @@ export default function Navbar() {
                                     >
                                         {link.label}
                                     </Link>
-                                )
-                            )}
+                                );
+                            })}
                             <a
                                 href="https://calendly.com/purplehubweb/30min"
                                 target="_blank"
