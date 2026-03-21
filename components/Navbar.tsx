@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -59,6 +59,36 @@ export default function Navbar() {
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
     const pathname = usePathname();
+    const router = useRouter();
+
+    const scrollToSection = (pageHref: string, sectionId: string) => {
+        setActiveDropdown(null);
+        setMobileOpen(false);
+        setMobileAccordion(null);
+
+        const scrollTo = () => {
+            const el = document.getElementById(sectionId);
+            if (el) {
+                el.scrollIntoView({ behavior: "smooth", block: "start" });
+                return true;
+            }
+            return false;
+        };
+
+        if (pathname === pageHref) {
+            scrollTo();
+        } else {
+            router.push(pageHref);
+            // Poll for the element after page navigation
+            let attempts = 0;
+            const interval = setInterval(() => {
+                if (scrollTo() || attempts > 50) {
+                    clearInterval(interval);
+                }
+                attempts++;
+            }, 100);
+        }
+    };
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -134,14 +164,13 @@ export default function Navbar() {
                                                     className="absolute top-full left-0 mt-1 w-56 py-2 rounded-xl bg-surface/95 backdrop-blur-xl border border-border shadow-2xl shadow-black/30"
                                                 >
                                                     {sections.map((section) => (
-                                                        <Link
+                                                        <button
                                                             key={section.id}
-                                                            href={`${link.href}#${section.id}`}
-                                                            className="block px-4 py-2.5 text-sm text-gray-300 hover:text-primary-brand hover:bg-green-900/20 transition-all duration-200"
-                                                            onClick={() => setActiveDropdown(null)}
+                                                            onClick={() => scrollToSection(link.href, section.id)}
+                                                            className="block w-full text-left px-4 py-2.5 text-sm text-gray-300 hover:text-primary-brand hover:bg-green-900/20 transition-all duration-200"
                                                         >
                                                             {section.label}
-                                                        </Link>
+                                                        </button>
                                                     ))}
                                                 </motion.div>
                                             )}
@@ -235,13 +264,13 @@ export default function Navbar() {
                                                         className="pl-4 overflow-hidden"
                                                     >
                                                         {sections.map((section) => (
-                                                            <Link
+                                                            <button
                                                                 key={section.id}
-                                                                href={`${link.href}#${section.id}`}
-                                                                className="block px-4 py-2.5 text-sm text-gray-400 hover:text-primary-brand transition-colors"
+                                                                onClick={() => scrollToSection(link.href, section.id)}
+                                                                className="block w-full text-left px-4 py-2.5 text-sm text-gray-400 hover:text-primary-brand transition-colors"
                                                             >
                                                                 {section.label}
-                                                            </Link>
+                                                            </button>
                                                         ))}
                                                     </motion.div>
                                                 )}
