@@ -669,26 +669,11 @@ export default function HomePage() {
                 Not Another{" "}
                 <span className="gradient-text">HRMS Add-On</span>
               </h2>
-              <p className="text-lg text-text-secondary leading-relaxed mb-8">
-                While others extend 50+ features you&apos;ll never use, we focus
-                exclusively on performance intelligence.
-              </p>
-              <p className="text-text-secondary leading-relaxed mb-8">
-                90% of HRMS platforms prioritize onboarding, payroll and
-                compliance—performance is just an afterthought. Organizations
-                typically use only 50-60% of system capabilities. We built
-                something different: intelligent, continuous performance
-                management that people actually adopt.
-              </p>
-              
-              <div id="hr-density" className="mb-8 scroll-mt-24">
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">
-                  The <span className="text-primary-brand">HR Density</span> Advantage
-                </h3>
-                <p className="text-text-secondary leading-relaxed mb-4">
+              <div id="hr-density" className="mb-10 scroll-mt-24">
+                <p className="text-lg text-text-secondary leading-relaxed mb-6">
                   Unlike the HRMS tools built around workflows, this platform has the strength of about 60 years of HR experience from diverse industries backing it – making it not just technologically strong, but conceptually robust and focused on driving real organizational impact.
                 </p>
-                <p className="text-text-secondary leading-relaxed">
+                <p className="text-lg text-text-secondary leading-relaxed">
                   The platform is deeply rooted in the real-world challenges and is designed with a clear line of sight of business.
                 </p>
               </div>
