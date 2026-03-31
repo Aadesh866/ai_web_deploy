@@ -681,7 +681,7 @@ export default function HomePage() {
                 management that people actually adopt.
               </p>
               
-              <div className="p-6 mb-8 rounded-2xl bg-white/5 border border-white/10 border-l-4 border-l-primary-brand">
+              <div id="hr-density" className="p-6 mb-8 rounded-2xl bg-white/5 border border-white/10 border-l-4 border-l-primary-brand scroll-mt-24">
                 <h3 className="text-white font-semibold mb-2 flex items-center gap-2">
                   <Zap className="w-4 h-4 text-primary-brand" />
                   The HR Density Advantage

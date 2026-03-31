@@ -29,6 +29,7 @@ const pageSections: Record<string, { id: string; label: string }[]> = {
         { id: "salient-features", label: "Salient Features" },
         { id: "name-story", label: "Our Name Story" },
         { id: "the-difference", label: "The Difference" },
+        { id: "hr-density", label: "HR Density" },
         { id: "going-beyond", label: "Going Beyond" },
     ],
     "/platform": [
