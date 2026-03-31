@@ -16,6 +16,7 @@ const footerLinks = {
         { label: "Platform", href: "/platform" },
         { label: "Solutions", href: "/solutions" },
         { label: "Resources", href: "/resources" },
+        { label: "Teasers", href: "/teasers" },
         { label: "Brochure", href: "/brochure" },
     ],
     support: [

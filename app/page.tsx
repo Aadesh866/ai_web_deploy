@@ -680,6 +680,16 @@ export default function HomePage() {
                 something different: intelligent, continuous performance
                 management that people actually adopt.
               </p>
+              
+              <div className="p-6 mb-8 rounded-2xl bg-white/5 border border-white/10 border-l-4 border-l-primary-brand">
+                <h3 className="text-white font-semibold mb-2 flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-primary-brand" />
+                  The HR Density Advantage
+                </h3>
+                <p className="text-sm text-gray-300 leading-relaxed">
+                  Unlike HRMS tools built around workflows, this platform has the strength of about 60 years of HR experience from diverse industries backing it – making it not just technologically strong, but conceptually robust and focused on driving real organizational impact. The platform is deeply rooted in real-world challenges and is designed with a clear line of sight of business.
+                </p>
+              </div>
               <Link
                 href="/platform"
                 className="group inline-flex items-center gap-2 px-8 py-4 bg-primary-brand text-white rounded-2xl font-semibold text-base hover:bg-green-600 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-1"
