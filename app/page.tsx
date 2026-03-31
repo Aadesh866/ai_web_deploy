@@ -681,13 +681,15 @@ export default function HomePage() {
                 management that people actually adopt.
               </p>
               
-              <div id="hr-density" className="p-6 mb-8 rounded-2xl bg-white/5 border border-white/10 border-l-4 border-l-primary-brand scroll-mt-24">
-                <h3 className="text-white font-semibold mb-2 flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-primary-brand" />
-                  The HR Density Advantage
+              <div id="hr-density" className="mb-8 scroll-mt-24">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">
+                  The <span className="text-primary-brand">HR Density</span> Advantage
                 </h3>
-                <p className="text-sm text-gray-300 leading-relaxed">
-                  Unlike HRMS tools built around workflows, this platform has the strength of about 60 years of HR experience from diverse industries backing it – making it not just technologically strong, but conceptually robust and focused on driving real organizational impact. The platform is deeply rooted in real-world challenges and is designed with a clear line of sight of business.
+                <p className="text-text-secondary leading-relaxed mb-4">
+                  Unlike the HRMS tools built around workflows, this platform has the strength of about 60 years of HR experience from diverse industries backing it – making it not just technologically strong, but conceptually robust and focused on driving real organizational impact.
+                </p>
+                <p className="text-text-secondary leading-relaxed">
+                  The platform is deeply rooted in the real-world challenges and is designed with a clear line of sight of business.
                 </p>
               </div>
               <Link
