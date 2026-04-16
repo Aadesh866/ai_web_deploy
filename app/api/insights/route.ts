@@ -70,6 +70,7 @@ export async function GET() {
 
             const rows = parseCSV(text);
 
+            const posts: { number: string; title: string; url: string }[] = [];
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
                 let url = "";
