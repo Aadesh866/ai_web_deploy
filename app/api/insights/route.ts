@@ -45,6 +45,8 @@ function parseCSV(text: string): string[][] {
     return rows;
 }
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
     let lastError = "";
 
@@ -73,25 +75,20 @@ export async function GET() {
             const posts: { number: string; title: string; url: string }[] = [];
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                let url = "";
-                let title = "";
+                
+                // Rigid structure as requested:
+                // Column A (0) = Hash/Number
+                // Column B (1) = Link (LinkedIn URL)
+                // Column C (2) = Title
+                
+                const link = row[1];
+                const title = row[2];
 
-                // Check if Column B (1) has the URL
-                if (row.length > 1 && row[1] && row[1].includes("linkedin.com")) {
-                    url = row[1];
-                    title = row[2] || ""; // Assume Column C is Title
-                }
-                // Check if Column C (2) has the URL
-                else if (row.length > 2 && row[2] && row[2].includes("linkedin.com")) {
-                    url = row[2];
-                    title = row[1] || ""; // Assume Column B is Title
-                }
-
-                if (url) {
+                if (link && link.includes("linkedin.com")) {
                     posts.push({
                         number: row[0] || String(i),
-                        title: title.trim(),
-                        url: url.trim(),
+                        title: (title || "").trim(),
+                        url: link.trim(),
                     });
                 }
             }
