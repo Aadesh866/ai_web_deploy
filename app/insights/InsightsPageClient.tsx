@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Sparkles, ChevronLeft, ChevronRight, ExternalLink, Pause, Play, RefreshCw } from "lucide-react";
 
-const API_URL = "/api/insights";
 
 interface LinkedInPost {
     number: string;
@@ -38,42 +37,31 @@ function toEmbedUrl(url: string): string {
 }
 
 
-export default function InsightsPageClient() {
-    const [posts, setPosts] = useState<LinkedInPost[]>([]);
+export default function InsightsPageClient({ initialPosts = [] }: { initialPosts?: LinkedInPost[] }) {
+    const [posts, setPosts] = useState<LinkedInPost[]>(initialPosts.map(p => ({
+        ...p,
+        embedUrl: toEmbedUrl(p.url)
+    })));
     const [current, setCurrent] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false); // No longer loading initially
     const [error, setError] = useState<string | null>(null);
 
-    const fetchPosts = useCallback(async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const res = await fetch(API_URL, { cache: "no-store" });
-            const data = await res.json();
-
-            if (data.error) {
-                setError(data.error);
-                return;
-            }
-
-            const parsed: LinkedInPost[] = (data.posts || []).map(
-                (p: { number: string; title: string; url: string }) => ({
-                    ...p,
-                    embedUrl: toEmbedUrl(p.url),
-                })
-            );
-            setPosts(parsed);
-        } catch {
-            setError("Could not load posts. Please try again.");
-        } finally {
-            setLoading(false);
-        }
+    const refreshPosts = useCallback(async () => {
+        // Fallback or Refresh logic if needed, but for now we rely on server data
+        // We can keep a simple refresh that calls the server-side again if wanted,
+        // but it's simpler to just rely on the page reload for now.
     }, []);
 
     useEffect(() => {
-        fetchPosts();
-    }, [fetchPosts]);
+        // Update posts if initialPosts change (e.g. on navigation)
+        if (initialPosts.length > 0) {
+            setPosts(initialPosts.map(p => ({
+                ...p,
+                embedUrl: toEmbedUrl(p.url)
+            })));
+        }
+    }, [initialPosts]);
 
     const total = posts.length;
 
@@ -152,11 +140,11 @@ export default function InsightsPageClient() {
                         <div className="text-center py-20">
                             <p className="text-red-400 mb-4">{error}</p>
                             <button
-                                onClick={fetchPosts}
+                                onClick={() => window.location.reload()}
                                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-surface border border-border rounded-xl text-sm text-white hover:border-primary-brand transition-colors"
                             >
                                 <RefreshCw className="w-4 h-4" />
-                                Retry
+                                Refresh Page
                             </button>
                         </div>
                     ) : total === 0 ? (
