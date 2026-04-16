@@ -220,12 +220,13 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                                     transition={{ duration: 0.4 }}
                                     className="rounded-2xl overflow-hidden border border-border bg-surface/50 shadow-xl shadow-green-500/5 flex flex-col"
                                 >
-                                    <div className="p-6 border-b border-border bg-surface/80 backdrop-blur-sm">
-                                        <h3 className="text-xl sm:text-2xl font-bold font-heading text-white line-clamp-2 leading-snug">
-                                            {posts[current].title || "NO TITLE"}
-                                        </h3>
-                                        <p className="text-xs text-red-400 mt-2">Debug: title="{posts[current].title}"</p>
-                                    </div>
+                                    {posts[current].title && (
+                                        <div className="p-6 border-b border-border bg-surface/80 backdrop-blur-sm">
+                                            <h3 className="text-xl sm:text-2xl font-bold font-heading text-white line-clamp-2 leading-snug">
+                                                {posts[current].title}
+                                            </h3>
+                                        </div>
+                                    )}
                                     <iframe
                                         src={posts[current].embedUrl}
                                         width="100%"
