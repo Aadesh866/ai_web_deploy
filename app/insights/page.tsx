@@ -76,6 +76,7 @@ async function getPosts() {
                 });
             }
         }
+        console.log("POSTS BEING RETURNED:", JSON.stringify(posts, null, 2));
         return posts;
     } catch (error) {
         console.error("Failed to fetch insights:", error);

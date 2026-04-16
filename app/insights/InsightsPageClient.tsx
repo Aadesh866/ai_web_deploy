@@ -13,6 +13,8 @@ interface LinkedInPost {
     embedUrl: string;
 }
 
+
+
 /* Convert a LinkedIn post URL to its embeddable version */
 function toEmbedUrl(url: string): string {
     if (url.includes("/embed/")) return url;
@@ -218,13 +220,12 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                                     transition={{ duration: 0.4 }}
                                     className="rounded-2xl overflow-hidden border border-border bg-surface/50 shadow-xl shadow-green-500/5 flex flex-col"
                                 >
-                                    {posts[current].title && (
-                                        <div className="p-6 border-b border-border bg-surface/80 backdrop-blur-sm">
-                                            <h3 className="text-xl sm:text-2xl font-bold font-heading text-white line-clamp-2 leading-snug">
-                                                {posts[current].title}
-                                            </h3>
-                                        </div>
-                                    )}
+                                    <div className="p-6 border-b border-border bg-surface/80 backdrop-blur-sm">
+                                        <h3 className="text-xl sm:text-2xl font-bold font-heading text-white line-clamp-2 leading-snug">
+                                            {posts[current].title || "NO TITLE"}
+                                        </h3>
+                                        <p className="text-xs text-red-400 mt-2">Debug: title="{posts[current].title}"</p>
+                                    </div>
                                     <iframe
                                         src={posts[current].embedUrl}
                                         width="100%"
@@ -258,11 +259,10 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                                     <button
                                         key={i}
                                         onClick={() => setCurrent(i)}
-                                        className={`h-2 rounded-full transition-all duration-300 ${
-                                            i === current
+                                        className={`h-2 rounded-full transition-all duration-300 ${i === current
                                                 ? "w-6 bg-primary-brand"
                                                 : "w-2 bg-white/20 hover:bg-white/40"
-                                        }`}
+                                            }`}
                                         aria-label={`Go to post ${i + 1}`}
                                     />
                                 ))}
@@ -289,3 +289,5 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
         </main>
     );
 }
+
+
