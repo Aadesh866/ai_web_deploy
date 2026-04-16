@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Sparkles, ChevronLeft, ChevronRight, ExternalLink, Pause, Play, RefreshCw } from "lucide-react";
 
-const SHEET_ID = "1D7SKY65vSpByhyO9UimUHtDIAul9996qTUPUJqmuehI";
-const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+const API_URL = "/api/insights";
 
 interface LinkedInPost {
     number: string;
@@ -38,43 +37,6 @@ function toEmbedUrl(url: string): string {
     return url;
 }
 
-/* Parse CSV text into rows */
-function parseCSV(text: string): string[][] {
-    const rows: string[][] = [];
-    let current = "";
-    let inQuotes = false;
-    let row: string[] = [];
-
-    for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        if (char === '"') {
-            if (inQuotes && text[i + 1] === '"') {
-                current += '"';
-                i++;
-            } else {
-                inQuotes = !inQuotes;
-            }
-        } else if (char === "," && !inQuotes) {
-            row.push(current.trim());
-            current = "";
-        } else if ((char === "\n" || char === "\r") && !inQuotes) {
-            if (current || row.length > 0) {
-                row.push(current.trim());
-                rows.push(row);
-                row = [];
-                current = "";
-            }
-            if (char === "\r" && text[i + 1] === "\n") i++;
-        } else {
-            current += char;
-        }
-    }
-    if (current || row.length > 0) {
-        row.push(current.trim());
-        rows.push(row);
-    }
-    return rows;
-}
 
 export default function InsightsPageClient() {
     const [posts, setPosts] = useState<LinkedInPost[]>([]);
@@ -87,33 +49,20 @@ export default function InsightsPageClient() {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch(SHEET_CSV_URL, { cache: "no-store" });
-            const text = await res.text();
-            const rows = parseCSV(text);
+            const res = await fetch(API_URL, { cache: "no-store" });
+            const data = await res.json();
 
-            // Skip header row (row 0), parse data rows
-            const parsed: LinkedInPost[] = [];
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i];
-                // New format: Column A (0) = Hash, B (1) = Title, C (2) = URL
-                if (row.length > 2 && row[2] && row[2].includes("linkedin.com")) {
-                    parsed.push({
-                        number: row[0] || String(i),
-                        title: row[1] || "",
-                        url: row[2],
-                        embedUrl: toEmbedUrl(row[2]),
-                    });
-                } 
-                // Old format fallback: Column A (0) = Hash, B (1) = URL
-                else if (row.length >= 2 && row[1] && row[1].includes("linkedin.com")) {
-                    parsed.push({
-                        number: row[0] || String(i),
-                        title: "",
-                        url: row[1],
-                        embedUrl: toEmbedUrl(row[1]),
-                    });
-                }
+            if (data.error) {
+                setError(data.error);
+                return;
             }
+
+            const parsed: LinkedInPost[] = (data.posts || []).map(
+                (p: { number: string; title: string; url: string }) => ({
+                    ...p,
+                    embedUrl: toEmbedUrl(p.url),
+                })
+            );
             setPosts(parsed);
         } catch {
             setError("Could not load posts. Please try again.");
