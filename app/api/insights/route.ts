@@ -70,23 +70,27 @@ export async function GET() {
 
             const rows = parseCSV(text);
 
-            const posts: { number: string; title: string; url: string }[] = [];
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                // New format: A=number, B=title, C=url
-                if (row.length > 2 && row[2] && row[2].includes("linkedin.com")) {
-                    posts.push({
-                        number: row[0] || String(i),
-                        title: row[1] || "",
-                        url: row[2],
-                    });
+                let url = "";
+                let title = "";
+
+                // Check if Column B (1) has the URL
+                if (row.length > 1 && row[1] && row[1].includes("linkedin.com")) {
+                    url = row[1];
+                    title = row[2] || ""; // Assume Column C is Title
                 }
-                // Old format fallback: A=number, B=url
-                else if (row.length >= 2 && row[1] && row[1].includes("linkedin.com")) {
+                // Check if Column C (2) has the URL
+                else if (row.length > 2 && row[2] && row[2].includes("linkedin.com")) {
+                    url = row[2];
+                    title = row[1] || ""; // Assume Column B is Title
+                }
+
+                if (url) {
                     posts.push({
                         number: row[0] || String(i),
-                        title: "",
-                        url: row[1],
+                        title: title.trim(),
+                        url: url.trim(),
                     });
                 }
             }
