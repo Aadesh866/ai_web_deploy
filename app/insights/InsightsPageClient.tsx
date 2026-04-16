@@ -10,6 +10,7 @@ const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/t
 
 interface LinkedInPost {
     number: string;
+    title: string;
     url: string;
     embedUrl: string;
 }
@@ -94,9 +95,20 @@ export default function InsightsPageClient() {
             const parsed: LinkedInPost[] = [];
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                if (row.length >= 2 && row[1] && row[1].includes("linkedin.com")) {
+                // New format: Column A (0) = Hash, B (1) = Title, C (2) = URL
+                if (row.length > 2 && row[2] && row[2].includes("linkedin.com")) {
                     parsed.push({
                         number: row[0] || String(i),
+                        title: row[1] || "",
+                        url: row[2],
+                        embedUrl: toEmbedUrl(row[2]),
+                    });
+                } 
+                // Old format fallback: Column A (0) = Hash, B (1) = URL
+                else if (row.length >= 2 && row[1] && row[1].includes("linkedin.com")) {
+                    parsed.push({
+                        number: row[0] || String(i),
+                        title: "",
                         url: row[1],
                         embedUrl: toEmbedUrl(row[1]),
                     });
@@ -267,8 +279,15 @@ export default function InsightsPageClient() {
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: -60 }}
                                     transition={{ duration: 0.4 }}
-                                    className="rounded-2xl overflow-hidden border border-border bg-surface/50 shadow-xl shadow-green-500/5"
+                                    className="rounded-2xl overflow-hidden border border-border bg-surface/50 shadow-xl shadow-green-500/5 flex flex-col"
                                 >
+                                    {posts[current].title && (
+                                        <div className="p-6 border-b border-border bg-surface/80 backdrop-blur-sm">
+                                            <h3 className="text-xl sm:text-2xl font-bold font-heading text-white line-clamp-2 leading-snug">
+                                                {posts[current].title}
+                                            </h3>
+                                        </div>
+                                    )}
                                     <iframe
                                         src={posts[current].embedUrl}
                                         width="100%"
@@ -276,7 +295,7 @@ export default function InsightsPageClient() {
                                         frameBorder="0"
                                         allowFullScreen
                                         title={`LinkedIn Post ${posts[current].number}`}
-                                        className="w-full bg-white"
+                                        className="w-full bg-white flex-1"
                                         style={{ minHeight: 500 }}
                                     />
                                     <div className="p-4 border-t border-border flex items-center justify-between">
