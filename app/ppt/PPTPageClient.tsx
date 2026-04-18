@@ -16,6 +16,8 @@ import {
   Minimize2,
   LinkIcon,
   Presentation,
+  Upload,
+  FileIcon,
 } from "lucide-react";
 
 // ─── URL normalizer ────────────────────────────────────────────────────────────
@@ -63,10 +65,12 @@ function buildEmbedUrl(url: string): string {
 // ─── Props ─────────────────────────────────────────────────────────────────────
 interface PPTPageClientProps {
   initialUrl: string;
+  supabaseUrl: string;
+  supabaseKey: string;
 }
 
 // ─── Component ─────────────────────────────────────────────────────────────────
-export default function PPTPageClient({ initialUrl }: PPTPageClientProps) {
+export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: PPTPageClientProps) {
   const [pptUrl, setPptUrl] = useState(initialUrl);
   const [embedUrl, setEmbedUrl] = useState(buildEmbedUrl(initialUrl));
 
@@ -80,6 +84,7 @@ export default function PPTPageClient({ initialUrl }: PPTPageClientProps) {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
 
   // Fullscreen
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -142,20 +147,47 @@ export default function PPTPageClient({ initialUrl }: PPTPageClientProps) {
 
   // ── Save new URL ───────────────────────────────────────────────────────────
   const handleSave = useCallback(async () => {
-    if (!newUrl.trim()) {
-      setSaveError("Please enter a valid URL.");
+    if (!newUrl.trim() && !uploadFile) {
+      setSaveError("Please enter a URL or select a file to upload.");
       return;
     }
     setSaving(true);
     setSaveError("");
+    
+    let finalUrl = newUrl.trim();
+
     try {
+      // 1. If user selected a file, upload it directly to Supabase Storage first
+      if (uploadFile) {
+        const fileExt = uploadFile.name.split('.').pop()?.toLowerCase() || '';
+        const fileName = `presentation_${Date.now()}.${fileExt}`;
+        
+        const uploadRes = await fetch(`${supabaseUrl}/storage/v1/object/presentations/${fileName}`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${supabaseKey}`,
+            "apikey": supabaseKey,
+            "Content-Type": uploadFile.type || "application/octet-stream",
+            "Cache-Control": "max-age=3600"
+          },
+          body: uploadFile
+        });
+
+        if (!uploadRes.ok) {
+          throw new Error("File upload failed. Ensure bucket exists and permissions are set.");
+        }
+
+        finalUrl = `${supabaseUrl}/storage/v1/object/public/presentations/${fileName}`;
+      }
+
+      // 2. Save the final URL securely to DB
       const res = await fetch("/api/ppt-config", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, url: newUrl.trim() }),
+        body: JSON.stringify({ password, url: finalUrl }),
       });
       if (res.ok) {
-        setPptUrl(newUrl.trim());
+        setPptUrl(finalUrl);
         setSaveSuccess(true);
         setTimeout(() => {
           setShowEdit(false);
@@ -182,6 +214,7 @@ export default function PPTPageClient({ initialUrl }: PPTPageClientProps) {
     setShowPassword(false);
     setPasswordError("");
     setNewUrl("");
+    setUploadFile(null);
     setSaveError("");
     setSaveSuccess(false);
   }, []);
@@ -656,14 +689,71 @@ export default function PPTPageClient({ initialUrl }: PPTPageClientProps) {
                         lineHeight: 1.6,
                       }}
                     >
-                      ✅ Supports: <strong>Canva embed</strong>, <strong>Google Slides</strong>, <strong>PPTX URL</strong> (OneDrive, Drive)
+                      ✅ Supports: <strong>Canva</strong>, <strong>Google Slides</strong>, <strong>OneDrive URL</strong>, or <strong>Direct Upload</strong>
+                    </div>
+
+                    {/* File Upload Area */}
+                    <label
+                      htmlFor="ppt-file-input"
+                      style={{ display: "block", fontSize: 13, color: "#94A3B8", marginBottom: 8, fontWeight: 500 }}
+                    >
+                      Upload File (.pps, .pptx, .pdf)
+                    </label>
+                    <div style={{ marginBottom: 20 }}>
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "12px 16px",
+                          background: uploadFile ? "rgba(34,197,94,0.1)" : "rgba(15,23,42,0.7)",
+                          border: `1px dashed ${uploadFile ? "rgba(34,197,94,0.5)" : "rgba(51,65,85,0.8)"}`,
+                          borderRadius: 10,
+                          cursor: "pointer",
+                          transition: "all 0.2s"
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                           <FileIcon size={20} color={uploadFile ? "#22C55E" : "#64748B"} />
+                           <span style={{ color: uploadFile ? "#F1F5F9" : "#94A3B8", fontSize: 14 }}>
+                             {uploadFile ? uploadFile.name : "Choose a file to upload..."}
+                           </span>
+                        </div>
+                        <input
+                           id="ppt-file-input"
+                           type="file"
+                           accept=".pptx,.pps,.ppsx,.pdf"
+                           onChange={e => {
+                             if (e.target.files && e.target.files[0]) {
+                               setUploadFile(e.target.files[0]);
+                               setNewUrl(""); // clear URL if they picked a file
+                               setSaveError("");
+                             }
+                           }}
+                           style={{ display: "none" }}
+                        />
+                      </label>
+                      {uploadFile && (
+                        <button
+                          onClick={() => setUploadFile(null)}
+                          style={{ background: "none", border: "none", color: "#F87171", fontSize: 12, marginTop: 6, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}
+                        >
+                          <X size={12} /> Remove file
+                        </button>
+                      )}
+                    </div>
+
+                    <div style={{ display: "flex", alignItems: "center", margin: "16px 0", gap: 12 }}>
+                      <div style={{ flex: 1, height: 1, background: "rgba(51,65,85,0.5)" }}></div>
+                      <span style={{ color: "#64748B", fontSize: 13, fontWeight: 500, fontFamily: "var(--font-heading)" }}>OR</span>
+                      <div style={{ flex: 1, height: 1, background: "rgba(51,65,85,0.5)" }}></div>
                     </div>
 
                     <label
                       htmlFor="ppt-url-input"
                       style={{ display: "block", fontSize: 13, color: "#94A3B8", marginBottom: 8, fontWeight: 500 }}
                     >
-                      Presentation URL
+                      Paste Presentation URL
                     </label>
                     <div style={{ position: "relative" }}>
                       <LinkIcon
@@ -675,10 +765,9 @@ export default function PPTPageClient({ initialUrl }: PPTPageClientProps) {
                         id="ppt-url-input"
                         type="url"
                         value={newUrl}
-                        onChange={e => { setNewUrl(e.target.value); setSaveError(""); }}
+                        onChange={e => { setNewUrl(e.target.value); setUploadFile(null); setSaveError(""); }}
                         onKeyDown={onUrlKeyDown}
                         placeholder="https://www.canva.com/design/..."
-                        autoFocus
                         style={{
                           width: "100%",
                           padding: "12px 16px 12px 40px",

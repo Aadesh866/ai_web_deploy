@@ -31,5 +31,7 @@ async function getPPTUrl(): Promise<string> {
 
 export default async function PPTPage() {
   const initialUrl = await getPPTUrl();
-  return <PPTPageClient initialUrl={initialUrl} />;
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  return <PPTPageClient initialUrl={initialUrl} supabaseUrl={supabaseUrl!} supabaseKey={supabaseKey!} />;
 }
