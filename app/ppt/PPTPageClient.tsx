@@ -245,8 +245,8 @@ export default function PPTPageClient({ initialUrl }: PPTPageClientProps) {
               letterSpacing: "-0.02em",
             }}
           >
-            PurpleHub{" "}
-            <span style={{ color: "#22C55E" }}>Deck</span>
+            PurpleHub
+
           </span>
         </div>
 
