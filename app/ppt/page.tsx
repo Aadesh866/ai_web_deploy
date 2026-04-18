@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 async function getPPTUrl(): Promise<string> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/ppt_config?id=eq.main&select=url`,
+      `${process.env.SUPABASE_URL}/rest/v1/ppt_config?id=eq.main&select=url`,
       {
         headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
+          apikey: process.env.SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${process.env.SUPABASE_ANON_KEY!}`,
         },
         cache: "no-store",
       }
