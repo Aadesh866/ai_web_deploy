@@ -204,7 +204,7 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
     } finally {
       setSaving(false);
     }
-  }, [newUrl, password]);
+  }, [newUrl, password, uploadFile, supabaseUrl, supabaseKey]);
 
   // ── Close modal reset ──────────────────────────────────────────────────────
   const closeModal = useCallback(() => {
