@@ -47,9 +47,14 @@ function buildEmbedUrl(url: string): string {
       .replace(/\/embed\?.*/, "/embed?start=false&loop=false&delayms=3000");
   }
 
-  // Microsoft Office Online viewer for .pptx links (Google Drive, OneDrive, Dropbox, etc.)
+  // Microsoft Office Online viewer for .pptx / .ppsx / .pps links
+  const isPowerPoint = 
+    parsedUrl.toLowerCase().includes(".pptx") || 
+    parsedUrl.toLowerCase().includes(".ppsx") || 
+    parsedUrl.toLowerCase().includes(".pps");
+
   if (
-    parsedUrl.includes(".pptx") ||
+    isPowerPoint ||
     parsedUrl.includes("1drv.ms") ||
     parsedUrl.includes("sharepoint.com") ||
     parsedUrl.includes("onedrive.live.com")
@@ -58,7 +63,7 @@ function buildEmbedUrl(url: string): string {
     return `https://view.officeapps.live.com/op/embed.aspx?src=${encoded}`;
   }
 
-  // Assume raw embed-ready URL (already works in iframe)
+  // Assume raw embed-ready URL (e.g. native PDFs in browser iframe)
   return parsedUrl;
 }
 
