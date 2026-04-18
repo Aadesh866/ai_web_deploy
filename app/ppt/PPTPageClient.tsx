@@ -382,6 +382,25 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
               }}
               onContextMenu={e => e.preventDefault()}
             />
+
+            {/* Overlay to block Microsoft Office Viewer 'Download' Menu on bottom right */}
+            {embedUrl?.includes("officeapps.live.com") && (
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  width: 160,
+                  height: 44,
+                  zIndex: 2,
+                  background: "transparent",
+                  pointerEvents: "auto", 
+                  cursor: "not-allowed",
+                }}
+                title="Download disabled"
+                onContextMenu={e => e.preventDefault()}
+              />
+            )}
             <iframe
               ref={iframeRef}
               src={embedUrl}
