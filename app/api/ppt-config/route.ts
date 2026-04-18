@@ -1,22 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
 
-const CONFIG_PATH = path.join(process.cwd(), "ppt-config.json");
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const EDIT_PASSWORD = process.env.PPT_EDIT_PASSWORD || "purplehub2024";
 
-async function readConfig() {
-  try {
-    const raw = await fs.readFile(CONFIG_PATH, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return { url: "" };
-  }
-}
+const headers = {
+  apikey: SUPABASE_KEY,
+  Authorization: `Bearer ${SUPABASE_KEY}`,
+  "Content-Type": "application/json",
+};
 
 export async function GET() {
-  const config = await readConfig();
-  return NextResponse.json(config);
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/ppt_config?id=eq.main&select=url`,
+      { headers, cache: "no-store" }
+    );
+    const data = await res.json();
+    return NextResponse.json({ url: data[0]?.url || "" });
+  } catch {
+    return NextResponse.json({ url: "" });
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -27,7 +31,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid password" }, { status: 401 });
   }
 
-  const config = { url: url || "" };
-  await fs.writeFile(CONFIG_PATH, JSON.stringify(config, null, 2), "utf-8");
-  return NextResponse.json({ success: true, url: config.url });
+  await fetch(`${SUPABASE_URL}/rest/v1/ppt_config?id=eq.main`, {
+    method: "PATCH",
+    headers: { ...headers, Prefer: "return=minimal" },
+    body: JSON.stringify({ url }),
+  });
+
+  return NextResponse.json({ success: true, url });
 }

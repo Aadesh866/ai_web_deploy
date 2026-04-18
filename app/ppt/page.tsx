@@ -9,17 +9,23 @@ export const metadata: Metadata = {
 
 async function getPPTUrl(): Promise<string> {
   try {
-    // Read config from filesystem directly on server
-    const { promises: fs } = await import("fs");
-    const path = await import("path");
-    const configPath = path.join(process.cwd(), "ppt-config.json");
-    const raw = await fs.readFile(configPath, "utf-8");
-    const json = JSON.parse(raw);
-    return json.url || "";
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/ppt_config?id=eq.main&select=url`,
+      {
+        headers: {
+          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
+        },
+        cache: "no-store",
+      }
+    );
+    const data = await res.json();
+    return data[0]?.url || "";
   } catch {
     return "";
   }
 }
+
 
 export default async function PPTPage() {
   const initialUrl = await getPPTUrl();
