@@ -103,6 +103,9 @@ export default function Navbar() {
         setMobileAccordion(null);
     }, [pathname]);
 
+    // Hide on private/standalone pages
+    if (pathname?.startsWith('/ppt')) return null;
+
     return (
         <header
             className={cn(

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import ConditionalFooter from "@/components/ConditionalFooter";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-heading",
@@ -66,7 +66,7 @@ export default function RootLayout({
       >
         <Navbar />
         <main>{children}</main>
-        <Footer />
+        <ConditionalFooter />
       </body>
     </html>
   );

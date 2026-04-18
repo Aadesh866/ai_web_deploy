@@ -216,3 +216,14 @@ h6 {
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+/* Hide global Navbar + Footer on the /ppt page */
+body[data-ppt-page] nav,
+body[data-ppt-page] footer {
+  display: none !important;
+}
+
+body[data-ppt-page] > main {
+  padding: 0 !important;
+  margin: 0 !important;
+}
