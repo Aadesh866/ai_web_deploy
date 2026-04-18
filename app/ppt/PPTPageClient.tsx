@@ -22,16 +22,24 @@ import {
 function buildEmbedUrl(url: string): string {
   if (!url) return "";
 
+  let parsedUrl = url.trim();
+  
+  // If user pasted an entire iframe/html snippet, extract the src URL
+  const srcMatch = parsedUrl.match(/src=["'](.*?)["']/i);
+  if (srcMatch) {
+    parsedUrl = srcMatch[1];
+  }
+
   // Canva embed — already an iframe src
-  if (url.includes("canva.com/embed") || url.includes("canva.com/design")) {
+  if (parsedUrl.includes("canva.com/embed") || parsedUrl.includes("canva.com/design")) {
     // Ensure it ends with ?embed
-    if (!url.includes("embed")) return url + "?embed";
-    return url;
+    if (!parsedUrl.includes("embed")) return parsedUrl + "?embed";
+    return parsedUrl;
   }
 
   // Google Slides — convert share link to embed
-  if (url.includes("docs.google.com/presentation")) {
-    return url
+  if (parsedUrl.includes("docs.google.com/presentation")) {
+    return parsedUrl
       .replace("/edit", "/embed")
       .replace("/pub", "/embed")
       .replace(/\/embed\?.*/, "/embed?start=false&loop=false&delayms=3000");
@@ -39,17 +47,17 @@ function buildEmbedUrl(url: string): string {
 
   // Microsoft Office Online viewer for .pptx links (Google Drive, OneDrive, Dropbox, etc.)
   if (
-    url.includes(".pptx") ||
-    url.includes("1drv.ms") ||
-    url.includes("sharepoint.com") ||
-    url.includes("onedrive.live.com")
+    parsedUrl.includes(".pptx") ||
+    parsedUrl.includes("1drv.ms") ||
+    parsedUrl.includes("sharepoint.com") ||
+    parsedUrl.includes("onedrive.live.com")
   ) {
-    const encoded = encodeURIComponent(url);
+    const encoded = encodeURIComponent(parsedUrl);
     return `https://view.officeapps.live.com/op/embed.aspx?src=${encoded}`;
   }
 
   // Assume raw embed-ready URL (already works in iframe)
-  return url;
+  return parsedUrl;
 }
 
 // ─── Props ─────────────────────────────────────────────────────────────────────
