@@ -628,7 +628,7 @@ export default function HomePage() {
             <ScrollReveal delay={0.2}>
               <p className="section-label">OUR NAME STORY</p>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-                Why <span className="gradient-text">PurpleHub</span>?
+                Why <span className="gradient-text">Purplehub</span>?
               </h2>
               <div className="space-y-5 text-text-secondary leading-relaxed">
                 <p>
@@ -643,7 +643,7 @@ export default function HomePage() {
                   and the work stops feeling like work. Pain melts away. Flow takes over.
                 </p>
                 <p>
-                  PurpleHub was born to unlock that feeling at scale — to help
+                  Purplehub was born to unlock that feeling at scale — to help
                   organizations see their people clearly, celebrate their
                   contributions honestly, and create environments where
                   purpose-driven work thrives.
@@ -783,7 +783,7 @@ export default function HomePage() {
                   Performance isn&apos;t just about what gets measured — it&apos;s about what gets <span className="text-white font-medium">understood</span>.
                 </p>
                 <p>
-                  PurpleHub goes beyond simple dashboards and scorecards. We surface the <span className="text-primary-brand font-semibold">stories behind the numbers</span> —
+                  Purplehub goes beyond simple dashboards and scorecards. We surface the <span className="text-primary-brand font-semibold">stories behind the numbers</span> —
                   the quiet contributor who bridges three teams, the deep-tech specialist whose impact ripples across the entire organization.
                 </p>
                 <p>

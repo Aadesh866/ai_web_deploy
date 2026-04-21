@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Terms of Service | PurpleHub",
+    title: "Terms of Service | Purplehub",
     description:
-        "Read PurpleHub's Terms of Service. Understand the terms and conditions governing your use of our performance intelligence platform.",
+        "Read Purplehub's Terms of Service. Understand the terms and conditions governing your use of our performance intelligence platform.",
 };
 
 export default function TermsOfServicePage() {
@@ -28,7 +28,7 @@ export default function TermsOfServicePage() {
                         </span>
                     </h1>
                     <p className="mt-6 text-lg text-green-200/80 max-w-2xl mx-auto">
-                        Please read these terms carefully before using PurpleHub&apos;s services.
+                        Please read these terms carefully before using Purplehub&apos;s services.
                     </p>
                     <p className="mt-3 text-sm text-green-200/50">
                         Last updated: March 22, 2026
@@ -47,7 +47,7 @@ export default function TermsOfServicePage() {
                                 1. Acceptance of Terms
                             </h2>
                             <p className="text-text-secondary leading-relaxed">
-                                By accessing or using the PurpleHub website (purplehub.co.in), platform, or any
+                                By accessing or using the Purplehub website (purplehub.co.in), platform, or any
                                 related services (collectively, the &ldquo;Services&rdquo;), you agree to be bound
                                 by these Terms of Service (&ldquo;Terms&rdquo;). If you are using the Services on
                                 behalf of an organization, you represent that you have the authority to bind that
@@ -64,7 +64,7 @@ export default function TermsOfServicePage() {
                                 2. Description of Services
                             </h2>
                             <p className="text-text-secondary leading-relaxed">
-                                PurpleHub provides an AI-powered performance intelligence platform designed to help
+                                Purplehub provides an AI-powered performance intelligence platform designed to help
                                 organizations manage, measure, and enhance employee performance. Our Services
                                 include, but are not limited to:
                             </p>
@@ -110,7 +110,7 @@ export default function TermsOfServicePage() {
                             </h3>
                             <p className="text-text-secondary leading-relaxed">
                                 You are responsible for maintaining the confidentiality of your account credentials
-                                and for all activities that occur under your account. You must notify PurpleHub
+                                and for all activities that occur under your account. You must notify Purplehub
                                 immediately of any unauthorized use of your account or any other breach of security.
                             </p>
                             <h3 className="text-lg font-semibold text-white mt-6 mb-3">
@@ -160,8 +160,8 @@ export default function TermsOfServicePage() {
                             </h3>
                             <p className="text-text-secondary leading-relaxed">
                                 All content, features, functionality, trademarks, logos, design elements, and
-                                underlying technology of the PurpleHub platform and website are the exclusive
-                                property of PurpleHub Technologies Private Limited and are protected by intellectual
+                                underlying technology of the Purplehub platform and website are the exclusive
+                                property of Purplehub Technologies Private Limited and are protected by intellectual
                                 property laws. Nothing in these Terms grants you any right, title, or interest in
                                 our intellectual property.
                             </p>
@@ -170,7 +170,7 @@ export default function TermsOfServicePage() {
                             </h3>
                             <p className="text-text-secondary leading-relaxed">
                                 You retain ownership of any data or content you submit through the platform. By
-                                using our Services, you grant PurpleHub a limited, non-exclusive license to process
+                                using our Services, you grant Purplehub a limited, non-exclusive license to process
                                 and display your content solely for the purpose of providing the Services.
                             </p>
                         </div>
@@ -181,7 +181,7 @@ export default function TermsOfServicePage() {
                                 6. Subscription and Payment
                             </h2>
                             <p className="text-text-secondary leading-relaxed">
-                                Access to PurpleHub&apos;s platform features may require a paid subscription.
+                                Access to Purplehub&apos;s platform features may require a paid subscription.
                                 Subscription plans, pricing, and billing cycles are detailed in your service
                                 agreement. All fees are non-refundable except as expressly stated in your agreement
                                 or required by applicable law.
@@ -228,7 +228,7 @@ export default function TermsOfServicePage() {
                                 9. Limitation of Liability
                             </h2>
                             <p className="text-text-secondary leading-relaxed">
-                                To the maximum extent permitted by applicable law, PurpleHub and its officers,
+                                To the maximum extent permitted by applicable law, Purplehub and its officers,
                                 directors, employees, and agents shall not be liable for any indirect, incidental,
                                 special, consequential, or punitive damages, including but not limited to loss of
                                 profits, data, business opportunities, or goodwill, arising out of or related to
@@ -236,7 +236,7 @@ export default function TermsOfServicePage() {
                             </p>
                             <p className="text-text-secondary leading-relaxed mt-3">
                                 Our total liability for any claim arising under these Terms shall not exceed the
-                                amount paid by you to PurpleHub in the twelve (12) months preceding the claim.
+                                amount paid by you to Purplehub in the twelve (12) months preceding the claim.
                             </p>
                         </div>
 
@@ -246,7 +246,7 @@ export default function TermsOfServicePage() {
                                 10. Indemnification
                             </h2>
                             <p className="text-text-secondary leading-relaxed">
-                                You agree to indemnify and hold harmless PurpleHub and its affiliates from any
+                                You agree to indemnify and hold harmless Purplehub and its affiliates from any
                                 claims, losses, damages, liabilities, costs, or expenses (including reasonable
                                 attorney&apos;s fees) arising from your use of the Services, violation of these
                                 Terms, or infringement of any third-party rights.
@@ -262,7 +262,7 @@ export default function TermsOfServicePage() {
                                 The Services are provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo; without
                                 warranties of any kind, whether express or implied, including but not limited to
                                 implied warranties of merchantability, fitness for a particular purpose, and
-                                non-infringement. PurpleHub does not warrant that the Services will be uninterrupted,
+                                non-infringement. Purplehub does not warrant that the Services will be uninterrupted,
                                 error-free, or completely secure.
                             </p>
                         </div>
@@ -290,7 +290,7 @@ export default function TermsOfServicePage() {
                                 13. Modifications to Terms
                             </h2>
                             <p className="text-text-secondary leading-relaxed">
-                                PurpleHub reserves the right to modify these Terms at any time. Material changes will
+                                Purplehub reserves the right to modify these Terms at any time. Material changes will
                                 be communicated through the website or via email to registered users. Continued use
                                 of the Services following any modifications constitutes acceptance of the revised
                                 Terms. We recommend reviewing these Terms periodically for updates.
@@ -329,7 +329,7 @@ export default function TermsOfServicePage() {
                                     <strong className="text-white">Phone:</strong> +91 8904096161
                                 </p>
                                 <p>
-                                    <strong className="text-white">Address:</strong> PurpleHub Technologies Private Limited, Bangalore, India
+                                    <strong className="text-white">Address:</strong> Purplehub Technologies Private Limited, Bangalore, India
                                 </p>
                             </div>
                         </div>

@@ -86,7 +86,7 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
     return (
         <main className="min-h-screen bg-background text-text-primary selection:bg-primary-brand/30 pb-20">
             {/* HERO SECTION */}
-            <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-gradient-to-br from-primary-dark via-green-900 to-primary-dark overflow-hidden">
+            <section className="relative pt-24 pb-10 lg:pt-28 lg:pb-12 bg-gradient-to-br from-primary-dark via-green-900 to-primary-dark overflow-hidden">
                 <div className="absolute inset-0 opacity-20">
                     <div
                         className="absolute inset-0"
@@ -111,7 +111,7 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                         transition={{ delay: 0.2 }}
                         className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight"
                     >
-                        PurpleHub{" "}
+                        Purplehub{" "}
                         <span className="bg-gradient-to-r from-primary-brand to-secondary bg-clip-text text-transparent">
                             Insights
                         </span>
@@ -129,7 +129,7 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
             </section>
 
             {/* CAROUSEL / CONTENT */}
-            <section className="py-20 lg:py-28">
+            <section className="py-8 lg:py-12">
                 <div className="max-w-4xl mx-auto px-6 lg:px-8">
                     {loading ? (
                         /* ─── Loading state ─── */
@@ -169,7 +169,7 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                     </svg>
-                                    Follow PurpleHub on LinkedIn
+                                    Follow Purplehub on LinkedIn
                                 </a>
                             </div>
                         </ScrollReveal>
@@ -280,7 +280,7 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                     </svg>
-                                    Follow PurpleHub on LinkedIn
+                                    Follow Purplehub on LinkedIn
                                 </a>
                             </div>
                         </div>

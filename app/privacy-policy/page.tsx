@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Privacy Policy | PurpleHub",
+    title: "Privacy Policy | Purplehub",
     description:
-        "Learn how PurpleHub collects, uses, and protects your personal information. Our commitment to data privacy and security.",
+        "Learn how Purplehub collects, uses, and protects your personal information. Our commitment to data privacy and security.",
 };
 
 export default function PrivacyPolicyPage() {
@@ -47,7 +47,7 @@ export default function PrivacyPolicyPage() {
                                 1. Introduction
                             </h2>
                             <p className="text-text-secondary leading-relaxed">
-                                PurpleHub Technologies Private Limited (&ldquo;PurpleHub,&rdquo; &ldquo;we,&rdquo;
+                                Purplehub Technologies Private Limited (&ldquo;Purplehub,&rdquo; &ldquo;we,&rdquo;
                                 &ldquo;us,&rdquo; or &ldquo;our&rdquo;) is committed to protecting the privacy and
                                 security of your personal information. This Privacy Policy explains how we collect,
                                 use, disclose, and safeguard your information when you visit our website
@@ -104,7 +104,7 @@ export default function PrivacyPolicyPage() {
                                 2.3 Platform Data (For Customers)
                             </h3>
                             <p className="text-text-secondary leading-relaxed">
-                                When organizations use the PurpleHub performance intelligence platform, employee
+                                When organizations use the Purplehub performance intelligence platform, employee
                                 performance data, feedback, goals, and related HR information are processed on behalf
                                 of our customers. This data is governed by the customer&apos;s own privacy policies and
                                 our Data Processing Agreement.
@@ -152,7 +152,7 @@ export default function PrivacyPolicyPage() {
                                 </li>
                                 <li className="flex items-start gap-2">
                                     <span className="w-1.5 h-1.5 rounded-full bg-primary-brand mt-2 flex-shrink-0" />
-                                    <span><strong className="text-white">Legal Requirements:</strong> When required by law, regulation, or legal process, or to protect the rights, property, or safety of PurpleHub, our users, or others.</span>
+                                    <span><strong className="text-white">Legal Requirements:</strong> When required by law, regulation, or legal process, or to protect the rights, property, or safety of Purplehub, our users, or others.</span>
                                 </li>
                                 <li className="flex items-start gap-2">
                                     <span className="w-1.5 h-1.5 rounded-full bg-primary-brand mt-2 flex-shrink-0" />
@@ -247,7 +247,7 @@ export default function PrivacyPolicyPage() {
                             </h2>
                             <p className="text-text-secondary leading-relaxed">
                                 Our website may contain links to third-party websites or services that are not
-                                operated by PurpleHub. We are not responsible for the privacy practices of these
+                                operated by Purplehub. We are not responsible for the privacy practices of these
                                 external sites. We encourage you to review the privacy policies of any third-party
                                 sites you visit.
                             </p>
@@ -300,7 +300,7 @@ export default function PrivacyPolicyPage() {
                                     <strong className="text-white">Phone:</strong> +91 8904096161
                                 </p>
                                 <p>
-                                    <strong className="text-white">Address:</strong> PurpleHub Technologies Private Limited, Bangalore, India
+                                    <strong className="text-white">Address:</strong> Purplehub Technologies Private Limited, Bangalore, India
                                 </p>
                             </div>
                         </div>

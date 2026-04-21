@@ -41,7 +41,7 @@ const articles = [
         category: "Case Studies",
         title: "How ScaleUp Inc. Transformed Performance Culture",
         excerpt: "From annual reviews to continuous intelligence: a 2,000-person company's 18-month transformation journey.",
-        author: "PurpleHub Team",
+        author: "Purplehub Team",
         readTime: "6 min read",
         gradient: "from-green-500 to-emerald-400",
     },
@@ -312,10 +312,10 @@ export default function ResourcesPageClient() {
                     <ScrollReveal className="text-center mb-12">
                         <p className="section-label">BROCHURE</p>
                         <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                            Explore the <span className="gradient-text">PurpleHub Brochure</span>
+                            Explore the <span className="gradient-text">Purplehub Brochure</span>
                         </h2>
                         <p className="text-text-secondary max-w-2xl mx-auto">
-                            A comprehensive look at how PurpleHub transforms performance management — scroll through the full brochure below.
+                            A comprehensive look at how Purplehub transforms performance management — scroll through the full brochure below.
                         </p>
                     </ScrollReveal>
 
@@ -329,7 +329,7 @@ export default function ResourcesPageClient() {
                                 src="/purplehub-brochure.pdf#toolbar=0&navpanes=0&scrollbar=1"
                                 className="w-full"
                                 style={{ height: "80vh", minHeight: "600px", border: "none" }}
-                                title="PurpleHub Brochure"
+                                title="Purplehub Brochure"
                             />
                         </div>
                     </ScrollReveal>

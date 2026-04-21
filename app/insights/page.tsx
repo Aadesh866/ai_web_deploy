@@ -4,8 +4,8 @@ import InsightsPageClient from "./InsightsPageClient";
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-    title: "Insights | PurpleHub",
-    description: "Explore the latest insights, teasers, and thought leadership from PurpleHub on LinkedIn.",
+    title: "Insights | Purplehub",
+    description: "Explore the latest insights, teasers, and thought leadership from Purplehub on LinkedIn.",
 };
 
 const SHEET_ID = "1D7SKY65vSpByhyO9UimUHtDIAul9996qTUPUJqmuehI";

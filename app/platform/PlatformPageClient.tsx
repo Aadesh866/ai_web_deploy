@@ -281,10 +281,10 @@ export default function PlatformPageClient() {
                     <ScrollReveal className="text-center mb-16">
                         <p className="section-label">COMPARE</p>
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-                            Compare <span className="gradient-text">PurpleHub</span> with the rest
+                            Compare <span className="gradient-text">Purplehub</span> with the rest
                         </h2>
                         <p className="mt-4 text-text-secondary max-w-2xl mx-auto">
-                            See at a glance how PurpleHub delivers where others fall short
+                            See at a glance how Purplehub delivers where others fall short
                         </p>
                     </ScrollReveal>
 
@@ -303,7 +303,7 @@ export default function PlatformPageClient() {
                                         </div>
                                     ))}
                                     <div className="p-4 lg:p-5 text-center text-xs lg:text-sm font-bold text-primary-brand border-l-2 border-primary-brand/30 bg-green-500/10">
-                                        🟢 PurpleHub
+                                        🟢 Purplehub
                                     </div>
                                 </div>
                             </div>
@@ -338,10 +338,10 @@ export default function PlatformPageClient() {
                             ))}
                         </div>
 
-                        {/* PurpleHub Row Summary */}
+                        {/* Purplehub Row Summary */}
                         <div className="bg-primary-brand/10 border-t-2 border-primary-brand/30">
                             <div className="p-5 lg:p-6 text-center">
-                                <p className="text-primary-brand font-bold text-base lg:text-lg font-heading">PurpleHub delivers on every single feature</p>
+                                <p className="text-primary-brand font-bold text-base lg:text-lg font-heading">Purplehub delivers on every single feature</p>
                                 <p className="text-text-secondary text-xs lg:text-sm mt-1">20 out of 20 capabilities — intuitively designed, not bolted on</p>
                             </div>
                         </div>
@@ -456,7 +456,7 @@ export default function PlatformPageClient() {
                             See it in action
                         </h2>
                         <p className="text-lg text-text-secondary mb-10">
-                            Schedule a personalized demo and see how PurpleHub can transform
+                            Schedule a personalized demo and see how Purplehub can transform
                             your organization&apos;s performance management.
                         </p>
                         <Link

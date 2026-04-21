@@ -119,7 +119,7 @@ export default function Navbar() {
                     <Link href="/" className="flex items-center gap-2 group">
                         <Image
                             src="/logo.png"
-                            alt="PurpleHub Logo"
+                            alt="Purplehub Logo"
                             width={160}
                             height={45}
                             className="h-10 w-auto group-hover:scale-105 transition-transform duration-300"

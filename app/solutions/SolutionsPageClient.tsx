@@ -88,7 +88,7 @@ const useCases = [
     },
     {
         title: "Matrix Organizations",
-        content: "Navigate dotted-line reporting with multi-rater feedback from project leads, functional managers, and peers. PurpleHub surfaces cross-functional contributions that traditional hierarchical reviews miss entirely.",
+        content: "Navigate dotted-line reporting with multi-rater feedback from project leads, functional managers, and peers. Purplehub surfaces cross-functional contributions that traditional hierarchical reviews miss entirely.",
     },
     {
         title: "Agile & Cross-Functional Teams",
@@ -296,7 +296,7 @@ export default function SolutionsPageClient() {
                                     <p className="section-label">SUCCESS STORY</p>
                                     <Quote className="w-10 h-10 text-primary-brand/20 mb-4" />
                                     <blockquote className="text-xl font-heading font-bold text-white leading-snug mb-6">
-                                        &ldquo;PurpleHub transformed how we think about talent
+                                        &ldquo;Purplehub transformed how we think about talent
                                         development. Our manager effectiveness scores jumped 45% in the
                                         first year.&rdquo;
                                     </blockquote>
@@ -345,7 +345,7 @@ export default function SolutionsPageClient() {
                             Calculate your <span className="gradient-text">potential savings</span>
                         </h2>
                         <p className="text-lg text-text-secondary mb-10">
-                            See how much time, money, and effort PurpleHub can save your
+                            See how much time, money, and effort Purplehub can save your
                             organization. Schedule a consultation for a personalized ROI analysis.
                         </p>
                         <Link

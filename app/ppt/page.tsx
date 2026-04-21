@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import PPTPageClient from "./PPTPageClient";
 
 export const metadata: Metadata = {
-  title: "Presentation | PurpleHub",
-  description: "PurpleHub client presentation.",
+  title: "Presentation | Purplehub",
+  description: "Purplehub client presentation.",
   robots: "noindex, nofollow",
 };
 

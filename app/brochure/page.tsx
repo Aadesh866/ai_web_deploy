@@ -74,10 +74,10 @@ export default function BrochurePage() {
                     <ScrollReveal className="text-center mb-8">
                         <p className="section-label">BROCHURE</p>
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-                            The <span className="gradient-text">PurpleHub</span> Brochure
+                            The <span className="gradient-text">Purplehub</span> Brochure
                         </h1>
                         <p className="text-text-secondary max-w-2xl mx-auto">
-                            A comprehensive overview of how PurpleHub transforms performance management.
+                            A comprehensive overview of how Purplehub transforms performance management.
                         </p>
                     </ScrollReveal>
                 </div>

@@ -20,7 +20,7 @@ export default function ScrollPinnedSteps({ steps }: { steps: Step[] }) {
     return (
         <div
             ref={containerRef}
-            style={{ height: `${(steps.length + 1) * 100}vh` }}
+            style={{ height: `${(steps.length + 1) * 200}vh` }}
             className="relative"
         >
             <div className="sticky top-0 h-screen flex items-center overflow-hidden">

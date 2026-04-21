@@ -283,7 +283,7 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
               letterSpacing: "-0.02em",
             }}
           >
-            PurpleHub
+            Purplehub
 
           </span>
         </div>
@@ -404,7 +404,7 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
             <iframe
               ref={iframeRef}
               src={embedUrl}
-              title="PurpleHub Presentation"
+              title="Purplehub Presentation"
               allow="autoplay; fullscreen"
               allowFullScreen
               style={{
