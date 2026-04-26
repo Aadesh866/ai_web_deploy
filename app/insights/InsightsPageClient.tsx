@@ -45,7 +45,7 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
         embedUrl: toEmbedUrl(p.url)
     })));
     const [current, setCurrent] = useState(0);
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(false);
     const [loading, setLoading] = useState(false); // No longer loading initially
     const [error, setError] = useState<string | null>(null);
 
@@ -97,34 +97,14 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                     />
                 </div>
                 <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-green-200 mb-6"
-                    >
-                        <Sparkles className="w-4 h-4" />
-                        From Our LinkedIn
-                    </motion.div>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight"
-                    >
-                        Purplehub{" "}
-                        <span className="bg-gradient-to-r from-primary-brand to-secondary bg-clip-text text-transparent">
-                            Insights
-                        </span>
-                    </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="mt-6 text-lg text-green-200/80 max-w-2xl mx-auto"
+                        className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-snug max-w-3xl mx-auto"
                     >
                         Stay up-to-date with our latest insights and thought leadership
                         — straight from our LinkedIn.
-                    </motion.p>
+                    </motion.h1>
                 </div>
             </section>
 
@@ -177,37 +157,44 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                         /* ─── Rolling carousel ─── */
                         <div>
                             {/* Controls */}
-                            <div className="flex items-center justify-between mb-6">
-                                <p className="text-sm text-text-secondary">
-                                    Post {current + 1} of {total}
-                                </p>
-                                <div className="flex items-center gap-2">
+                            {/* Controls */}
+                            <div className="flex flex-col items-center justify-center gap-4 mb-10 mt-2">
+                                <div className="flex items-center gap-2 sm:gap-4 bg-surface/50 border border-border px-4 py-2 sm:px-6 sm:py-3 rounded-full shadow-lg shadow-green-500/10">
+                                    <button
+                                        onClick={prev}
+                                        className="p-2 sm:p-3 rounded-xl text-white hover:bg-surface hover:text-primary-brand transition-all flex items-center gap-1 sm:gap-2 font-bold text-sm sm:text-base"
+                                        aria-label="Previous"
+                                    >
+                                        <ChevronLeft className="w-5 h-5" /> PREV
+                                    </button>
+                                    
+                                    <div className="w-[1px] h-6 sm:h-8 bg-border"></div>
+                                    
                                     <button
                                         onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                                        className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-surface transition-colors"
+                                        className="p-2 sm:p-3 rounded-xl text-white hover:bg-surface hover:text-green-400 transition-all flex items-center gap-1 sm:gap-2 font-bold text-sm sm:text-base"
                                         aria-label={isAutoPlaying ? "Pause" : "Play"}
                                     >
                                         {isAutoPlaying ? (
-                                            <Pause className="w-4 h-4" />
+                                            <><Pause className="w-5 h-5" /> PAUSE</>
                                         ) : (
-                                            <Play className="w-4 h-4" />
+                                            <><Play className="w-5 h-5" /> PLAY</>
                                         )}
                                     </button>
-                                    <button
-                                        onClick={prev}
-                                        className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-surface transition-colors"
-                                        aria-label="Previous"
-                                    >
-                                        <ChevronLeft className="w-5 h-5" />
-                                    </button>
+                                    
+                                    <div className="w-[1px] h-6 sm:h-8 bg-border"></div>
+                                    
                                     <button
                                         onClick={next}
-                                        className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-surface transition-colors"
+                                        className="p-2 sm:p-3 rounded-xl text-white hover:bg-surface hover:text-primary-brand transition-all flex items-center gap-1 sm:gap-2 font-bold text-sm sm:text-base"
                                         aria-label="Next"
                                     >
-                                        <ChevronRight className="w-5 h-5" />
+                                        NEXT <ChevronRight className="w-5 h-5" />
                                     </button>
                                 </div>
+                                <p className="text-sm text-text-secondary font-medium tracking-wide">
+                                    Post {current + 1} of {total}
+                                </p>
                             </div>
 
                             {/* Embedded post */}
