@@ -67,7 +67,7 @@ export function EmployeeCharts() {
       {/* Variation 1.5: True 3D Isometric Scatter (Values Manifested style) */}
       <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
         <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 1.5: 3D Isometric Scatter</h3>
-        <div className="relative h-[550px] w-full max-w-2xl mx-auto flex items-center justify-center pt-8">
+        <div className="relative h-[450px] w-full max-w-2xl mx-auto flex items-center justify-center pt-8">
            <ValuesManifested3DChart />
         </div>
       </div>
@@ -276,18 +276,18 @@ function ValuesManifested3DChart() {
     // y is height axis
     const isoX = (x - z) * 0.866; // cos(30)
     const isoY = (x + z) * 0.5 - y; // sin(30) - height
-    return { cx: isoX * 2.5 + 200, cy: isoY * 2.5 + 400 }; // Scale and center lower down
+    return { cx: isoX * 2.5 + 200, cy: isoY * 2.5 + 320 }; // Centered vertically
   };
 
   const projectFloor = (x: number, z: number) => {
     const isoX = (x - z) * 0.866;
     const isoY = (x + z) * 0.5;
-    return { cx: isoX * 2.5 + 200, cy: isoY * 2.5 + 400 };
+    return { cx: isoX * 2.5 + 200, cy: isoY * 2.5 + 320 };
   };
 
   return (
     <div className="relative w-full h-full max-w-[400px]">
-      <svg viewBox="0 0 400 550" className="w-full h-full overflow-visible">
+      <svg viewBox="0 0 400 450" className="w-full h-full overflow-visible">
         <defs>
            <filter id="glow3d">
              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
