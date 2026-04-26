@@ -87,6 +87,15 @@ export function EmployeeCharts() {
           <OrbitalChart data={employeeData} />
         </div>
       </div>
+
+      {/* Variation 4: Animated Speedometers (Velocity & Volume) */}
+      <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
+        <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 4: Live Speedometers</h3>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-16 lg:gap-32">
+          <SpeedometerChart title="Assignment Velocity" type="velocity" />
+          <SpeedometerChart title="Assignment Volume" type="volume" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -363,6 +372,176 @@ function ValuesManifested3DChart() {
           );
         })}
       </svg>
+    </div>
+  );
+}
+
+// Helper component for Live Speedometers
+function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "volume" }) {
+  const size = 300;
+  const center = size / 2;
+  const radius = size / 2 - 40;
+  
+  // Speedometer goes from -120 degrees to +120 degrees
+  const angleRange = 240; 
+  const startAngle = -120;
+  const endAngle = 120;
+
+  // Data config based on video
+  const maxVal = type === "velocity" ? 60 : 200;
+  const ticks = type === "velocity" 
+    ? [0, 10, 20, 30, 40, 50, 60]
+    : [0, 40, 80, 120, 160, 200];
+  
+  // Target values based on the video:
+  // Velocity: Org Average ~22, Employee ~30, Org Best ~48
+  // Volume: Org Average ~95, Employee ~125, Org Best ~170
+  const targets = type === "velocity" 
+    ? { avg: 22, best: 48, emp: 30 }
+    : { avg: 95, best: 170, emp: 125 };
+
+  // Calculate rotation angle based on value
+  const valToAngle = (val: number) => {
+    const percentage = val / maxVal;
+    return startAngle + (percentage * angleRange);
+  };
+
+  return (
+    <div className="flex flex-col items-center">
+      <h4 className="text-white font-bold mb-8 text-lg bg-black/50 px-4 py-2 rounded-lg border border-white/10">{title}</h4>
+      
+      <div className="relative" style={{ width: size, height: size }}>
+        {/* Background dial */}
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gray-800 to-black border-4 border-gray-700 shadow-2xl flex items-center justify-center overflow-hidden">
+           {/* Inner metallic rim */}
+           <div className="absolute inset-2 rounded-full border-2 border-gray-600/50" />
+           <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_10%,rgba(255,255,255,0.1),transparent_50%)]" />
+        </div>
+
+        <svg width={size} height={size} className="absolute inset-0 z-10 overflow-visible">
+          {/* Ticks and Labels */}
+          {ticks.map((tick) => {
+             const angle = valToAngle(tick);
+             const rad = (angle - 90) * (Math.PI / 180);
+             // Major ticks
+             const x1 = center + Math.cos(rad) * (radius);
+             const y1 = center + Math.sin(rad) * (radius);
+             const x2 = center + Math.cos(rad) * (radius - 15);
+             const y2 = center + Math.sin(rad) * (radius - 15);
+             // Text position
+             const tx = center + Math.cos(rad) * (radius - 35);
+             const ty = center + Math.sin(rad) * (radius - 35);
+
+             return (
+               <g key={tick}>
+                 <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#64748B" strokeWidth="3" strokeLinecap="round" />
+                 <text x={tx} y={ty} fill="#F1F5F9" fontSize="16" fontWeight="bold" textAnchor="middle" alignmentBaseline="middle">{tick}</text>
+               </g>
+             );
+          })}
+
+          {/* Sub-ticks */}
+          {Array.from({ length: type === "velocity" ? 60 : 40 }).map((_, i) => {
+             const val = type === "velocity" ? i : i * 5;
+             if (ticks.includes(val)) return null;
+             const angle = valToAngle(val);
+             const rad = (angle - 90) * (Math.PI / 180);
+             const isMid = type === "velocity" ? val % 5 === 0 : val % 20 === 0;
+             const tickLen = isMid ? 10 : 5;
+             const x1 = center + Math.cos(rad) * (radius);
+             const y1 = center + Math.sin(rad) * (radius);
+             const x2 = center + Math.cos(rad) * (radius - tickLen);
+             const y2 = center + Math.sin(rad) * (radius - tickLen);
+             return <line key={`sub-${i}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#334155" strokeWidth="2" />;
+          })}
+
+          {/* Color Arc Guides (Green to Blue representing Avg to Best) */}
+          <path 
+             d={`M ${center + Math.cos((valToAngle(targets.avg)-90)*Math.PI/180)*(radius-10)} ${center + Math.sin((valToAngle(targets.avg)-90)*Math.PI/180)*(radius-10)} A ${radius-10} ${radius-10} 0 0 1 ${center + Math.cos((valToAngle(targets.best)-90)*Math.PI/180)*(radius-10)} ${center + Math.sin((valToAngle(targets.best)-90)*Math.PI/180)*(radius-10)}`}
+             fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="20" strokeLinecap="round"
+          />
+
+          {/* Needles */}
+          
+          {/* 1. Org Average Needle (Green) */}
+          <motion.g
+            initial={{ rotate: startAngle }}
+            whileInView={{ rotate: valToAngle(targets.avg) }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 2.5, delay: 0.5, type: "spring", stiffness: 40 }}
+            style={{ originX: "50%", originY: "50%" }}
+          >
+            <path d={`M ${center - 4} ${center} L ${center + 4} ${center} L ${center} ${center - radius + 20} Z`} fill="#22C55E" />
+          </motion.g>
+
+          {/* 2. Org Best Needle (Blue) */}
+          <motion.g
+            initial={{ rotate: startAngle }}
+            whileInView={{ rotate: valToAngle(targets.best) }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 3, delay: 0.7, type: "spring", stiffness: 40 }}
+            style={{ originX: "50%", originY: "50%" }}
+          >
+            <path d={`M ${center - 4} ${center} L ${center + 4} ${center} L ${center} ${center - radius + 20} Z`} fill="#3B82F6" />
+          </motion.g>
+
+          {/* 3. Employee Average / Total Needle (Dark Gray / Black thick needle) */}
+          <motion.g
+            initial={{ rotate: startAngle }}
+            whileInView={{ rotate: valToAngle(targets.emp) }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 3.5, delay: 1.0, type: "spring", stiffness: 30, damping: 12 }}
+            style={{ originX: "50%", originY: "50%" }}
+          >
+            {/* Shadow */}
+            <path d={`M ${center - 8} ${center} L ${center + 8} ${center} L ${center + 2} ${center - radius + 10} L ${center - 2} ${center - radius + 10} Z`} fill="rgba(0,0,0,0.5)" transform="translate(4, 4)" />
+            {/* Needle Body */}
+            <path d={`M ${center - 8} ${center} L ${center + 8} ${center} L ${center + 2} ${center - radius + 10} L ${center - 2} ${center - radius + 10} Z`} fill="#1E293B" stroke="#000" strokeWidth="1" />
+            <circle cx={center} cy={center} r="12" fill="#334155" stroke="#1E293B" strokeWidth="2" />
+            {/* Red accent dot on center */}
+            <circle cx={center} cy={center} r="4" fill="#EF4444" />
+          </motion.g>
+        </svg>
+
+        {/* Floating Labels matching the video */}
+        <div className="absolute inset-0 pointer-events-none">
+           {/* Org Average (Green) */}
+           <div className="absolute" style={{ 
+              top: `${center + Math.sin((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+30)}px`, 
+              left: `${center + Math.cos((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+30)}px`,
+              transform: "translate(-100%, -50%)",
+           }}>
+             <div className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-[#1E293B] shadow-lg whitespace-nowrap border border-[#22C55E]/30 relative">
+                Org. Average
+                <div className="absolute top-1/2 -right-1 w-2 h-2 bg-white rotate-45 transform -translate-y-1/2" />
+             </div>
+           </div>
+
+           {/* Org Best (Blue) */}
+           <div className="absolute" style={{ 
+              top: `${center + Math.sin((valToAngle(targets.best)-90)*Math.PI/180) * (radius+20)}px`, 
+              left: `${center + Math.cos((valToAngle(targets.best)-90)*Math.PI/180) * (radius+20)}px`,
+              transform: "translate(0%, -50%)",
+           }}>
+             <div className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-[#1E293B] shadow-lg whitespace-nowrap border border-[#3B82F6]/30 relative">
+                <div className="absolute top-1/2 -left-1 w-2 h-2 bg-white rotate-45 transform -translate-y-1/2" />
+                Org. Best
+             </div>
+           </div>
+
+           {/* Employee Target (Gray) */}
+           <div className="absolute" style={{ 
+              top: `${center + Math.sin((valToAngle(targets.emp)-90)*Math.PI/180) * (radius+20)}px`, 
+              left: `${center + Math.cos((valToAngle(targets.emp)-90)*Math.PI/180) * (radius+20)}px`,
+              transform: "translate(-50%, -100%)",
+           }}>
+             <div className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-[#1E293B] shadow-lg whitespace-nowrap relative mt-[-10px]">
+                {type === "velocity" ? "Employee Average velocity" : "Employee total assignment"}
+                <div className="absolute -bottom-1 left-1/2 w-2 h-2 bg-white rotate-45 transform -translate-x-1/2" />
+             </div>
+           </div>
+        </div>
+      </div>
     </div>
   );
 }
