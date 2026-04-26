@@ -248,12 +248,12 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                                     <iframe
                                         src={posts[current].embedUrl}
                                         width="100%"
-                                        height="600"
+                                        height="500"
                                         frameBorder="0"
                                         allowFullScreen
                                         title={`LinkedIn Post ${posts[current].number}`}
                                         className="w-full bg-white flex-1"
-                                        style={{ minHeight: 500 }}
+                                        style={{ minHeight: 450 }}
                                     />
                                     <div className="p-4 border-t border-border flex items-center justify-between">
                                         <p className="text-sm text-text-secondary">
