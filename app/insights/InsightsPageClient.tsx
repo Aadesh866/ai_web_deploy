@@ -97,22 +97,11 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                     />
                 </div>
                 <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center">
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight"
-                    >
-                        Purplehub{" "}
-                        <span className="bg-gradient-to-r from-primary-brand to-secondary bg-clip-text text-transparent">
-                            Insights
-                        </span>
-                    </motion.h1>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="mt-6 text-lg text-green-200/80 max-w-2xl mx-auto"
+                        transition={{ delay: 0.2 }}
+                        className="text-lg text-green-200/80 max-w-2xl mx-auto"
                     >
                         Stay up-to-date with our latest insights and thought leadership
                         — straight from our LinkedIn.
