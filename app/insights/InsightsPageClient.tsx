@@ -100,11 +100,23 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-snug max-w-3xl mx-auto"
+                        transition={{ delay: 0.2 }}
+                        className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight"
+                    >
+                        Purplehub{" "}
+                        <span className="bg-gradient-to-r from-primary-brand to-secondary bg-clip-text text-transparent">
+                            Insights
+                        </span>
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="mt-6 text-lg text-green-200/80 max-w-2xl mx-auto"
                     >
                         Stay up-to-date with our latest insights and thought leadership
                         — straight from our LinkedIn.
-                    </motion.h1>
+                    </motion.p>
                 </div>
             </section>
 
@@ -197,9 +209,28 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                                 </p>
                             </div>
 
-                            {/* Embedded post */}
-                            <AnimatePresence mode="wait">
-                                <motion.div
+                            {/* Embedded post with Side Arrows */}
+                            <div className="relative group">
+                                {/* Left Side Arrow */}
+                                <button
+                                    onClick={prev}
+                                    className="hidden lg:flex opacity-0 group-hover:opacity-100 absolute left-[-60px] top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-surface/80 border border-border text-gray-400 hover:text-white hover:bg-surface hover:border-primary-brand transition-all shadow-lg"
+                                    aria-label="Previous Post"
+                                >
+                                    <ChevronLeft className="w-6 h-6" />
+                                </button>
+                                
+                                {/* Right Side Arrow */}
+                                <button
+                                    onClick={next}
+                                    className="hidden lg:flex opacity-0 group-hover:opacity-100 absolute right-[-60px] top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-surface/80 border border-border text-gray-400 hover:text-white hover:bg-surface hover:border-primary-brand transition-all shadow-lg"
+                                    aria-label="Next Post"
+                                >
+                                    <ChevronRight className="w-6 h-6" />
+                                </button>
+
+                                <AnimatePresence mode="wait">
+                                    <motion.div
                                     key={current}
                                     initial={{ opacity: 0, x: 60 }}
                                     animate={{ opacity: 1, x: 0 }}
@@ -239,7 +270,8 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                                         </a>
                                     </div>
                                 </motion.div>
-                            </AnimatePresence>
+                                </AnimatePresence>
+                            </div>
 
                             {/* Dot indicators */}
                             <div className="flex justify-center gap-2 mt-6">
