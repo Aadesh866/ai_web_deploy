@@ -203,7 +203,7 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                                 {/* Left Side Arrow */}
                                 <button
                                     onClick={prev}
-                                    className="hidden lg:flex opacity-0 group-hover:opacity-100 absolute left-[-60px] top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-surface/80 border border-border text-gray-400 hover:text-white hover:bg-surface hover:border-primary-brand transition-all shadow-lg"
+                                    className="hidden lg:flex absolute left-[-80px] top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-surface/80 border border-border text-gray-400 hover:text-white hover:bg-surface hover:border-primary-brand transition-all shadow-lg"
                                     aria-label="Previous Post"
                                 >
                                     <ChevronLeft className="w-6 h-6" />
@@ -212,7 +212,7 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                                 {/* Right Side Arrow */}
                                 <button
                                     onClick={next}
-                                    className="hidden lg:flex opacity-0 group-hover:opacity-100 absolute right-[-60px] top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-surface/80 border border-border text-gray-400 hover:text-white hover:bg-surface hover:border-primary-brand transition-all shadow-lg"
+                                    className="hidden lg:flex absolute right-[-80px] top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-surface/80 border border-border text-gray-400 hover:text-white hover:bg-surface hover:border-primary-brand transition-all shadow-lg"
                                     aria-label="Next Post"
                                 >
                                     <ChevronRight className="w-6 h-6" />
@@ -237,12 +237,12 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
                                     <iframe
                                         src={posts[current].embedUrl}
                                         width="100%"
-                                        height="500"
+                                        height="600"
                                         frameBorder="0"
                                         allowFullScreen
                                         title={`LinkedIn Post ${posts[current].number}`}
                                         className="w-full bg-white flex-1"
-                                        style={{ minHeight: 450 }}
+                                        style={{ minHeight: 500 }}
                                     />
                                     <div className="p-4 border-t border-border flex items-center justify-between">
                                         <p className="text-sm text-text-secondary">
