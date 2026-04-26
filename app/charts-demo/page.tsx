@@ -23,14 +23,14 @@ export default function ChartsDemoPage() {
       <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-green-200 mb-6">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            Live Demo
+            <span className="w-2 h-2 rounded-full bg-green-400" />
+            Visualizations
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Next-Level <span className="bg-gradient-to-r from-primary-brand to-secondary bg-clip-text text-transparent">Visualizations</span>
+            Data <span className="bg-gradient-to-r from-primary-brand to-secondary bg-clip-text text-transparent">Representations</span>
           </h1>
           <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-            A showcase of modern, interactive data representations designed to replace traditional pie and bar charts.
+            Interactive, data-driven charts for performance intelligence and organizational clarity.
           </p>
         </div>
 

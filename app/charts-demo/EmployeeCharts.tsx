@@ -14,8 +14,8 @@ export function EmployeeCharts() {
   return (
     <div className="space-y-24">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-white mb-2">Scenario 1: Individual Contribution (Aadesh)</h2>
-        <p className="text-text-secondary">3 modern visualizations showing varying levels of satisfaction/contribution across different work types.</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Scenario 1: Employee Contribution Levels</h2>
+        <p className="text-text-secondary">Visualizing an individual's engagement across different competencies.</p>
       </div>
 
       {/* Variation 1: 3D Glowing Spheres on Grid */}
@@ -33,15 +33,17 @@ export function EmployeeCharts() {
               {/* Glowing Line connecting sphere to floor */}
               <motion.div
                 initial={{ height: 0 }}
-                animate={{ height: `${item.score * 2.5}px` }}
-                transition={{ duration: 1.5, delay: 0.2 + i * 0.2, ease: "easeOut" }}
+                whileInView={{ height: `${item.score * 2.5}px` }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 2.5, delay: 0.5 + i * 0.4, ease: "easeOut" }}
                 className="w-1 bg-gradient-to-t from-transparent to-white/50 relative"
               >
                 {/* 3D Sphere */}
                 <motion.div
                   initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ type: "spring", stiffness: 100, delay: 0.5 + i * 0.2 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ type: "spring", stiffness: 60, damping: 15, delay: 1.0 + i * 0.4 }}
                   className={`absolute -top-16 -left-12 w-24 h-24 rounded-full bg-gradient-to-br ${item.color} shadow-[0_0_40px_rgba(0,0,0,0.5)] flex items-center justify-center cursor-pointer`}
                   style={{
                     boxShadow: `inset -10px -10px 20px rgba(0,0,0,0.5), inset 10px 10px 20px rgba(255,255,255,0.4), 0 0 ${item.score / 2}px ${item.colorHex}`,
@@ -124,8 +126,9 @@ function RadarChart({ data }: { data: typeof employeeData }) {
         {/* Data Polygon */}
         <motion.path
           initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: 1, opacity: 1 }}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
+          whileInView={{ pathLength: 1, opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 2.5, ease: "easeInOut" }}
           d={polygonPath}
           fill="rgba(34, 197, 94, 0.2)"
           stroke="#22c55e"
@@ -138,8 +141,9 @@ function RadarChart({ data }: { data: typeof employeeData }) {
           <motion.circle
             key={i}
             initial={{ r: 0 }}
-            animate={{ r: 6 }}
-            transition={{ delay: 1.5 + i * 0.2, type: "spring" }}
+            whileInView={{ r: 6 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ delay: 2.0 + i * 0.4, type: "spring", stiffness: 60, damping: 12 }}
             cx={p.x}
             cy={p.y}
             fill={data[i].colorHex}
@@ -200,8 +204,9 @@ function OrbitalChart({ data }: { data: typeof employeeData }) {
               {/* Animated Progress Ring */}
               <motion.circle
                 initial={{ strokeDashoffset: circumference }}
-                animate={{ strokeDashoffset }}
-                transition={{ duration: 2, delay: i * 0.3, ease: "easeOut" }}
+                whileInView={{ strokeDashoffset }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 3, delay: 0.5 + i * 0.5, ease: "easeOut" }}
                 cx={center}
                 cy={center}
                 r={radius}

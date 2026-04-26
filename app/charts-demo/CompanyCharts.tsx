@@ -55,8 +55,9 @@ function LiquidGauge({ data, delay }: { data: typeof companyData[0], delay: numb
         {/* Liquid Fill */}
         <motion.div
           initial={{ y: "100%" }}
-          animate={{ y: `${100 - data.percentage}%` }}
-          transition={{ duration: 2.5, delay, type: "spring", stiffness: 30 }}
+          whileInView={{ y: `${100 - data.percentage}%` }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 3.5, delay: delay + 0.5, type: "spring", stiffness: 20 }}
           className={`absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t ${data.color} opacity-80`}
           style={{ filter: `drop-shadow(0 -10px 20px ${data.colorHex})` }}
         >
@@ -109,8 +110,9 @@ function DonutChart({ data }: { data: typeof companyData }) {
               
               <motion.circle
                 initial={{ strokeDasharray: `0 ${circumference}` }}
-                animate={{ strokeDasharray: `${dashArray} ${circumference - dashArray}` }}
-                transition={{ duration: 1.5, delay: i * 0.2, ease: "easeOut" }}
+                whileInView={{ strokeDasharray: `${dashArray} ${circumference - dashArray}` }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 2.5, delay: 0.5 + i * 0.4, ease: "easeOut" }}
                 cx={center}
                 cy={center}
                 r={radius}
@@ -182,17 +184,18 @@ function ParticleSwarmChart({ data }: { data: typeof companyData }) {
                     opacity: 0,
                     scale: 0
                   }}
-                  animate={{ 
+                  whileInView={{ 
                     x: targetX, 
                     y: targetY, 
                     opacity: 1,
                     scale: 1
                   }}
+                  viewport={{ once: true, margin: "-100px" }}
                   transition={{ 
-                    duration: 1.5, 
-                    delay: 0.5 + Math.random() * 1,
+                    duration: 2.5, 
+                    delay: 1.0 + Math.random() * 1.5,
                     type: "spring",
-                    damping: 12
+                    damping: 10
                   }}
                   className="absolute bottom-0 left-1/2 w-2 h-2 rounded-full"
                   style={{ 
