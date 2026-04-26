@@ -55,12 +55,20 @@ export function EmployeeCharts() {
               </motion.div>
 
               {/* Labels */}
-              <div className="absolute -bottom-16 text-center w-32">
+              <div className="absolute -bottom-24 text-center w-36">
                 <p className="text-white font-semibold text-sm truncate">{item.category}</p>
                 <p className="text-text-secondary text-xs">{item.label}</p>
               </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Variation 1.5: True 3D Isometric Scatter (Values Manifested style) */}
+      <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
+        <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 1.5: 3D Isometric Scatter</h3>
+        <div className="relative h-[450px] w-full max-w-2xl mx-auto flex items-center justify-center pt-8">
+           <ValuesManifested3DChart />
         </div>
       </div>
 
@@ -238,6 +246,123 @@ function OrbitalChart({ data }: { data: typeof employeeData }) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+// Helper component for 3D Isometric Scatter Chart (Values Manifested)
+function ValuesManifested3DChart() {
+  const points = [
+    { label: "Humility", x: 20, y: 80, z: 20, color: "#22c55e" },
+    { label: "Respect", x: 40, y: 50, z: 40, color: "#22c55e" },
+    { label: "Achievement", x: 70, y: 30, z: 60, color: "#22c55e" },
+    { label: "Integrity", x: 80, y: 60, z: 30, color: "#22c55e" },
+    { label: "Customer Orient.", x: 60, y: 90, z: 80, color: "#22c55e" },
+  ];
+
+  // Isometric projection math
+  const project = (x: number, y: number, z: number) => {
+    // x is left/right axis
+    // z is depth axis
+    // y is height axis
+    const isoX = (x - z) * 0.866; // cos(30)
+    const isoY = (x + z) * 0.5 - y; // sin(30) - height
+    return { cx: isoX * 2.5 + 200, cy: isoY * 2.5 + 300 }; // Scale and center
+  };
+
+  const projectFloor = (x: number, z: number) => {
+    const isoX = (x - z) * 0.866;
+    const isoY = (x + z) * 0.5;
+    return { cx: isoX * 2.5 + 200, cy: isoY * 2.5 + 300 };
+  };
+
+  return (
+    <div className="relative w-full h-full max-w-[400px]">
+      <svg viewBox="0 0 400 450" className="w-full h-full overflow-visible">
+        <defs>
+           <filter id="glow3d">
+             <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+             <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+             </feMerge>
+           </filter>
+        </defs>
+
+        {/* 3D Grid Box Outline */}
+        <g stroke="rgba(255,255,255,0.1)" strokeWidth="1" fill="none">
+           {/* Floor grid */}
+           {[0, 20, 40, 60, 80, 100].map(val => {
+              const p1 = projectFloor(val, 0);
+              const p2 = projectFloor(val, 100);
+              const p3 = projectFloor(0, val);
+              const p4 = projectFloor(100, val);
+              return (
+                <g key={val}>
+                  <line x1={p1.cx} y1={p1.cy} x2={p2.cx} y2={p2.cy} />
+                  <line x1={p3.cx} y1={p3.cy} x2={p4.cx} y2={p4.cy} />
+                </g>
+              );
+           })}
+           {/* Back walls */}
+           <path d={`M ${projectFloor(0,0).cx} ${projectFloor(0,0).cy} L ${projectFloor(0,0).cx} ${projectFloor(0,0).cy - 250}`} strokeDasharray="4 4" />
+           <path d={`M ${projectFloor(100,0).cx} ${projectFloor(100,0).cy} L ${projectFloor(100,0).cx} ${projectFloor(100,0).cy - 250}`} />
+           <path d={`M ${projectFloor(0,100).cx} ${projectFloor(0,100).cy} L ${projectFloor(0,100).cx} ${projectFloor(0,100).cy - 250}`} />
+        </g>
+
+        {/* Y-axis labels */}
+        {[0, 20, 40, 60, 80, 100].map(val => {
+           const p = project(0, val, 100);
+           return (
+             <text key={val} x={p.cx - 15} y={p.cy + 4} fill="#94A3B8" fontSize="10" textAnchor="end">{val}</text>
+           )
+        })}
+
+        {/* Data Points */}
+        {points.map((pt, i) => {
+          const pos = project(pt.x, pt.y, pt.z);
+          const floorPos = projectFloor(pt.x, pt.z);
+          return (
+            <g key={i}>
+              {/* Drop line to floor */}
+              <motion.line 
+                 initial={{ y2: floorPos.cy }}
+                 whileInView={{ y2: pos.cy }}
+                 viewport={{ once: true, margin: "-100px" }}
+                 transition={{ duration: 1.5, delay: i * 0.3 }}
+                 x1={floorPos.cx} y1={floorPos.cy} x2={pos.cx} stroke="rgba(34, 197, 94, 0.4)" strokeWidth="1" strokeDasharray="3 3" 
+              />
+              {/* Floor shadow */}
+              <ellipse cx={floorPos.cx} cy={floorPos.cy} rx="8" ry="4" fill="rgba(0,0,0,0.5)" />
+              {/* Floating Point */}
+              <motion.circle 
+                 initial={{ cy: floorPos.cy, r: 0 }}
+                 whileInView={{ cy: pos.cy, r: 8 }}
+                 viewport={{ once: true, margin: "-100px" }}
+                 transition={{ duration: 1.5, delay: i * 0.3, type: "spring" }}
+                 cx={pos.cx} fill={pt.color} filter="url(#glow3d)" 
+              />
+              <motion.circle 
+                 initial={{ cy: floorPos.cy, opacity: 0 }}
+                 whileInView={{ cy: pos.cy, opacity: 1 }}
+                 viewport={{ once: true, margin: "-100px" }}
+                 transition={{ duration: 1.5, delay: i * 0.3 + 0.5 }}
+                 cx={pos.cx} r="3" fill="#fff" 
+              />
+              {/* Label */}
+              <motion.text 
+                 initial={{ opacity: 0 }}
+                 whileInView={{ opacity: 1 }}
+                 viewport={{ once: true, margin: "-100px" }}
+                 transition={{ duration: 0.5, delay: i * 0.3 + 1.5 }}
+                 x={pos.cx + 15} y={pos.cy + 4} fill="white" fontSize="12" fontWeight="bold"
+              >
+                {pt.label}
+              </motion.text>
+            </g>
+          );
+        })}
+      </svg>
     </div>
   );
 }
