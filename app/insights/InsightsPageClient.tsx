@@ -79,7 +79,7 @@ export default function InsightsPageClient({ initialPosts = [] }: { initialPosts
 
     useEffect(() => {
         if (!isAutoPlaying || total <= 1) return;
-        const timer = setInterval(next, 10000);
+        const timer = setInterval(next, 6000);
         return () => clearInterval(timer);
     }, [isAutoPlaying, next, total]);
 
