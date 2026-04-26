@@ -3,11 +3,11 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
-// Mock data based on the scenario
+// Mock data based on the product context (Talent Landscape)
 const companyData = [
-  { label: "Highly Satisfied", percentage: 60, colorHex: "#10b981", color: "from-green-400 to-emerald-600" },
-  { label: "Satisfied", percentage: 25, colorHex: "#3b82f6", color: "from-blue-400 to-indigo-600" },
-  { label: "Dissatisfied", percentage: 15, colorHex: "#e11d48", color: "from-red-400 to-rose-600" },
+  { label: "High Achievers", percentage: 60, colorHex: "#10b981", color: "from-green-400 to-emerald-600" },
+  { label: "Steady Performers", percentage: 25, colorHex: "#3b82f6", color: "from-blue-400 to-indigo-600" },
+  { label: "Needs Improvement", percentage: 15, colorHex: "#e11d48", color: "from-red-400 to-rose-600" },
 ];
 
 export function CompanyCharts() {

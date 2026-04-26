@@ -3,11 +3,11 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-// Mock data based on the scenario
+// Mock data based on the product context (Competencies)
 const employeeData = [
-  { category: "Web Development", score: 95, color: "from-green-400 to-emerald-600", colorHex: "#10b981", label: "Highly Satisfied" },
-  { category: "UI/UX Design", score: 65, color: "from-blue-400 to-indigo-600", colorHex: "#3b82f6", label: "Satisfied" },
-  { category: "Graphic Design", score: 25, color: "from-red-400 to-rose-600", colorHex: "#e11d48", label: "Dissatisfied" },
+  { category: "Execution", score: 95, color: "from-green-400 to-emerald-600", colorHex: "#10b981", label: "High Impact" },
+  { category: "Collaboration", score: 65, color: "from-blue-400 to-indigo-600", colorHex: "#3b82f6", label: "Steady Performer" },
+  { category: "Domain Acumen", score: 25, color: "from-red-400 to-rose-600", colorHex: "#e11d48", label: "Needs Improvement" },
 ];
 
 export function EmployeeCharts() {
