@@ -21,7 +21,7 @@ export function EmployeeCharts() {
       {/* Variation 1: 3D Glowing Spheres on Grid */}
       <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
         <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 1: 3D Glowing Spheres</h3>
-        <div className="relative h-[400px] w-full max-w-3xl mx-auto flex items-end justify-center gap-12 sm:gap-24 pb-12 perspective-[1000px]">
+        <div className="relative h-[400px] w-full max-w-4xl mx-auto flex items-end justify-center gap-16 sm:gap-32 pb-12 perspective-[1000px]">
           {/* Floor Grid */}
           <div className="absolute bottom-0 left-0 right-0 h-48 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:20px_20px] [transform:rotateX(60deg)] origin-bottom opacity-50" />
 
@@ -55,8 +55,8 @@ export function EmployeeCharts() {
               </motion.div>
 
               {/* Labels */}
-              <div className="absolute -bottom-24 text-center w-36">
-                <p className="text-white font-semibold text-sm truncate">{item.category}</p>
+              <div className="absolute -bottom-24 text-center w-40 -ml-2">
+                <p className="text-white font-semibold text-sm whitespace-nowrap">{item.category}</p>
                 <p className="text-text-secondary text-xs">{item.label}</p>
               </div>
             </div>
@@ -67,7 +67,7 @@ export function EmployeeCharts() {
       {/* Variation 1.5: True 3D Isometric Scatter (Values Manifested style) */}
       <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
         <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 1.5: 3D Isometric Scatter</h3>
-        <div className="relative h-[450px] w-full max-w-2xl mx-auto flex items-center justify-center pt-8">
+        <div className="relative h-[550px] w-full max-w-2xl mx-auto flex items-center justify-center pt-8">
            <ValuesManifested3DChart />
         </div>
       </div>
@@ -267,18 +267,18 @@ function ValuesManifested3DChart() {
     // y is height axis
     const isoX = (x - z) * 0.866; // cos(30)
     const isoY = (x + z) * 0.5 - y; // sin(30) - height
-    return { cx: isoX * 2.5 + 200, cy: isoY * 2.5 + 300 }; // Scale and center
+    return { cx: isoX * 2.5 + 200, cy: isoY * 2.5 + 400 }; // Scale and center lower down
   };
 
   const projectFloor = (x: number, z: number) => {
     const isoX = (x - z) * 0.866;
     const isoY = (x + z) * 0.5;
-    return { cx: isoX * 2.5 + 200, cy: isoY * 2.5 + 300 };
+    return { cx: isoX * 2.5 + 200, cy: isoY * 2.5 + 400 };
   };
 
   return (
     <div className="relative w-full h-full max-w-[400px]">
-      <svg viewBox="0 0 400 450" className="w-full h-full overflow-visible">
+      <svg viewBox="0 0 400 550" className="w-full h-full overflow-visible">
         <defs>
            <filter id="glow3d">
              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
