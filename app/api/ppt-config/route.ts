@@ -27,6 +27,10 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const { password, url } = body;
 
+  console.log("Received password:", password);
+  console.log("Expected password:", EDIT_PASSWORD);
+  console.log("Match:", password === EDIT_PASSWORD);
+
   if (password !== EDIT_PASSWORD) {
     return NextResponse.json({ error: "Invalid password" }, { status: 401 });
   }
