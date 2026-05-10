@@ -5,9 +5,10 @@ import { useState, useEffect } from "react";
 
 // Mock data based on the product context (Talent Landscape)
 const companyData = [
-  { label: "High Achievers", percentage: 60, colorHex: "#10b981", color: "from-green-400 to-emerald-600" },
-  { label: "Steady Performers", percentage: 25, colorHex: "#3b82f6", color: "from-blue-400 to-indigo-600" },
-  { label: "Needs Improvement", percentage: 15, colorHex: "#e11d48", color: "from-red-400 to-rose-600" },
+  { label: "Highly Engaged", percentage: 65, colorHex: "#10b981", color: "from-green-400 to-emerald-600" },
+  { label: "Moderately Engaged", percentage: 20, colorHex: "#3b82f6", color: "from-blue-400 to-indigo-600" },
+  { label: "Moderately Disengaged", percentage: 10, colorHex: "#f59e0b", color: "from-amber-400 to-orange-500" },
+  { label: "Highly Disengaged", percentage: 5, colorHex: "#e11d48", color: "from-red-400 to-rose-600" },
 ];
 
 export function CompanyCharts() {
@@ -21,9 +22,9 @@ export function CompanyCharts() {
       {/* Variation 1: Liquid Fill Gauges */}
       <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
         <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 1: Liquid Fill Gauges</h3>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-12 sm:gap-24">
+        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16">
           {companyData.map((data, i) => (
-            <LiquidGauge key={data.label} data={data} delay={i * 0.2} />
+            <LiquidGauge key={data.label} data={data} delay={i * 0.3} />
           ))}
         </div>
       </div>
@@ -43,6 +44,22 @@ export function CompanyCharts() {
           <ParticleSwarmChart data={companyData} />
         </div>
       </div>
+
+      {/* Variation 4: High Performing Teams (Podium) */}
+      <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
+        <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 4: High Performing Teams</h3>
+        <div className="relative w-full max-w-4xl mx-auto flex items-center justify-center pt-12 pb-8">
+          <TeamPerformanceChart />
+        </div>
+      </div>
+
+      {/* Variation 5: Feedback Personas */}
+      <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
+        <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 5: Feedback Personas</h3>
+        <div className="relative w-full max-w-5xl mx-auto">
+          <FeedbackPersonasChart />
+        </div>
+      </div>
     </div>
   );
 }
@@ -56,8 +73,8 @@ function LiquidGauge({ data, delay }: { data: typeof companyData[0], delay: numb
         <motion.div
           initial={{ y: "100%" }}
           whileInView={{ y: `${100 - data.percentage}%` }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 3.5, delay: delay + 0.5, type: "spring", stiffness: 20 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 4.5, delay: delay + 0.5, type: "spring", stiffness: 15 }}
           className={`absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t ${data.color} opacity-80`}
           style={{ filter: `drop-shadow(0 -10px 20px ${data.colorHex})` }}
         >
@@ -111,8 +128,8 @@ function DonutChart({ data }: { data: typeof companyData }) {
               <motion.circle
                 initial={{ strokeDasharray: `0 ${circumference}` }}
                 whileInView={{ strokeDasharray: `${dashArray} ${circumference - dashArray}` }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 2.5, delay: 0.5 + i * 0.4, ease: "easeOut" }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 3.5, delay: 0.5 + i * 0.6, ease: "easeOut" }}
                 cx={center}
                 cy={center}
                 r={radius}
@@ -160,7 +177,7 @@ function ParticleSwarmChart({ data }: { data: typeof companyData }) {
   return (
     <div className="flex h-full w-full items-end justify-between px-8 pb-12">
       {data.map((d, i) => (
-        <div key={i} className="flex flex-col items-center gap-4 w-1/3">
+        <div key={i} className="flex flex-col items-center gap-4 w-1/4">
           <div className="relative w-full h-[250px]">
             {/* The "Swarm" container */}
             {Array.from({ length: d.percentage }).map((_, pIndex) => {
@@ -190,10 +207,10 @@ function ParticleSwarmChart({ data }: { data: typeof companyData }) {
                     opacity: 1,
                     scale: 1
                   }}
-                  viewport={{ once: true, margin: "-100px" }}
+                  viewport={{ once: true, amount: 0.5 }}
                   transition={{ 
-                    duration: 2.5, 
-                    delay: 1.0 + Math.random() * 1.5,
+                    duration: 3.5, 
+                    delay: 1.0 + Math.random() * 2.0,
                     type: "spring",
                     damping: 10
                   }}
@@ -211,6 +228,148 @@ function ParticleSwarmChart({ data }: { data: typeof companyData }) {
             <span className="text-xs text-text-secondary uppercase">{d.label}</span>
           </div>
         </div>
+      ))}
+    </div>
+  );
+}
+
+// Helper component for High Performing Teams (Podium)
+function TeamPerformanceChart() {
+  const teams = [
+    { team: "Team Beta", manager: "David L.", score: 92, height: 200, delay: 0.5 },
+    { team: "Team Alpha", manager: "Sarah J.", score: 98, height: 280, delay: 0.2 },
+    { team: "Team Gamma", manager: "Alex M.", score: 88, height: 160, delay: 0.8 },
+  ];
+
+  return (
+    <div className="flex items-end justify-center gap-4 sm:gap-12 h-[350px]">
+      {teams.map((t, i) => (
+        <div key={t.team} className="relative flex flex-col items-center group">
+          {/* Floating Score Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 1.5, delay: t.delay + 1.0 }}
+            className="absolute -top-32 flex flex-col items-center z-20 pointer-events-none group-hover:-translate-y-4 transition-transform duration-300"
+          >
+            <div className="bg-surface-light border border-border px-4 py-3 rounded-xl shadow-2xl flex flex-col items-center gap-1 backdrop-blur-md">
+               <span className="text-xs text-text-secondary uppercase tracking-wider">{t.team}</span>
+               <span className="text-sm font-bold text-white whitespace-nowrap">{t.manager}</span>
+               <div className="bg-primary-brand/20 text-primary-brand text-xs font-bold px-2 py-0.5 rounded-full mt-1">
+                 {t.score}%
+               </div>
+            </div>
+            {/* Arrow pointing down */}
+            <div className="w-0 h-0 border-l-[6px] border-r-[6px] border-t-[8px] border-l-transparent border-r-transparent border-t-border mt-[-1px]" />
+          </motion.div>
+
+          {/* Manager Avatar placeholder (Initials) */}
+          <motion.div
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ type: "spring", stiffness: 50, delay: t.delay + 0.5 }}
+            className="w-12 h-12 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 border-2 border-primary-brand flex items-center justify-center text-white font-bold mb-4 shadow-[0_0_15px_rgba(34,197,94,0.3)] z-10"
+          >
+            {t.manager.split(" ")[0][0]}{t.manager.split(" ")[1][0]}
+          </motion.div>
+
+          {/* 3D Pillar */}
+          <div className="relative w-20 sm:w-24">
+             {/* Top Face */}
+             <motion.div 
+               initial={{ opacity: 0 }}
+               whileInView={{ opacity: 1 }}
+               viewport={{ once: true, amount: 0.5 }}
+               transition={{ delay: t.delay + 0.3 }}
+               className="absolute -top-3 left-0 w-full h-6 bg-emerald-400 rounded-[50%] z-10" 
+             />
+             {/* Body */}
+             <motion.div
+               initial={{ height: 0 }}
+               whileInView={{ height: t.height }}
+               viewport={{ once: true, amount: 0.5 }}
+               transition={{ duration: 2.0, delay: t.delay, ease: "easeOut" }}
+               className="w-full bg-gradient-to-b from-emerald-500 to-emerald-900 rounded-b-xl"
+               style={{
+                 boxShadow: "inset -5px 0 15px rgba(0,0,0,0.3), inset 5px 0 15px rgba(255,255,255,0.1)"
+               }}
+             />
+             {/* Base reflection */}
+             <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[120%] h-8 bg-emerald-500/20 blur-md rounded-[50%]" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Helper component for Feedback Personas
+function FeedbackPersonasChart() {
+  const personas = [
+    {
+      title: "Liberal Manager",
+      description: "Lenient, leans toward pleasing scores to maintain image.",
+      color: "from-blue-500 to-cyan-500",
+      bgClass: "bg-blue-500/10 border-blue-500/30",
+      textClass: "text-blue-400",
+      stats: [
+        { label: "Objective Facts", value: 30 },
+        { label: "Pleasing Scores", value: 90 },
+        { label: "Growth Impact", value: 40 },
+      ]
+    },
+    {
+      title: "Caring Critic",
+      description: "Data-driven, objective, factual feedback to enhance growth.",
+      color: "from-green-500 to-emerald-600",
+      bgClass: "bg-green-500/10 border-green-500/30",
+      textClass: "text-green-400",
+      stats: [
+        { label: "Objective Facts", value: 95 },
+        { label: "Pleasing Scores", value: 30 },
+        { label: "Growth Impact", value: 90 },
+      ]
+    }
+  ];
+
+  return (
+    <div className="flex flex-col md:flex-row gap-8 lg:gap-12 w-full justify-center">
+      {personas.map((persona, idx) => (
+        <motion.div
+          key={persona.title}
+          initial={{ opacity: 0, x: idx === 0 ? -50 : 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 1.5, delay: 0.3 * idx }}
+          className={`flex-1 rounded-2xl border p-6 lg:p-8 backdrop-blur-sm ${persona.bgClass}`}
+        >
+          <div className="mb-8">
+             <h4 className={`text-2xl font-bold mb-2 ${persona.textClass}`}>{persona.title}</h4>
+             <p className="text-text-secondary text-sm h-10">{persona.description}</p>
+          </div>
+
+          <div className="space-y-6">
+             {persona.stats.map((stat, sIdx) => (
+               <div key={stat.label}>
+                 <div className="flex justify-between mb-2">
+                   <span className="text-sm font-semibold text-white">{stat.label}</span>
+                   <span className="text-sm text-text-secondary">{stat.value}%</span>
+                 </div>
+                 <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden">
+                   <motion.div
+                     initial={{ width: 0 }}
+                     whileInView={{ width: `${stat.value}%` }}
+                     viewport={{ once: true, amount: 0.5 }}
+                     transition={{ duration: 2.5, delay: 0.8 + (sIdx * 0.2) + (idx * 0.3), type: "spring", stiffness: 30 }}
+                     className={`h-full bg-gradient-to-r ${persona.color} rounded-full`}
+                   />
+                 </div>
+               </div>
+             ))}
+          </div>
+        </motion.div>
       ))}
     </div>
   );
