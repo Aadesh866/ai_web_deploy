@@ -475,38 +475,35 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
 
           {/* Needles (Animated inside the SVG) */}
           <motion.g
-            initial={{ rotate: startAngle }}
-            whileInView={{ rotate: valToAngle(targets.avg) }}
+            initial={{ rotate: startAngle, x: center, y: center }}
+            whileInView={{ rotate: valToAngle(targets.avg), x: center, y: center }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 4.0, delay: 0.5, type: "spring", stiffness: 30 }}
-            style={{ originX: "50%", originY: "150px" }}
           >
-            <path d={`M ${center - 5} ${center} L ${center + 5} ${center} L ${center} ${center - radius + 35} Z`} fill="#22C55E" />
+            <path d={`M -5 0 L 5 0 L 0 ${-radius + 35} Z`} fill="#22C55E" />
           </motion.g>
 
           <motion.g
-            initial={{ rotate: startAngle }}
-            whileInView={{ rotate: valToAngle(targets.best) }}
+            initial={{ rotate: startAngle, x: center, y: center }}
+            whileInView={{ rotate: valToAngle(targets.best), x: center, y: center }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 4.5, delay: 0.7, type: "spring", stiffness: 30 }}
-            style={{ originX: "50%", originY: "150px" }}
           >
-            <path d={`M ${center - 5} ${center} L ${center + 5} ${center} L ${center} ${center - radius + 35} Z`} fill="#3B82F6" />
+            <path d={`M -5 0 L 5 0 L 0 ${-radius + 35} Z`} fill="#3B82F6" />
           </motion.g>
 
           {/* Employee Needle */}
           <motion.g
-            initial={{ rotate: startAngle }}
-            whileInView={{ rotate: valToAngle(targets.emp) }}
+            initial={{ rotate: startAngle, x: center, y: center }}
+            whileInView={{ rotate: valToAngle(targets.emp), x: center, y: center }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 5.0, delay: 1.0, type: "spring", stiffness: 20, damping: 10 }}
-            style={{ originX: "50%", originY: "150px" }}
           >
             {/* Flat Base */}
-            <path d={`M ${center - 6} ${center + 15} L ${center + 6} ${center + 15} L ${center + 2} ${center - radius + 15} L ${center - 2} ${center - radius + 15} Z`} fill="#F8FAFC" />
-            <path d={`M ${center - 2} ${center - radius + 15} L ${center + 2} ${center - radius + 15} L ${center} ${center - radius + 5} Z`} fill="#EF4444" />
-            <circle cx={center} cy={center} r="12" fill="#F8FAFC" />
-            <circle cx={center} cy={center} r="4" fill="#0F172A" />
+            <path d={`M -6 15 L 6 15 L 2 ${-radius + 15} L -2 ${-radius + 15} Z`} fill="#F8FAFC" />
+            <path d={`M -2 ${-radius + 15} L 2 ${-radius + 15} L 0 ${-radius + 5} Z`} fill="#EF4444" />
+            <circle cx="0" cy="0" r="12" fill="#F8FAFC" />
+            <circle cx="0" cy="0" r="4" fill="#0F172A" />
           </motion.g>
         </svg>
 

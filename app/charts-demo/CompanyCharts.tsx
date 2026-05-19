@@ -69,13 +69,12 @@ function LiquidGauge({ data, delay }: { data: typeof companyData[0], delay: numb
   return (
     <div className="flex flex-col items-center gap-6">
       <div className="relative w-32 h-48 rounded-t-full rounded-b-3xl bg-black/40 border-2 border-white/10 overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
-        {/* Liquid Fill */}
         <motion.div
-          initial={{ y: "100%" }}
-          whileInView={{ y: `${100 - data.percentage}%` }}
+          initial={{ height: "0%" }}
+          whileInView={{ height: `${data.percentage}%` }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 4.5, delay: delay + 0.5, type: "spring", stiffness: 15 }}
-          className={`absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t ${data.color} opacity-80`}
+          className={`absolute bottom-0 left-0 right-0 w-full bg-gradient-to-t ${data.color} opacity-80`}
           style={{ filter: `drop-shadow(0 -10px 20px ${data.colorHex})` }}
         >
           {/* Animated Wave */}
@@ -307,70 +306,62 @@ function TeamPerformanceChart() {
 
 // Helper component for Feedback Personas
 function FeedbackPersonasChart() {
-  const personas = [
-    {
-      title: "Liberal Manager",
-      description: "Lenient, leans toward pleasing scores to maintain image.",
-      color: "from-blue-500 to-cyan-500",
-      bgClass: "bg-blue-500/10 border-blue-500/30",
-      textClass: "text-blue-400",
-      stats: [
-        { label: "Objective Facts", value: 30 },
-        { label: "Pleasing Scores", value: 90 },
-        { label: "Growth Impact", value: 40 },
-      ]
-    },
-    {
-      title: "Caring Critic",
-      description: "Data-driven, objective, factual feedback to enhance growth.",
-      color: "from-green-500 to-emerald-600",
-      bgClass: "bg-green-500/10 border-green-500/30",
-      textClass: "text-green-400",
-      stats: [
-        { label: "Objective Facts", value: 95 },
-        { label: "Pleasing Scores", value: 30 },
-        { label: "Growth Impact", value: 90 },
-      ]
-    }
-  ];
-
   return (
-    <div className="flex flex-col md:flex-row gap-8 lg:gap-12 w-full justify-center">
-      {personas.map((persona, idx) => (
+    <div className="flex flex-col items-center gap-12 w-full">
+      {/* Company Average Banner */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.5 }}
+        className="bg-surface-light border border-border px-8 py-4 rounded-2xl shadow-lg text-center"
+      >
+        <span className="text-text-secondary text-sm uppercase tracking-wider block mb-1">Company Average Feedback Score</span>
+        <span className="text-4xl font-bold text-white">7.5<span className="text-lg text-text-secondary">/10</span></span>
+      </motion.div>
+
+      <div className="flex flex-col md:flex-row gap-8 w-full max-w-4xl justify-center">
+        {/* Manager A (Generous) */}
         <motion.div
-          key={persona.title}
-          initial={{ opacity: 0, x: idx === 0 ? -50 : 50 }}
+          initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 1.5, delay: 0.3 * idx }}
-          className={`flex-1 rounded-2xl border p-6 lg:p-8 backdrop-blur-sm ${persona.bgClass}`}
+          transition={{ duration: 1.5, delay: 0.3 }}
+          className="flex-1 rounded-3xl border border-blue-500/30 bg-blue-500/10 p-8 backdrop-blur-sm flex flex-col items-center text-center relative overflow-hidden"
         >
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-cyan-400" />
+          <h4 className="text-2xl font-bold text-blue-400 mb-1">Manager A</h4>
+          <span className="text-blue-300/80 text-sm italic mb-6">"The Generous/Liberal"</span>
+          
           <div className="mb-8">
-             <h4 className={`text-2xl font-bold mb-2 ${persona.textClass}`}>{persona.title}</h4>
-             <p className="text-text-secondary text-sm h-10">{persona.description}</p>
+            <span className="text-6xl font-bold text-white drop-shadow-lg">9.0</span>
           </div>
 
-          <div className="space-y-6">
-             {persona.stats.map((stat, sIdx) => (
-               <div key={stat.label}>
-                 <div className="flex justify-between mb-2">
-                   <span className="text-sm font-semibold text-white">{stat.label}</span>
-                   <span className="text-sm text-text-secondary">{stat.value}%</span>
-                 </div>
-                 <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden">
-                   <motion.div
-                     initial={{ width: 0 }}
-                     whileInView={{ width: `${stat.value}%` }}
-                     viewport={{ once: true, amount: 0.5 }}
-                     transition={{ duration: 2.5, delay: 0.8 + (sIdx * 0.2) + (idx * 0.3), type: "spring", stiffness: 30 }}
-                     className={`h-full bg-gradient-to-r ${persona.color} rounded-full`}
-                   />
-                 </div>
-               </div>
-             ))}
-          </div>
+          <p className="text-text-secondary text-sm leading-relaxed">
+            Leans toward giving high, pleasing scores to maintain a positive image. Looks good on paper, but provides <span className="text-red-400 font-semibold">low real growth impact</span> for the employee.
+          </p>
         </motion.div>
-      ))}
+
+        {/* Manager B (Critical) */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 1.5, delay: 0.6 }}
+          className="flex-1 rounded-3xl border border-green-500/30 bg-green-500/10 p-8 backdrop-blur-sm flex flex-col items-center text-center relative overflow-hidden"
+        >
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-emerald-400" />
+          <h4 className="text-2xl font-bold text-green-400 mb-1">Manager B</h4>
+          <span className="text-green-300/80 text-sm italic mb-6">"The Caring Critic"</span>
+          
+          <div className="mb-8">
+            <span className="text-6xl font-bold text-white drop-shadow-lg">6.0</span>
+          </div>
+
+          <p className="text-text-secondary text-sm leading-relaxed">
+            Provides a judicious, objective approach using data and facts. Scores may be lower, but this leads to <span className="text-green-400 font-semibold">high real growth impact</span>.
+          </p>
+        </motion.div>
+      </div>
     </div>
   );
 }
