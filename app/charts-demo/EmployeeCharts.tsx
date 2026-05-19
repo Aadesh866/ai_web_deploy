@@ -3,32 +3,36 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-// Mock data based on the product context (Competencies)
-const employeeData = [
+// Mock data for 3D spheres (Organizational Competency)
+const orgCompetencyData = [
   { category: "Execution", score: 95, color: "from-green-400 to-emerald-600", colorHex: "#10b981", label: "High Impact" },
+  { category: "Client Satisfaction", score: 85, color: "from-teal-400 to-cyan-600", colorHex: "#0d9488", label: "Excellent" },
   { category: "Collaboration", score: 65, color: "from-blue-400 to-indigo-600", colorHex: "#3b82f6", label: "Steady Performer" },
+  { category: "Coding & Dev", score: 50, color: "from-purple-400 to-fuchsia-600", colorHex: "#9333ea", label: "Developing" },
   { category: "Domain Acumen", score: 25, color: "from-red-400 to-rose-600", colorHex: "#e11d48", label: "Needs Improvement" },
+];
+
+// Mock data for Orbital Rings
+const assignmentClosuresData = [
+  { category: "Feature developments", score: 80, colorHex: "#10b981" },
+  { category: "High Complex Ticket Resolution", score: 65, colorHex: "#3b82f6" },
+  { category: "Learnings and Certifications", score: 45, colorHex: "#e11d48" },
 ];
 
 export function EmployeeCharts() {
   return (
     <div className="space-y-24">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-white mb-2">Scenario 1: Employee Contribution Levels</h2>
-        <p className="text-text-secondary">Visualizing an individual's engagement across different competencies.</p>
-      </div>
-
       {/* Variation 1: 3D Glowing Spheres on Grid */}
-      <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
-        <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 1: 3D Glowing Spheres</h3>
-        <div className="relative h-[400px] w-full max-w-4xl mx-auto flex items-end justify-center gap-16 sm:gap-32 pb-12 perspective-[1000px]">
+      <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden mt-8">
+        <h3 className="text-xl font-bold text-white mb-8 text-center">Organizational competency profile at a glance</h3>
+        <div className="relative h-[400px] w-full max-w-5xl mx-auto flex items-end justify-center gap-4 sm:gap-12 pb-12 perspective-[1000px]">
           {/* Floor Grid */}
           <div className="absolute bottom-0 left-0 right-0 h-48 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:20px_20px] [transform:rotateX(60deg)] origin-bottom opacity-50" />
 
-          {employeeData.map((item, i) => (
-            <div key={item.category} className="relative flex flex-col items-center group z-10">
+          {orgCompetencyData.map((item, i) => (
+            <div key={item.category} className="relative flex flex-col items-center group z-10 w-24">
               {/* Drop Shadow/Reflection on Grid */}
-              <div className="absolute -bottom-4 w-24 h-8 bg-black/40 blur-md rounded-[100%] [transform:rotateX(60deg)] group-hover:bg-black/60 transition-all" />
+              <div className="absolute -bottom-4 w-20 h-6 bg-black/40 blur-md rounded-[100%] [transform:rotateX(60deg)] group-hover:bg-black/60 transition-all" />
 
               <motion.div
                 initial={{ height: 0 }}
@@ -54,42 +58,43 @@ export function EmployeeCharts() {
               </motion.div>
 
               {/* Labels */}
-              <div className="absolute -bottom-24 text-center w-32 -ml-16 left-1/2">
-                <p className="text-white font-semibold text-sm whitespace-nowrap">{item.category}</p>
-                <p className="text-text-secondary text-xs">{item.label}</p>
+              <div className="absolute -bottom-24 text-center w-32 -ml-4 left-1/2 transform -translate-x-1/2">
+                <p className="text-white font-semibold text-[13px] leading-tight mb-1">{item.category}</p>
+                <p className="text-text-secondary text-[11px] leading-tight">{item.label}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Variation 1.5: True 3D Isometric Scatter (Values Manifested style) */}
+      {/* Variation 2: Orbital Rings */}
       <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
-        <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 1.5: 3D Isometric Scatter</h3>
+        <h3 className="text-xl font-bold text-white mb-8 text-center">Assignment closures at the Org. Level</h3>
+        <div className="relative h-[400px] w-full max-w-2xl mx-auto flex items-center justify-center">
+          <OrbitalChart data={assignmentClosuresData} />
+        </div>
+      </div>
+
+      {/* Variation 3: True 3D Isometric Scatter (Values Manifested style) */}
+      <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
+        <h3 className="text-xl font-bold text-white mb-8 text-center">Personalized reports for every member of the team: Value profile</h3>
         <div className="relative h-[450px] w-full max-w-2xl mx-auto flex items-center justify-center pt-8">
            <ValuesManifested3DChart />
         </div>
       </div>
 
-      {/* Variation 2: Radar / Web Chart */}
+      {/* Variation 4: Radar / Web Chart */}
       <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
-        <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 2: Futuristic Radar Web</h3>
+        <h3 className="text-xl font-bold text-white mb-2 text-center">Personalized reports for every member of the team:</h3>
+        <h4 className="text-lg font-semibold text-text-secondary mb-8 text-center">Your Competency Profile 2026</h4>
         <div className="relative h-[400px] w-full max-w-xl mx-auto flex items-center justify-center mt-8">
           <RadarChart />
         </div>
       </div>
 
-      {/* Variation 3: Orbital Rings */}
+      {/* Variation 5: Animated Speedometers (Velocity & Volume) */}
       <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
-        <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 3: Orbital Contribution Rings</h3>
-        <div className="relative h-[400px] w-full max-w-2xl mx-auto flex items-center justify-center">
-          <OrbitalChart data={employeeData} />
-        </div>
-      </div>
-
-      {/* Variation 4: Animated Speedometers (Velocity & Volume) */}
-      <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
-        <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 4: Live Speedometers</h3>
+        <h3 className="text-xl font-bold text-white mb-8 text-center">Personalized reports for every member of the team:</h3>
         <div className="flex flex-col md:flex-row items-center justify-center gap-16 lg:gap-32">
           <SpeedometerChart title="Assignment Velocity" type="velocity" />
           <SpeedometerChart title="Assignment Volume" type="volume" />
@@ -228,7 +233,7 @@ function RadarChart() {
 }
 
 // Helper component for Orbital Chart
-function OrbitalChart({ data }: { data: typeof employeeData }) {
+function OrbitalChart({ data }: { data: typeof assignmentClosuresData }) {
   const size = 350;
   const center = size / 2;
 
@@ -279,11 +284,11 @@ function OrbitalChart({ data }: { data: typeof employeeData }) {
       </div>
 
       {/* Legend list below */}
-      <div className="absolute -bottom-8 left-0 right-0 flex justify-center gap-6">
+      <div className="absolute -bottom-8 left-0 right-0 flex justify-center gap-6 flex-wrap w-max mx-auto max-w-[400px]">
         {data.map((d, i) => (
           <div key={i} className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: d.colorHex }} />
-            <span className="text-xs text-text-secondary">{d.category} ({d.score}%)</span>
+            <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: d.colorHex }} />
+            <span className="text-xs text-text-secondary whitespace-nowrap">{d.category} ({d.score}%)</span>
           </div>
         ))}
       </div>
@@ -411,7 +416,7 @@ function ValuesManifested3DChart() {
 // Helper component for Live Speedometers
 function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "volume" }) {
   const size = 300;
-  const extendedHeight = 350; // Increased height to prevent canvas cutoff
+  const extendedHeight = 350; 
   const center = size / 2;
   const radius = size / 2 - 20; 
   
@@ -481,7 +486,6 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 4.0, delay: 0.5, type: "spring", stiffness: 30 }}
             >
-              {/* Invisible bounding box to force center pivot at 0,0 */}
               <circle cx="0" cy="0" r="150" fill="transparent" />
               <path d={`M -5 0 L 5 0 L 0 ${-radius + 35} Z`} fill="#22C55E" />
             </motion.g>
@@ -494,7 +498,6 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 4.5, delay: 0.7, type: "spring", stiffness: 30 }}
             >
-              {/* Invisible bounding box to force center pivot at 0,0 */}
               <circle cx="0" cy="0" r="150" fill="transparent" />
               <path d={`M -5 0 L 5 0 L 0 ${-radius + 35} Z`} fill="#3B82F6" />
             </motion.g>
@@ -508,9 +511,7 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 5.0, delay: 1.0, type: "spring", stiffness: 20, damping: 10 }}
             >
-              {/* Invisible bounding box to force center pivot at 0,0 */}
               <circle cx="0" cy="0" r="150" fill="transparent" />
-              {/* Flat Base */}
               <path d={`M -6 15 L 6 15 L 2 ${-radius + 15} L -2 ${-radius + 15} Z`} fill="#F8FAFC" />
               <path d={`M -2 ${-radius + 15} L 2 ${-radius + 15} L 0 ${-radius + 5} Z`} fill="#EF4444" />
               <circle cx="0" cy="0" r="12" fill="#F8FAFC" />
@@ -519,12 +520,12 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
           </g>
         </svg>
 
-        {/* Labels positioned cleanly inside the extended canvas area */}
-        <div className="absolute inset-0 pointer-events-none">
+        {/* Labels properly aligned outside the gauge path */}
+        <div className="absolute inset-0 pointer-events-none z-20">
            <div className="absolute" style={{ 
-              top: `${center + Math.sin((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+35)}px`, 
-              left: `${center + Math.cos((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+35)}px`,
-              transform: "translate(-100%, -50%)",
+              top: `${center + Math.sin((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+40)}px`, 
+              left: `${center + Math.cos((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+40)}px`,
+              transform: "translate(-50%, -50%)",
            }}>
              <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-green-500/20 text-green-400 border border-green-500/30 rounded">
                 Org. Average
@@ -532,22 +533,23 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
            </div>
 
            <div className="absolute" style={{ 
-              top: `${center + Math.sin((valToAngle(targets.best)-90)*Math.PI/180) * (radius+25)}px`, 
-              left: `${center + Math.cos((valToAngle(targets.best)-90)*Math.PI/180) * (radius+25)}px`,
-              transform: "translate(0%, -50%)",
+              top: `${center + Math.sin((valToAngle(targets.best)-90)*Math.PI/180) * (radius+40)}px`, 
+              left: `${center + Math.cos((valToAngle(targets.best)-90)*Math.PI/180) * (radius+40)}px`,
+              transform: "translate(-50%, -50%)",
            }}>
-             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded ml-2">
+             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded">
                 Org. Best
              </div>
            </div>
 
+           {/* Ananya's Needle Label - perfectly aligned to the tip */}
            <div className="absolute" style={{ 
-              top: `${center + Math.sin((valToAngle(targets.emp)-90)*Math.PI/180) * (radius+25)}px`, 
-              left: `${center + Math.cos((valToAngle(targets.emp)-90)*Math.PI/180) * (radius+25)}px`,
-              transform: "translate(-50%, 0%)", // Position below the needle tip to prevent overlap
+              top: `${center + Math.sin((valToAngle(targets.emp)-90)*Math.PI/180) * (radius+5)}px`, 
+              left: `${center + Math.cos((valToAngle(targets.emp)-90)*Math.PI/180) * (radius+5)}px`,
+              transform: "translate(-50%, -100%)",
            }}>
-             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-slate-800/80 text-slate-200 border border-slate-600 rounded mt-4">
-                {type === "velocity" ? "Employee Velocity" : "Employee Volume"}
+             <div className="px-3 py-1 text-[12px] font-bold text-white whitespace-nowrap bg-slate-800/90 text-slate-100 border border-slate-500 rounded shadow-lg -mt-3">
+                {type === "velocity" ? "Ananya's Velocity" : "Ananya's Volume"}
              </div>
            </div>
         </div>
