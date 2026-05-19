@@ -474,37 +474,46 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
           })}
 
           {/* Needles (Animated inside the SVG) */}
-          <motion.g
-            initial={{ rotate: startAngle, x: center, y: center }}
-            whileInView={{ rotate: valToAngle(targets.avg), x: center, y: center }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 4.0, delay: 0.5, type: "spring", stiffness: 30 }}
-          >
-            <path d={`M -5 0 L 5 0 L 0 ${-radius + 35} Z`} fill="#22C55E" />
-          </motion.g>
+          <g transform={`translate(${center}, ${center})`}>
+            <motion.g
+              initial={{ rotate: startAngle }}
+              whileInView={{ rotate: valToAngle(targets.avg) }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 4.0, delay: 0.5, type: "spring", stiffness: 30 }}
+              style={{ originX: "0px", originY: "0px" }}
+            >
+              <path d={`M -5 0 L 5 0 L 0 ${-radius + 35} Z`} fill="#22C55E" />
+            </motion.g>
+          </g>
 
-          <motion.g
-            initial={{ rotate: startAngle, x: center, y: center }}
-            whileInView={{ rotate: valToAngle(targets.best), x: center, y: center }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 4.5, delay: 0.7, type: "spring", stiffness: 30 }}
-          >
-            <path d={`M -5 0 L 5 0 L 0 ${-radius + 35} Z`} fill="#3B82F6" />
-          </motion.g>
+          <g transform={`translate(${center}, ${center})`}>
+            <motion.g
+              initial={{ rotate: startAngle }}
+              whileInView={{ rotate: valToAngle(targets.best) }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 4.5, delay: 0.7, type: "spring", stiffness: 30 }}
+              style={{ originX: "0px", originY: "0px" }}
+            >
+              <path d={`M -5 0 L 5 0 L 0 ${-radius + 35} Z`} fill="#3B82F6" />
+            </motion.g>
+          </g>
 
           {/* Employee Needle */}
-          <motion.g
-            initial={{ rotate: startAngle, x: center, y: center }}
-            whileInView={{ rotate: valToAngle(targets.emp), x: center, y: center }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 5.0, delay: 1.0, type: "spring", stiffness: 20, damping: 10 }}
-          >
-            {/* Flat Base */}
-            <path d={`M -6 15 L 6 15 L 2 ${-radius + 15} L -2 ${-radius + 15} Z`} fill="#F8FAFC" />
-            <path d={`M -2 ${-radius + 15} L 2 ${-radius + 15} L 0 ${-radius + 5} Z`} fill="#EF4444" />
-            <circle cx="0" cy="0" r="12" fill="#F8FAFC" />
-            <circle cx="0" cy="0" r="4" fill="#0F172A" />
-          </motion.g>
+          <g transform={`translate(${center}, ${center})`}>
+            <motion.g
+              initial={{ rotate: startAngle }}
+              whileInView={{ rotate: valToAngle(targets.emp) }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 5.0, delay: 1.0, type: "spring", stiffness: 20, damping: 10 }}
+              style={{ originX: "0px", originY: "0px" }}
+            >
+              {/* Flat Base */}
+              <path d={`M -6 15 L 6 15 L 2 ${-radius + 15} L -2 ${-radius + 15} Z`} fill="#F8FAFC" />
+              <path d={`M -2 ${-radius + 15} L 2 ${-radius + 15} L 0 ${-radius + 5} Z`} fill="#EF4444" />
+              <circle cx="0" cy="0" r="12" fill="#F8FAFC" />
+              <circle cx="0" cy="0" r="4" fill="#0F172A" />
+            </motion.g>
+          </g>
         </svg>
 
         {/* Labels positioned cleanly inside the extended canvas area */}
