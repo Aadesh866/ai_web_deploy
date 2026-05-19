@@ -480,8 +480,9 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
               whileInView={{ rotate: valToAngle(targets.avg) }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 4.0, delay: 0.5, type: "spring", stiffness: 30 }}
-              style={{ originX: "0px", originY: "0px" }}
             >
+              {/* Invisible bounding box to force center pivot at 0,0 */}
+              <circle cx="0" cy="0" r="150" fill="transparent" />
               <path d={`M -5 0 L 5 0 L 0 ${-radius + 35} Z`} fill="#22C55E" />
             </motion.g>
           </g>
@@ -492,8 +493,9 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
               whileInView={{ rotate: valToAngle(targets.best) }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 4.5, delay: 0.7, type: "spring", stiffness: 30 }}
-              style={{ originX: "0px", originY: "0px" }}
             >
+              {/* Invisible bounding box to force center pivot at 0,0 */}
+              <circle cx="0" cy="0" r="150" fill="transparent" />
               <path d={`M -5 0 L 5 0 L 0 ${-radius + 35} Z`} fill="#3B82F6" />
             </motion.g>
           </g>
@@ -505,8 +507,9 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
               whileInView={{ rotate: valToAngle(targets.emp) }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 5.0, delay: 1.0, type: "spring", stiffness: 20, damping: 10 }}
-              style={{ originX: "0px", originY: "0px" }}
             >
+              {/* Invisible bounding box to force center pivot at 0,0 */}
+              <circle cx="0" cy="0" r="150" fill="transparent" />
               {/* Flat Base */}
               <path d={`M -6 15 L 6 15 L 2 ${-radius + 15} L -2 ${-radius + 15} Z`} fill="#F8FAFC" />
               <path d={`M -2 ${-radius + 15} L 2 ${-radius + 15} L 0 ${-radius + 5} Z`} fill="#EF4444" />
