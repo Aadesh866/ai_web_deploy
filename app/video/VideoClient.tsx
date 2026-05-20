@@ -222,8 +222,8 @@ export default function VideoClient() {
       if (tag === "INPUT" || tag === "TEXTAREA") return;
       switch (e.key) {
         case " ": e.preventDefault(); togglePlay(); break;
-        case "ArrowLeft": skip(-10); break;
-        case "ArrowRight": skip(10); break;
+        case "ArrowLeft": skip(-5); break;
+        case "ArrowRight": skip(5); break;
         case "m": case "M": toggleMute(); break;
         case "f": case "F": toggleFullscreen(); break;
       }
@@ -433,7 +433,7 @@ export default function VideoClient() {
                 {/* Buttons */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 sm:gap-3">
-                    <button onClick={() => skip(-10)} className="w-9 h-9 flex items-center justify-center text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-all" title="Rewind 10s">
+                    <button onClick={() => skip(-5)} className="w-9 h-9 flex items-center justify-center text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-all" title="Rewind 5s">
                       <RotateCcw className="w-5 h-5" />
                     </button>
 
@@ -441,7 +441,7 @@ export default function VideoClient() {
                       {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-0.5" />}
                     </button>
 
-                    <button onClick={() => skip(10)} className="w-9 h-9 flex items-center justify-center text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-all" title="Forward 10s">
+                    <button onClick={() => skip(5)} className="w-9 h-9 flex items-center justify-center text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-all" title="Forward 5s">
                       <RotateCw className="w-5 h-5" />
                     </button>
 
