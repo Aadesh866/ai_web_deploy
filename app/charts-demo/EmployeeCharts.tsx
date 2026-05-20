@@ -70,7 +70,7 @@ export function EmployeeCharts() {
       {/* Variation 2: Orbital Rings */}
       <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
         <h3 className="text-xl font-bold text-white mb-8 text-center">Assignment closures at the Org. Level</h3>
-        <div className="relative h-[400px] w-full max-w-2xl mx-auto flex items-center justify-center">
+        <div className="relative w-full max-w-2xl mx-auto flex items-center justify-center pt-8 pb-32">
           <OrbitalChart data={assignmentClosuresData} />
         </div>
       </div>
@@ -284,11 +284,11 @@ function OrbitalChart({ data }: { data: typeof assignmentClosuresData }) {
       </div>
 
       {/* Legend list below */}
-      <div className="absolute -bottom-8 left-0 right-0 flex justify-center gap-6 flex-wrap w-max mx-auto max-w-[400px]">
+      <div className="absolute top-full mt-6 left-0 right-0 flex flex-col items-center justify-center gap-3">
         {data.map((d, i) => (
-          <div key={i} className="flex items-center gap-2">
+          <div key={i} className="flex items-center gap-3">
             <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: d.colorHex }} />
-            <span className="text-xs text-text-secondary whitespace-nowrap">{d.category} ({d.score}%)</span>
+            <span className="text-[13px] font-medium text-text-secondary whitespace-nowrap">{d.category} ({d.score}%)</span>
           </div>
         ))}
       </div>
@@ -523,21 +523,21 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
         {/* Labels properly aligned outside the gauge path */}
         <div className="absolute inset-0 pointer-events-none z-20">
            <div className="absolute" style={{ 
-              top: `${center + Math.sin((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+40)}px`, 
-              left: `${center + Math.cos((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+40)}px`,
-              transform: "translate(-50%, -50%)",
+              top: `${center + Math.sin((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+50)}px`, 
+              left: `${center + Math.cos((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+50)}px`,
+              transform: "translate(-100%, -50%)",
            }}>
-             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-green-500/20 text-green-400 border border-green-500/30 rounded">
+             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-green-500/20 text-green-400 border border-green-500/30 rounded -ml-2">
                 Org. Average
              </div>
            </div>
 
            <div className="absolute" style={{ 
-              top: `${center + Math.sin((valToAngle(targets.best)-90)*Math.PI/180) * (radius+40)}px`, 
-              left: `${center + Math.cos((valToAngle(targets.best)-90)*Math.PI/180) * (radius+40)}px`,
-              transform: "translate(-50%, -50%)",
+              top: `${center + Math.sin((valToAngle(targets.best)-90)*Math.PI/180) * (radius+50)}px`, 
+              left: `${center + Math.cos((valToAngle(targets.best)-90)*Math.PI/180) * (radius+50)}px`,
+              transform: "translate(0%, -50%)",
            }}>
-             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded">
+             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded ml-2">
                 Org. Best
              </div>
            </div>
