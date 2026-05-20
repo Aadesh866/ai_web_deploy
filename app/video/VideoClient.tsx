@@ -257,14 +257,14 @@ export default function VideoClient() {
   // Loading state while checking IndexedDB
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0B0F19] flex items-center justify-center pt-28">
+      <div className="min-h-screen bg-[#0B0F19] flex items-center justify-center">
         <div className="animate-pulse text-text-secondary text-sm">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] flex flex-col items-center justify-center p-4 pt-28 sm:p-8 sm:pt-32 font-sans">
+    <div className="min-h-screen bg-[#0B0F19] flex flex-col items-center justify-center p-4 sm:p-8 font-sans">
       <AnimatePresence mode="wait">
         {!videoUrl ? (
           /* ───────── Upload UI ───────── */
