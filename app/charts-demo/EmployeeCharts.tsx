@@ -25,7 +25,7 @@ export function EmployeeCharts() {
       {/* Variation 1: 3D Glowing Spheres on Grid */}
       <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden mt-8">
         <h3 className="text-xl font-bold text-white mb-8 text-center">Organizational competency profile at a glance</h3>
-        <div className="relative h-[400px] w-full max-w-5xl mx-auto flex items-end justify-center gap-4 sm:gap-12 pb-12 perspective-[1000px]">
+        <div className="relative h-[500px] w-full max-w-5xl mx-auto flex items-end justify-center gap-4 sm:gap-12 pb-32 perspective-[1000px]">
           {/* Floor Grid */}
           <div className="absolute bottom-0 left-0 right-0 h-48 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:20px_20px] [transform:rotateX(60deg)] origin-bottom opacity-50" />
 
@@ -78,7 +78,7 @@ export function EmployeeCharts() {
       {/* Variation 3: True 3D Isometric Scatter (Values Manifested style) */}
       <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
         <h3 className="text-xl font-bold text-white mb-8 text-center">Personalized reports for every member of the team: Value profile</h3>
-        <div className="relative h-[450px] w-full max-w-2xl mx-auto flex items-center justify-center pt-8">
+        <div className="relative h-[500px] w-full max-w-2xl mx-auto flex items-center justify-center pt-8 pb-16">
            <ValuesManifested3DChart />
         </div>
       </div>
@@ -523,21 +523,21 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
         {/* Labels properly aligned outside the gauge path */}
         <div className="absolute inset-0 pointer-events-none z-20">
            <div className="absolute" style={{ 
-              top: `${center + Math.sin((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+50)}px`, 
-              left: `${center + Math.cos((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+50)}px`,
-              transform: "translate(-100%, -50%)",
+              top: `${center + Math.sin((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+60)}px`, 
+              left: `${center + Math.cos((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+60)}px`,
+              transform: "translate(-50%, -50%)",
            }}>
-             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-green-500/20 text-green-400 border border-green-500/30 rounded -ml-2">
+             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-green-500/20 text-green-400 border border-green-500/30 rounded shadow-sm">
                 Org. Average
              </div>
            </div>
 
            <div className="absolute" style={{ 
-              top: `${center + Math.sin((valToAngle(targets.best)-90)*Math.PI/180) * (radius+50)}px`, 
-              left: `${center + Math.cos((valToAngle(targets.best)-90)*Math.PI/180) * (radius+50)}px`,
-              transform: "translate(0%, -50%)",
+              top: `${center + Math.sin((valToAngle(targets.best)-90)*Math.PI/180) * (radius+60)}px`, 
+              left: `${center + Math.cos((valToAngle(targets.best)-90)*Math.PI/180) * (radius+60)}px`,
+              transform: "translate(-50%, -50%)",
            }}>
-             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded ml-2">
+             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded shadow-sm">
                 Org. Best
              </div>
            </div>

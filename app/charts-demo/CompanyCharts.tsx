@@ -48,7 +48,7 @@ export function CompanyCharts() {
       {/* Variation 4: High Performing Teams (Podium) */}
       <div className="bg-surface border border-border rounded-3xl p-8 relative overflow-hidden">
         <h3 className="text-xl font-bold text-white mb-8 text-center">Variation 4: High Performing Teams</h3>
-        <div className="relative w-full max-w-4xl mx-auto flex items-center justify-center pt-12 pb-8">
+        <div className="relative w-full max-w-4xl mx-auto flex items-center justify-center pt-32 pb-8">
           <TeamPerformanceChart />
         </div>
       </div>
