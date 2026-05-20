@@ -2,12 +2,63 @@
 
 import { useState, useRef, useEffect, useCallback, ChangeEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload, Link as LinkIcon, Maximize, Minimize, X, Video as VideoIcon, Play, Pause, RotateCcw, RotateCw, Volume2, VolumeX } from "lucide-react";
+import { Upload, Link as LinkIcon, Maximize, Minimize, X, Video as VideoIcon, Play, Pause, RotateCcw, RotateCw, Volume2, VolumeX, RefreshCw } from "lucide-react";
 
+// ─── IndexedDB helpers for video persistence ───
+const DB_NAME = "purplehub_video";
+const STORE_NAME = "videos";
+const VIDEO_KEY = "current_video";
+
+function openDB(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME);
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function saveVideoToDB(blob: Blob): Promise<void> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    tx.objectStore(STORE_NAME).put(blob, VIDEO_KEY);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function loadVideoFromDB(): Promise<Blob | null> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readonly");
+    const req = tx.objectStore(STORE_NAME).get(VIDEO_KEY);
+    req.onsuccess = () => resolve(req.result ?? null);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function clearVideoFromDB(): Promise<void> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    tx.objectStore(STORE_NAME).delete(VIDEO_KEY);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+// ─── Component ───
 export default function VideoClient() {
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [inputUrl, setInputUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -16,36 +67,61 @@ export default function VideoClient() {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [showControls, setShowControls] = useState(true);
+  const [playbackRate, setPlaybackRate] = useState(1);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const controlsTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // --- File Upload ---
-  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+  // ─── Load persisted video on mount ───
+  useEffect(() => {
+    (async () => {
+      try {
+        const blob = await loadVideoFromDB();
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          setVideoUrl(url);
+        }
+      } catch {
+        // No saved video, that's fine
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
+
+  // ─── File Upload ───
+  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith("video/")) {
       setError("Please upload a valid video file (MP4, WebM, MOV).");
       return;
     }
+    // Revoke old blob
+    if (videoUrl.startsWith("blob:")) URL.revokeObjectURL(videoUrl);
+    // Save to IndexedDB for persistence
+    await saveVideoToDB(file);
     const url = URL.createObjectURL(file);
     setVideoUrl(url);
     setError(null);
     setIsPlaying(true);
   };
 
-  // --- URL Submit ---
-  const handleUrlSubmit = (e: React.FormEvent) => {
+  // ─── URL Submit ───
+  const handleUrlSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputUrl.trim()) {
-      setVideoUrl(inputUrl.trim());
-      setError(null);
-      setIsPlaying(true);
-    }
+    if (!inputUrl.trim()) return;
+    if (videoUrl.startsWith("blob:")) URL.revokeObjectURL(videoUrl);
+    // For external URLs, save the URL string in IndexedDB as a text blob
+    const urlBlob = new Blob([inputUrl.trim()], { type: "text/plain" });
+    await saveVideoToDB(urlBlob);
+    setVideoUrl(inputUrl.trim());
+    setError(null);
+    setIsPlaying(true);
   };
 
-  // --- Playback Controls ---
+  // ─── Playback Controls ───
   const togglePlay = useCallback(() => {
     const vid = videoRef.current;
     if (!vid) return;
@@ -79,6 +155,14 @@ export default function VideoClient() {
     }
   }, []);
 
+  const cyclePlaybackRate = useCallback(() => {
+    const rates = [0.5, 0.75, 1, 1.25, 1.5, 2];
+    const currentIndex = rates.indexOf(playbackRate);
+    const nextRate = rates[(currentIndex + 1) % rates.length];
+    setPlaybackRate(nextRate);
+    if (videoRef.current) videoRef.current.playbackRate = nextRate;
+  }, [playbackRate]);
+
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const vid = videoRef.current;
     if (!vid) return;
@@ -88,7 +172,7 @@ export default function VideoClient() {
     setProgress(vid.duration ? (time / vid.duration) * 100 : 0);
   };
 
-  // --- Auto-hide controls ---
+  // ─── Auto-hide controls ───
   const resetControlsTimer = useCallback(() => {
     setShowControls(true);
     if (controlsTimerRef.current) clearTimeout(controlsTimerRef.current);
@@ -99,12 +183,12 @@ export default function VideoClient() {
     }, 3000);
   }, []);
 
-  // --- Video element event handlers (as props, not addEventListener) ---
+  // ─── Video element event handlers ───
   const onLoadedMetadata = () => {
     const vid = videoRef.current;
     if (!vid) return;
     setDuration(vid.duration);
-    // Autoplay
+    vid.playbackRate = playbackRate;
     vid.play().then(() => setIsPlaying(true)).catch(() => {});
   };
 
@@ -123,14 +207,14 @@ export default function VideoClient() {
   const onVideoPlay = () => setIsPlaying(true);
   const onVideoPause = () => setIsPlaying(false);
 
-  // --- Fullscreen listener ---
+  // ─── Fullscreen listener ───
   useEffect(() => {
     const handler = () => setIsFullscreen(!!document.fullscreenElement);
     document.addEventListener("fullscreenchange", handler);
     return () => document.removeEventListener("fullscreenchange", handler);
   }, []);
 
-  // --- Keyboard shortcuts ---
+  // ─── Keyboard shortcuts ───
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (!videoUrl) return;
@@ -149,8 +233,9 @@ export default function VideoClient() {
     return () => window.removeEventListener("keydown", handleKey);
   }, [videoUrl, togglePlay, skip, toggleMute, toggleFullscreen, resetControlsTimer]);
 
-  const resetVideo = () => {
+  const resetVideo = async () => {
     if (videoUrl.startsWith("blob:")) URL.revokeObjectURL(videoUrl);
+    await clearVideoFromDB();
     setVideoUrl("");
     setInputUrl("");
     setIsPlaying(false);
@@ -158,6 +243,7 @@ export default function VideoClient() {
     setProgress(0);
     setCurrentTime(0);
     setDuration(0);
+    setPlaybackRate(1);
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   };
 
@@ -168,8 +254,17 @@ export default function VideoClient() {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
+  // Loading state while checking IndexedDB
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#0B0F19] flex items-center justify-center pt-28">
+        <div className="animate-pulse text-text-secondary text-sm">Loading...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#0B0F19] flex flex-col items-center justify-center p-4 sm:p-8 font-sans">
+    <div className="min-h-screen bg-[#0B0F19] flex flex-col items-center justify-center p-4 pt-28 sm:p-8 sm:pt-32 font-sans">
       <AnimatePresence mode="wait">
         {!videoUrl ? (
           /* ───────── Upload UI ───────── */
@@ -190,7 +285,7 @@ export default function VideoClient() {
               </div>
               <h1 className="text-3xl font-bold text-white mb-3">Present a Video</h1>
               <p className="text-text-secondary text-sm">
-                Upload a video from your device or paste an external link to begin the presentation.
+                Upload a video from your device or paste an external link to begin the presentation. Your video will be saved automatically.
               </p>
             </div>
 
@@ -214,7 +309,7 @@ export default function VideoClient() {
                     <Upload className="w-6 h-6 text-text-secondary group-hover:text-primary-brand" />
                   </div>
                   <p className="text-white font-semibold mb-1">Click or drag video to upload</p>
-                  <p className="text-xs text-text-secondary">MP4, WebM, MOV</p>
+                  <p className="text-xs text-text-secondary">MP4, WebM, MOV — saved automatically</p>
                 </div>
               </div>
 
@@ -261,7 +356,7 @@ export default function VideoClient() {
                 : "w-full max-w-5xl rounded-3xl shadow-2xl border border-border aspect-video"
             }`}
           >
-            {/* The Video Element — all events as React props */}
+            {/* Video Element */}
             <video
               ref={videoRef}
               src={videoUrl}
@@ -274,13 +369,13 @@ export default function VideoClient() {
               onPause={onVideoPause}
             />
 
-            {/* Clickable area over the video to toggle play (sits below controls) */}
+            {/* Click-to-play area */}
             <div
               className="absolute inset-0 z-10 cursor-pointer"
               onClick={togglePlay}
             />
 
-            {/* Custom Controls Overlay — z-20 so it sits above the click area */}
+            {/* Controls Overlay */}
             <div
               className={`absolute inset-0 flex flex-col justify-between pointer-events-none transition-opacity duration-300 z-20 ${
                 showControls ? "opacity-100" : "opacity-0"
@@ -291,17 +386,30 @@ export default function VideoClient() {
                 <button
                   onClick={resetVideo}
                   className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-red-500/80 text-white rounded-full backdrop-blur-md transition-colors"
-                  title="Close Video"
+                  title="Close & Remove Video"
                 >
                   <X className="w-5 h-5" />
                 </button>
-                <button
-                  onClick={toggleFullscreen}
-                  className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/25 text-white rounded-full backdrop-blur-md transition-colors"
-                  title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
-                >
-                  {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
-                </button>
+
+                <div className="flex items-center gap-2">
+                  {/* Change video button */}
+                  <label className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/25 text-white rounded-full backdrop-blur-md transition-colors cursor-pointer" title="Change Video">
+                    <RefreshCw className="w-4 h-4" />
+                    <input
+                      type="file"
+                      accept="video/*"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                  </label>
+                  <button
+                    onClick={toggleFullscreen}
+                    className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/25 text-white rounded-full backdrop-blur-md transition-colors"
+                    title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+                  >
+                    {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
+                  </button>
+                </div>
               </div>
 
               {/* Bottom controls */}
@@ -346,11 +454,23 @@ export default function VideoClient() {
                     </span>
                   </div>
 
-                  <div className="hidden sm:flex items-center gap-2 text-white/30 text-[10px] select-none">
-                    <span className="px-1.5 py-0.5 bg-white/10 rounded">Space</span>
-                    <span className="px-1.5 py-0.5 bg-white/10 rounded">← →</span>
-                    <span className="px-1.5 py-0.5 bg-white/10 rounded">M</span>
-                    <span className="px-1.5 py-0.5 bg-white/10 rounded">F</span>
+                  <div className="flex items-center gap-2">
+                    {/* Playback speed */}
+                    <button
+                      onClick={cyclePlaybackRate}
+                      className="px-2.5 py-1 text-xs font-bold text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-lg transition-all select-none"
+                      title="Playback Speed"
+                    >
+                      {playbackRate}x
+                    </button>
+
+                    {/* Keyboard hints */}
+                    <div className="hidden sm:flex items-center gap-1.5 text-white/30 text-[10px] select-none ml-2">
+                      <span className="px-1.5 py-0.5 bg-white/10 rounded">Space</span>
+                      <span className="px-1.5 py-0.5 bg-white/10 rounded">← →</span>
+                      <span className="px-1.5 py-0.5 bg-white/10 rounded">M</span>
+                      <span className="px-1.5 py-0.5 bg-white/10 rounded">F</span>
+                    </div>
                   </div>
                 </div>
               </div>
