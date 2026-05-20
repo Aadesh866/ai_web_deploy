@@ -9,7 +9,6 @@ export default function VideoClient() {
   const [inputUrl, setInputUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  // Player state
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -20,20 +19,20 @@ export default function VideoClient() {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const controlsTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const controlsTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // --- File Upload ---
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (file.type.startsWith("video/")) {
-        const url = URL.createObjectURL(file);
-        setVideoUrl(url);
-        setError(null);
-      } else {
-        setError("Please upload a valid video file (MP4, WebM, MOV).");
-      }
+    if (!file) return;
+    if (!file.type.startsWith("video/")) {
+      setError("Please upload a valid video file (MP4, WebM, MOV).");
+      return;
     }
+    const url = URL.createObjectURL(file);
+    setVideoUrl(url);
+    setError(null);
+    setIsPlaying(true);
   };
 
   // --- URL Submit ---
@@ -42,6 +41,7 @@ export default function VideoClient() {
     if (inputUrl.trim()) {
       setVideoUrl(inputUrl.trim());
       setError(null);
+      setIsPlaying(true);
     }
   };
 
@@ -50,7 +50,7 @@ export default function VideoClient() {
     const vid = videoRef.current;
     if (!vid) return;
     if (vid.paused) {
-      vid.play();
+      vid.play().catch(() => {});
       setIsPlaying(true);
     } else {
       vid.pause();
@@ -60,7 +60,7 @@ export default function VideoClient() {
 
   const skip = useCallback((seconds: number) => {
     const vid = videoRef.current;
-    if (!vid) return;
+    if (!vid || !vid.duration) return;
     vid.currentTime = Math.max(0, Math.min(vid.duration, vid.currentTime + seconds));
   }, []);
 
@@ -73,19 +73,20 @@ export default function VideoClient() {
 
   const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
-      containerRef.current?.requestFullscreen();
+      containerRef.current?.requestFullscreen().catch(() => {});
     } else {
-      document.exitFullscreen();
+      document.exitFullscreen().catch(() => {});
     }
   }, []);
 
-  const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const vid = videoRef.current;
     if (!vid) return;
     const time = parseFloat(e.target.value);
     vid.currentTime = time;
     setCurrentTime(time);
-  }, []);
+    setProgress(vid.duration ? (time / vid.duration) * 100 : 0);
+  };
 
   // --- Auto-hide controls ---
   const resetControlsTimer = useCallback(() => {
@@ -98,52 +99,49 @@ export default function VideoClient() {
     }, 3000);
   }, []);
 
-  // --- Events ---
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  }, []);
-
-  useEffect(() => {
+  // --- Video element event handlers (as props, not addEventListener) ---
+  const onLoadedMetadata = () => {
     const vid = videoRef.current;
     if (!vid) return;
+    setDuration(vid.duration);
+    // Autoplay
+    vid.play().then(() => setIsPlaying(true)).catch(() => {});
+  };
 
-    const onTimeUpdate = () => {
-      setCurrentTime(vid.currentTime);
-      setProgress(vid.duration ? (vid.currentTime / vid.duration) * 100 : 0);
-    };
-    const onLoadedMetadata = () => {
-      setDuration(vid.duration);
-    };
-    const onEnded = () => {
-      setIsPlaying(false);
-      setShowControls(true);
-    };
+  const onTimeUpdate = () => {
+    const vid = videoRef.current;
+    if (!vid) return;
+    setCurrentTime(vid.currentTime);
+    setProgress(vid.duration ? (vid.currentTime / vid.duration) * 100 : 0);
+  };
 
-    vid.addEventListener("timeupdate", onTimeUpdate);
-    vid.addEventListener("loadedmetadata", onLoadedMetadata);
-    vid.addEventListener("ended", onEnded);
+  const onEnded = () => {
+    setIsPlaying(false);
+    setShowControls(true);
+  };
 
-    return () => {
-      vid.removeEventListener("timeupdate", onTimeUpdate);
-      vid.removeEventListener("loadedmetadata", onLoadedMetadata);
-      vid.removeEventListener("ended", onEnded);
-    };
-  }, [videoUrl]);
+  const onVideoPlay = () => setIsPlaying(true);
+  const onVideoPause = () => setIsPlaying(false);
 
-  // Keyboard shortcuts
+  // --- Fullscreen listener ---
+  useEffect(() => {
+    const handler = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", handler);
+    return () => document.removeEventListener("fullscreenchange", handler);
+  }, []);
+
+  // --- Keyboard shortcuts ---
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (!videoUrl) return;
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
       switch (e.key) {
         case " ": e.preventDefault(); togglePlay(); break;
         case "ArrowLeft": skip(-10); break;
         case "ArrowRight": skip(10); break;
-        case "m": toggleMute(); break;
-        case "f": toggleFullscreen(); break;
+        case "m": case "M": toggleMute(); break;
+        case "f": case "F": toggleFullscreen(); break;
       }
       resetControlsTimer();
     };
@@ -152,6 +150,7 @@ export default function VideoClient() {
   }, [videoUrl, togglePlay, skip, toggleMute, toggleFullscreen, resetControlsTimer]);
 
   const resetVideo = () => {
+    if (videoUrl.startsWith("blob:")) URL.revokeObjectURL(videoUrl);
     setVideoUrl("");
     setInputUrl("");
     setIsPlaying(false);
@@ -159,10 +158,11 @@ export default function VideoClient() {
     setProgress(0);
     setCurrentTime(0);
     setDuration(0);
-    if (document.fullscreenElement) document.exitFullscreen();
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   };
 
   const formatTime = (s: number) => {
+    if (!s || !isFinite(s)) return "0:00";
     const mins = Math.floor(s / 60);
     const secs = Math.floor(s % 60);
     return `${mins}:${secs.toString().padStart(2, "0")}`;
@@ -181,7 +181,6 @@ export default function VideoClient() {
             transition={{ duration: 0.4 }}
             className="w-full max-w-xl bg-surface border border-border rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden"
           >
-            {/* Background Glows */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary-brand/10 rounded-full blur-[100px] pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
 
@@ -202,7 +201,6 @@ export default function VideoClient() {
             )}
 
             <div className="space-y-6 relative z-10">
-              {/* File Upload Area */}
               <div className="relative">
                 <input
                   type="file"
@@ -226,7 +224,6 @@ export default function VideoClient() {
                 <div className="h-[1px] flex-1 bg-border" />
               </div>
 
-              {/* URL Input */}
               <form onSubmit={handleUrlSubmit} className="relative">
                 <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                   <LinkIcon className="w-5 h-5 text-text-secondary" />
@@ -258,32 +255,39 @@ export default function VideoClient() {
             transition={{ duration: 0.5 }}
             ref={containerRef}
             onMouseMove={resetControlsTimer}
-            onClick={(e) => {
-              // Only toggle play if clicking the video area, not controls
-              if ((e.target as HTMLElement).tagName === "VIDEO") togglePlay();
-            }}
             className={`relative bg-black overflow-hidden transition-all duration-300 ${
               isFullscreen
                 ? "fixed inset-0 z-50 rounded-none"
                 : "w-full max-w-5xl rounded-3xl shadow-2xl border border-border aspect-video"
             }`}
           >
-            {/* The Video Element */}
+            {/* The Video Element — all events as React props */}
             <video
               ref={videoRef}
               src={videoUrl}
               className="w-full h-full object-contain bg-black"
               playsInline
+              onLoadedMetadata={onLoadedMetadata}
+              onTimeUpdate={onTimeUpdate}
+              onEnded={onEnded}
+              onPlay={onVideoPlay}
+              onPause={onVideoPause}
             />
 
-            {/* Custom Controls Overlay */}
+            {/* Clickable area over the video to toggle play (sits below controls) */}
             <div
-              className={`absolute inset-0 flex flex-col justify-end transition-opacity duration-300 ${
-                showControls ? "opacity-100" : "opacity-0 pointer-events-none"
+              className="absolute inset-0 z-10 cursor-pointer"
+              onClick={togglePlay}
+            />
+
+            {/* Custom Controls Overlay — z-20 so it sits above the click area */}
+            <div
+              className={`absolute inset-0 flex flex-col justify-between pointer-events-none transition-opacity duration-300 z-20 ${
+                showControls ? "opacity-100" : "opacity-0"
               }`}
             >
-              {/* Top gradient + close/fullscreen */}
-              <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4 sm:p-5 bg-gradient-to-b from-black/70 to-transparent">
+              {/* Top bar */}
+              <div className="flex items-center justify-between p-4 sm:p-5 bg-gradient-to-b from-black/70 to-transparent pointer-events-auto">
                 <button
                   onClick={resetVideo}
                   className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-red-500/80 text-white rounded-full backdrop-blur-md transition-colors"
@@ -300,55 +304,49 @@ export default function VideoClient() {
                 </button>
               </div>
 
-              {/* Bottom controls bar */}
-              <div className="bg-gradient-to-t from-black/80 to-transparent pt-16 pb-4 px-4 sm:px-6">
-                {/* Progress bar */}
+              {/* Bottom controls */}
+              <div className="bg-gradient-to-t from-black/80 to-transparent pt-16 pb-4 px-4 sm:px-6 pointer-events-auto">
+                {/* Seek bar */}
                 <div className="relative group mb-3">
                   <input
                     type="range"
                     min={0}
-                    max={duration || 0}
+                    max={duration || 1}
                     step={0.1}
                     value={currentTime}
                     onChange={handleSeek}
-                    className="w-full h-1 appearance-none bg-white/20 rounded-full cursor-pointer accent-primary-brand [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-primary-brand [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(34,197,94,0.6)] group-hover:[&::-webkit-slider-thumb]:w-4 group-hover:[&::-webkit-slider-thumb]:h-4 transition-all"
+                    className="w-full h-1.5 appearance-none bg-white/20 rounded-full cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-primary-brand [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(34,197,94,0.6)] [&::-webkit-slider-thumb]:cursor-pointer transition-all"
                     style={{
                       background: `linear-gradient(to right, #22c55e ${progress}%, rgba(255,255,255,0.2) ${progress}%)`
                     }}
                   />
                 </div>
 
-                {/* Buttons row */}
+                {/* Buttons */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    {/* Rewind 10s */}
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <button onClick={() => skip(-10)} className="w-9 h-9 flex items-center justify-center text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-all" title="Rewind 10s">
                       <RotateCcw className="w-5 h-5" />
                     </button>
 
-                    {/* Play / Pause */}
                     <button onClick={togglePlay} className="w-12 h-12 flex items-center justify-center bg-white/15 hover:bg-primary-brand text-white rounded-full backdrop-blur-sm transition-all shadow-lg" title={isPlaying ? "Pause" : "Play"}>
                       {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-0.5" />}
                     </button>
 
-                    {/* Forward 10s */}
                     <button onClick={() => skip(10)} className="w-9 h-9 flex items-center justify-center text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-all" title="Forward 10s">
                       <RotateCw className="w-5 h-5" />
                     </button>
 
-                    {/* Mute */}
                     <button onClick={toggleMute} className="w-9 h-9 flex items-center justify-center text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-all ml-1" title={isMuted ? "Unmute" : "Mute"}>
                       {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                     </button>
 
-                    {/* Time */}
-                    <span className="text-white/70 text-xs font-mono ml-2">
+                    <span className="text-white/70 text-xs font-mono ml-2 select-none">
                       {formatTime(currentTime)} / {formatTime(duration)}
                     </span>
                   </div>
 
-                  {/* Keyboard shortcuts hint */}
-                  <div className="hidden sm:flex items-center gap-2 text-white/30 text-[10px]">
+                  <div className="hidden sm:flex items-center gap-2 text-white/30 text-[10px] select-none">
                     <span className="px-1.5 py-0.5 bg-white/10 rounded">Space</span>
                     <span className="px-1.5 py-0.5 bg-white/10 rounded">← →</span>
                     <span className="px-1.5 py-0.5 bg-white/10 rounded">M</span>
@@ -358,9 +356,9 @@ export default function VideoClient() {
               </div>
             </div>
 
-            {/* Center Play overlay when paused */}
+            {/* Center play icon when paused */}
             {!isPlaying && showControls && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
