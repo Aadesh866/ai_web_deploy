@@ -520,37 +520,19 @@ function SpeedometerChart({ title, type }: { title: string, type: "velocity" | "
           </g>
         </svg>
 
-        {/* Labels properly aligned outside the gauge path */}
-        <div className="absolute inset-0 pointer-events-none z-20">
-           <div className="absolute" style={{ 
-              top: `${center + Math.sin((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+60)}px`, 
-              left: `${center + Math.cos((valToAngle(targets.avg)-90)*Math.PI/180) * (radius+60)}px`,
-              transform: "translate(-50%, -50%)",
-           }}>
-             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-green-500/20 text-green-400 border border-green-500/30 rounded shadow-sm">
-                Org. Average
-             </div>
+        {/* Legend below gauge — avoids all overlap issues */}
+        <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-4 pb-2">
+           <div className="flex items-center gap-1.5">
+             <div className="w-3 h-3 rounded-sm bg-green-500" />
+             <span className="text-[11px] font-semibold text-green-400">Org. Average</span>
            </div>
-
-           <div className="absolute" style={{ 
-              top: `${center + Math.sin((valToAngle(targets.best)-90)*Math.PI/180) * (radius+60)}px`, 
-              left: `${center + Math.cos((valToAngle(targets.best)-90)*Math.PI/180) * (radius+60)}px`,
-              transform: "translate(-50%, -50%)",
-           }}>
-             <div className="px-2 py-1 text-[11px] font-bold text-white whitespace-nowrap bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded shadow-sm">
-                Org. Best
-             </div>
+           <div className="flex items-center gap-1.5">
+             <div className="w-3 h-3 rounded-sm bg-blue-500" />
+             <span className="text-[11px] font-semibold text-blue-400">Org. Best</span>
            </div>
-
-           {/* Ananya's Needle Label - perfectly aligned to the tip */}
-           <div className="absolute" style={{ 
-              top: `${center + Math.sin((valToAngle(targets.emp)-90)*Math.PI/180) * (radius+5)}px`, 
-              left: `${center + Math.cos((valToAngle(targets.emp)-90)*Math.PI/180) * (radius+5)}px`,
-              transform: "translate(-50%, -100%)",
-           }}>
-             <div className="px-3 py-1 text-[12px] font-bold text-white whitespace-nowrap bg-slate-800/90 text-slate-100 border border-slate-500 rounded shadow-lg -mt-3">
-                {type === "velocity" ? "Ananya's Velocity" : "Ananya's Volume"}
-             </div>
+           <div className="flex items-center gap-1.5">
+             <div className="w-3 h-3 rounded-sm bg-slate-100" />
+             <span className="text-[11px] font-semibold text-slate-300">{type === "velocity" ? "Ananya" : "Ananya"}</span>
            </div>
         </div>
       </div>
