@@ -18,6 +18,8 @@ import {
   Presentation,
   Upload,
   FileIcon,
+  LogOut,
+  Settings,
 } from "lucide-react";
 
 // ─── URL normalizer ────────────────────────────────────────────────────────────
@@ -93,6 +95,15 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
 
   // Fullscreen
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Admin credentials modal
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [adminError, setAdminError] = useState("");
+  const [adminSuccess, setAdminSuccess] = useState(false);
+  const [updatingCreds, setUpdatingCreds] = useState(false);
 
   // ── Hide global Navbar & Footer for this standalone page ──────────────────
   useEffect(() => {
@@ -232,6 +243,52 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
     if (e.key === "Enter") handleSave();
   };
 
+  // ── Logout ─────────────────────────────────────────────────────────────────
+  const handleLogout = useCallback(async () => {
+    await fetch("/api/ppt-auth", { method: "DELETE" });
+    window.location.reload();
+  }, []);
+
+  // ── Update credentials ─────────────────────────────────────────────────────
+  const handleUpdateCredentials = useCallback(async () => {
+    if (!newUsername.trim() || !newPassword.trim()) {
+      setAdminError("Please enter both username and password");
+      return;
+    }
+    setUpdatingCreds(true);
+    setAdminError("");
+
+    try {
+      const res = await fetch("/api/ppt-auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "update",
+          currentPassword: adminPassword,
+          newUsername: newUsername.trim(),
+          newPassword: newPassword.trim(),
+        }),
+      });
+
+      if (res.ok) {
+        setAdminSuccess(true);
+        setTimeout(() => {
+          setShowAdminModal(false);
+          setAdminPassword("");
+          setNewUsername("");
+          setNewPassword("");
+          setAdminSuccess(false);
+        }, 2000);
+      } else {
+        setAdminError("Invalid admin password or update failed");
+      }
+    } catch {
+      setAdminError("Network error. Please try again.");
+    } finally {
+      setUpdatingCreds(false);
+    }
+  }, [adminPassword, newUsername, newPassword]);
+
   return (
     <div
       className="ppt-root"
@@ -290,6 +347,37 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
 
         {/* Action Buttons */}
         <div style={{ display: "flex", gap: 12 }}>
+          {/* Admin Settings Button */}
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={() => setShowAdminModal(true)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "9px 18px",
+              borderRadius: 10,
+              border: "1px solid rgba(51,65,85,0.8)",
+              background: "rgba(30,41,59,0.7)",
+              color: "#94A3B8",
+              fontSize: 14,
+              fontWeight: 500,
+              cursor: "pointer",
+              transition: "border-color 0.2s, color 0.2s",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "#334155";
+              (e.currentTarget as HTMLButtonElement).style.color = "#F1F5F9";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(51,65,85,0.8)";
+              (e.currentTarget as HTMLButtonElement).style.color = "#94A3B8";
+            }}
+          >
+            <Settings size={15} />
+          </motion.button>
+
           {/* Edit Button */}
           <motion.button
             id="ppt-edit-btn"
@@ -346,6 +434,37 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
           >
             {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
             {isFullscreen ? "Exit" : "Present"}
+          </motion.button>
+
+          {/* Logout Button */}
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={handleLogout}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "9px 18px",
+              borderRadius: 10,
+              border: "1px solid rgba(239,68,68,0.3)",
+              background: "rgba(127,29,29,0.3)",
+              color: "#F87171",
+              fontSize: 14,
+              fontWeight: 500,
+              cursor: "pointer",
+              transition: "border-color 0.2s, background 0.2s",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(239,68,68,0.5)";
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(127,29,29,0.5)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(239,68,68,0.3)";
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(127,29,29,0.3)";
+            }}
+          >
+            <LogOut size={15} />
           </motion.button>
         </div>
       </header>
@@ -865,6 +984,236 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
                   </motion.div>
                 )}
               </AnimatePresence>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Admin Credentials Modal ────────────────────────────────────────── */}
+      <AnimatePresence>
+        {showAdminModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(10,10,20,0.75)",
+              backdropFilter: "blur(6px)",
+              WebkitBackdropFilter: "blur(6px)",
+              zIndex: 100,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 20,
+            }}
+            onClick={e => { if (e.target === e.currentTarget) {
+              setShowAdminModal(false);
+              setAdminPassword("");
+              setNewUsername("");
+              setNewPassword("");
+              setAdminError("");
+            }}}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 28 }}
+              style={{
+                background: "linear-gradient(135deg, #1E293B, #162032)",
+                border: "1px solid rgba(51,65,85,0.8)",
+                borderRadius: 20,
+                padding: "32px 36px",
+                width: "100%",
+                maxWidth: 480,
+                boxShadow: "0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,197,94,0.05)",
+                position: "relative",
+              }}
+            >
+              <button
+                onClick={() => {
+                  setShowAdminModal(false);
+                  setAdminPassword("");
+                  setNewUsername("");
+                  setNewPassword("");
+                  setAdminError("");
+                }}
+                style={{
+                  position: "absolute",
+                  top: 16,
+                  right: 16,
+                  background: "rgba(51,65,85,0.5)",
+                  border: "none",
+                  borderRadius: 8,
+                  color: "#94A3B8",
+                  cursor: "pointer",
+                  padding: 6,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <X size={16} />
+              </button>
+
+              <div style={{ marginBottom: 28 }}>
+                <div
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 12,
+                    background: "linear-gradient(135deg, rgba(59,130,246,0.2), rgba(147,51,234,0.2))",
+                    border: "1px solid rgba(59,130,246,0.25)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 16,
+                  }}
+                >
+                  <Settings size={20} color="#3B82F6" />
+                </div>
+                <h3
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: "#F1F5F9",
+                    margin: 0,
+                    fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
+                    letterSpacing: "-0.02em",
+                  }}
+                >
+                  Update Access Credentials
+                </h3>
+                <p style={{ color: "#94A3B8", fontSize: 14, marginTop: 6 }}>
+                  Change the username and password required to access this page.
+                </p>
+              </div>
+
+              <div style={{ marginBottom: 18 }}>
+                <label style={{ display: "block", fontSize: 13, color: "#94A3B8", marginBottom: 8, fontWeight: 500 }}>
+                  Admin Password (Edit Password)
+                </label>
+                <input
+                  type="password"
+                  value={adminPassword}
+                  onChange={e => { setAdminPassword(e.target.value); setAdminError(""); }}
+                  placeholder="Enter admin password..."
+                  autoFocus
+                  style={{
+                    width: "100%",
+                    padding: "12px 16px",
+                    background: "rgba(15,23,42,0.7)",
+                    border: "1px solid rgba(51,65,85,0.8)",
+                    borderRadius: 10,
+                    color: "#F1F5F9",
+                    fontSize: 15,
+                    outline: "none",
+                    boxSizing: "border-box",
+                    fontFamily: "inherit",
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: 18 }}>
+                <label style={{ display: "block", fontSize: 13, color: "#94A3B8", marginBottom: 8, fontWeight: 500 }}>
+                  New Username
+                </label>
+                <input
+                  type="text"
+                  value={newUsername}
+                  onChange={e => { setNewUsername(e.target.value); setAdminError(""); }}
+                  placeholder="Enter new username..."
+                  style={{
+                    width: "100%",
+                    padding: "12px 16px",
+                    background: "rgba(15,23,42,0.7)",
+                    border: "1px solid rgba(51,65,85,0.8)",
+                    borderRadius: 10,
+                    color: "#F1F5F9",
+                    fontSize: 15,
+                    outline: "none",
+                    boxSizing: "border-box",
+                    fontFamily: "inherit",
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: 18 }}>
+                <label style={{ display: "block", fontSize: 13, color: "#94A3B8", marginBottom: 8, fontWeight: 500 }}>
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={e => { setNewPassword(e.target.value); setAdminError(""); }}
+                  placeholder="Enter new password..."
+                  style={{
+                    width: "100%",
+                    padding: "12px 16px",
+                    background: "rgba(15,23,42,0.7)",
+                    border: "1px solid rgba(51,65,85,0.8)",
+                    borderRadius: 10,
+                    color: "#F1F5F9",
+                    fontSize: 15,
+                    outline: "none",
+                    boxSizing: "border-box",
+                    fontFamily: "inherit",
+                  }}
+                />
+              </div>
+
+              {adminError && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    marginBottom: 18,
+                    color: "#F87171",
+                    fontSize: 13,
+                  }}
+                >
+                  <AlertCircle size={14} />
+                  {adminError}
+                </motion.div>
+              )}
+
+              <motion.button
+                whileHover={{ scale: adminSuccess ? 1 : 1.02 }}
+                whileTap={{ scale: adminSuccess ? 1 : 0.97 }}
+                onClick={handleUpdateCredentials}
+                disabled={updatingCreds || adminSuccess}
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: 10,
+                  border: "none",
+                  background: adminSuccess
+                    ? "linear-gradient(135deg, #16A34A, #15803D)"
+                    : "linear-gradient(135deg, #3B82F6, #2563EB)",
+                  color: "white",
+                  fontSize: 15,
+                  fontWeight: 600,
+                  cursor: updatingCreds || adminSuccess ? "not-allowed" : "pointer",
+                  boxShadow: "0 0 20px rgba(59,130,246,0.25)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                }}
+              >
+                {updatingCreds ? (
+                  <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Updating...</>
+                ) : adminSuccess ? (
+                  <><CheckCircle size={16} /> Updated!</>
+                ) : (
+                  "Update Credentials"
+                )}
+              </motion.button>
             </motion.div>
           </motion.div>
         )}
