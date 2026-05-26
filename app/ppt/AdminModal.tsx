@@ -50,6 +50,7 @@ export default function AdminModal({
   // Change credentials state
   const [newUsername, setNewUsername] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [credError, setCredError] = useState("");
   const [credSuccess, setCredSuccess] = useState(false);
   const [updatingCreds, setUpdatingCreds] = useState(false);
@@ -839,27 +840,48 @@ export default function AdminModal({
                         >
                           New Password
                         </label>
-                        <input
-                          type="password"
-                          value={newPassword}
-                          onChange={(e) => {
-                            setNewPassword(e.target.value);
-                            setCredError("");
-                          }}
-                          placeholder="Enter new password..."
-                          style={{
-                            width: "100%",
-                            padding: "12px 16px",
-                            background: "rgba(15,23,42,0.7)",
-                            border: "1px solid rgba(51,65,85,0.8)",
-                            borderRadius: 10,
-                            color: "#F1F5F9",
-                            fontSize: 15,
-                            outline: "none",
-                            boxSizing: "border-box",
-                            fontFamily: "inherit",
-                          }}
-                        />
+                        <div style={{ position: "relative" }}>
+                          <input
+                            type={showNewPassword ? "text" : "password"}
+                            value={newPassword}
+                            onChange={(e) => {
+                              setNewPassword(e.target.value);
+                              setCredError("");
+                            }}
+                            placeholder="Enter new password..."
+                            style={{
+                              width: "100%",
+                              padding: "12px 44px 12px 16px",
+                              background: "rgba(15,23,42,0.7)",
+                              border: "1px solid rgba(51,65,85,0.8)",
+                              borderRadius: 10,
+                              color: "#F1F5F9",
+                              fontSize: 15,
+                              outline: "none",
+                              boxSizing: "border-box",
+                              fontFamily: "inherit",
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowNewPassword((v) => !v)}
+                            style={{
+                              position: "absolute",
+                              right: 12,
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              background: "none",
+                              border: "none",
+                              color: "#64748B",
+                              cursor: "pointer",
+                              padding: 4,
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                          >
+                            {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          </button>
+                        </div>
                       </div>
 
                       {credError && (
