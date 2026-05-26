@@ -1,26 +1,9 @@
 "use client";
-// Hides global Navbar/Footer for this standalone page
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Maximize2,
-  Pencil,
-  X,
-  Lock,
-  Eye,
-  EyeOff,
-  CheckCircle,
-  AlertCircle,
-  Loader2,
-  Minimize2,
-  LinkIcon,
-  Presentation,
-  Upload,
-  FileIcon,
-  LogOut,
-  Settings,
-} from "lucide-react";
+import { motion } from "framer-motion";
+import { Maximize2, Minimize2, Presentation, LogOut, Settings } from "lucide-react";
+import AdminModal from "./AdminModal";
 
 // ─── URL normalizer ────────────────────────────────────────────────────────────
 function buildEmbedUrl(url: string): string {
@@ -28,20 +11,16 @@ function buildEmbedUrl(url: string): string {
 
   let parsedUrl = url.trim();
   
-  // If user pasted an entire iframe/html snippet, extract the src URL
   const srcMatch = parsedUrl.match(/src=["'](.*?)["']/i);
   if (srcMatch) {
     parsedUrl = srcMatch[1];
   }
 
-  // Canva embed — already an iframe src
   if (parsedUrl.includes("canva.com/embed") || parsedUrl.includes("canva.com/design")) {
-    // Ensure it ends with ?embed
     if (!parsedUrl.includes("embed")) return parsedUrl + "?embed";
     return parsedUrl;
   }
 
-  // Google Slides — convert share link to embed
   if (parsedUrl.includes("docs.google.com/presentation")) {
     return parsedUrl
       .replace("/edit", "/embed")
@@ -49,7 +28,6 @@ function buildEmbedUrl(url: string): string {
       .replace(/\/embed\?.*/, "/embed?start=false&loop=false&delayms=3000");
   }
 
-  // Microsoft Office Online viewer for .pptx / .ppsx / .pps links
   const isPowerPoint = 
     parsedUrl.toLowerCase().includes(".pptx") || 
     parsedUrl.toLowerCase().includes(".ppsx") || 
@@ -65,7 +43,6 @@ function buildEmbedUrl(url: string): string {
     return `https://view.officeapps.live.com/op/embed.aspx?src=${encoded}`;
   }
 
-  // Assume raw embed-ready URL (e.g. native PDFs in browser iframe)
   return parsedUrl;
 }
 
@@ -80,32 +57,13 @@ interface PPTPageClientProps {
 export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: PPTPageClientProps) {
   const [pptUrl, setPptUrl] = useState(initialUrl);
   const [embedUrl, setEmbedUrl] = useState(buildEmbedUrl(initialUrl));
-
-  // Edit modal state
-  const [showEdit, setShowEdit] = useState(false);
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [passwordError, setPasswordError] = useState("");
-  const [passwordOk, setPasswordOk] = useState(false);
-  const [newUrl, setNewUrl] = useState("");
-  const [saving, setSaving] = useState(false);
-  const [saveError, setSaveError] = useState("");
-  const [saveSuccess, setSaveSuccess] = useState(false);
-  const [uploadFile, setUploadFile] = useState<File | null>(null);
-
-  // Fullscreen
+  const [showAdminModal, setShowAdminModal] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Admin credentials modal
-  const [showAdminModal, setShowAdminModal] = useState(false);
-  const [adminPassword, setAdminPassword] = useState("");
-  const [newUsername, setNewUsername] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [adminError, setAdminError] = useState("");
-  const [adminSuccess, setAdminSuccess] = useState(false);
-  const [updatingCreds, setUpdatingCreds] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // ── Hide global Navbar & Footer for this standalone page ──────────────────
+  // ── Hide global Navbar & Footer ────────────────────────────────────────────
   useEffect(() => {
     document.body.setAttribute('data-ppt-page', 'true');
     document.body.style.overflow = 'hidden';
@@ -114,15 +72,13 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
       document.body.style.overflow = '';
     };
   }, []);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Sync embed URL when pptUrl changes
   useEffect(() => {
     setEmbedUrl(buildEmbedUrl(pptUrl));
   }, [pptUrl]);
 
-  // Listen for fullscreen changes (ESC key etc.)
+  // Listen for fullscreen changes
   useEffect(() => {
     const onFsChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -144,150 +100,11 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
     }
   }, []);
 
-  // ── Password check ─────────────────────────────────────────────────────────
-  const handlePasswordSubmit = useCallback(async () => {
-    setPasswordError("");
-    // We validate password via the API to keep it server-side
-    const res = await fetch("/api/ppt-config", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password, url: pptUrl }), // send current url to avoid wiping
-    });
-    if (res.ok) {
-      setPasswordOk(true);
-      setNewUrl(pptUrl);
-    } else {
-      setPasswordError("Incorrect password. Please try again.");
-    }
-  }, [password, pptUrl]);
-
-  // ── Save new URL ───────────────────────────────────────────────────────────
-  const handleSave = useCallback(async () => {
-    if (!newUrl.trim() && !uploadFile) {
-      setSaveError("Please enter a URL or select a file to upload.");
-      return;
-    }
-    setSaving(true);
-    setSaveError("");
-    
-    let finalUrl = newUrl.trim();
-
-    try {
-      // 1. If user selected a file, upload it directly to Supabase Storage first
-      if (uploadFile) {
-        const fileExt = uploadFile.name.split('.').pop()?.toLowerCase() || '';
-        const fileName = `presentation_${Date.now()}.${fileExt}`;
-        
-        const uploadRes = await fetch(`${supabaseUrl}/storage/v1/object/presentations/${fileName}`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${supabaseKey}`,
-            "apikey": supabaseKey,
-            "Content-Type": uploadFile.type || "application/octet-stream",
-            "Cache-Control": "max-age=3600"
-          },
-          body: uploadFile
-        });
-
-        if (!uploadRes.ok) {
-          throw new Error("File upload failed. Ensure bucket exists and permissions are set.");
-        }
-
-        finalUrl = `${supabaseUrl}/storage/v1/object/public/presentations/${fileName}`;
-      }
-
-      // 2. Save the final URL securely to DB
-      const res = await fetch("/api/ppt-config", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, url: finalUrl }),
-      });
-      if (res.ok) {
-        setPptUrl(finalUrl);
-        setSaveSuccess(true);
-        setTimeout(() => {
-          setShowEdit(false);
-          setPasswordOk(false);
-          setPassword("");
-          setNewUrl("");
-          setSaveSuccess(false);
-        }, 1500);
-      } else {
-        setSaveError("Failed to save. Check your password and try again.");
-      }
-    } catch {
-      setSaveError("Network error. Please try again.");
-    } finally {
-      setSaving(false);
-    }
-  }, [newUrl, password, uploadFile, supabaseUrl, supabaseKey]);
-
-  // ── Close modal reset ──────────────────────────────────────────────────────
-  const closeModal = useCallback(() => {
-    setShowEdit(false);
-    setPasswordOk(false);
-    setPassword("");
-    setShowPassword(false);
-    setPasswordError("");
-    setNewUrl("");
-    setUploadFile(null);
-    setSaveError("");
-    setSaveSuccess(false);
-  }, []);
-
-  // ── Key handlers ───────────────────────────────────────────────────────────
-  const onPasswordKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handlePasswordSubmit();
-  };
-  const onUrlKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleSave();
-  };
-
   // ── Logout ─────────────────────────────────────────────────────────────────
   const handleLogout = useCallback(async () => {
     await fetch("/api/ppt-auth", { method: "DELETE" });
     window.location.reload();
   }, []);
-
-  // ── Update credentials ─────────────────────────────────────────────────────
-  const handleUpdateCredentials = useCallback(async () => {
-    if (!newUsername.trim() || !newPassword.trim()) {
-      setAdminError("Please enter both username and password");
-      return;
-    }
-    setUpdatingCreds(true);
-    setAdminError("");
-
-    try {
-      const res = await fetch("/api/ppt-auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "update",
-          currentPassword: adminPassword,
-          newUsername: newUsername.trim(),
-          newPassword: newPassword.trim(),
-        }),
-      });
-
-      if (res.ok) {
-        setAdminSuccess(true);
-        setTimeout(() => {
-          setShowAdminModal(false);
-          setAdminPassword("");
-          setNewUsername("");
-          setNewPassword("");
-          setAdminSuccess(false);
-        }, 2000);
-      } else {
-        setAdminError("Invalid admin password or update failed");
-      }
-    } catch {
-      setAdminError("Network error. Please try again.");
-    } finally {
-      setUpdatingCreds(false);
-    }
-  }, [adminPassword, newUsername, newPassword]);
 
   return (
     <div
@@ -316,7 +133,7 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
           flexShrink: 0,
         }}
       >
-        {/* Logo / Brand */}
+        {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div
             style={{
@@ -341,49 +158,16 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
             }}
           >
             Purplehub
-
           </span>
         </div>
 
         {/* Action Buttons */}
         <div style={{ display: "flex", gap: 12 }}>
-          {/* Admin Settings Button */}
+          {/* Admin Button */}
           <motion.button
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             onClick={() => setShowAdminModal(true)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "9px 18px",
-              borderRadius: 10,
-              border: "1px solid rgba(51,65,85,0.8)",
-              background: "rgba(30,41,59,0.7)",
-              color: "#94A3B8",
-              fontSize: 14,
-              fontWeight: 500,
-              cursor: "pointer",
-              transition: "border-color 0.2s, color 0.2s",
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "#334155";
-              (e.currentTarget as HTMLButtonElement).style.color = "#F1F5F9";
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(51,65,85,0.8)";
-              (e.currentTarget as HTMLButtonElement).style.color = "#94A3B8";
-            }}
-          >
-            <Settings size={15} />
-          </motion.button>
-
-          {/* Edit Button */}
-          <motion.button
-            id="ppt-edit-btn"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={() => setShowEdit(true)}
             style={{
               display: "flex",
               alignItems: "center",
@@ -407,13 +191,12 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
               (e.currentTarget as HTMLButtonElement).style.color = "#94A3B8";
             }}
           >
-            <Pencil size={15} />
-            Edit
+            <Settings size={15} />
+            Admin
           </motion.button>
 
           {/* Present Button */}
           <motion.button
-            id="ppt-present-btn"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             onClick={handlePresent}
@@ -491,7 +274,7 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
               position: "relative",
             }}
           >
-            {/* Overlay to prevent right-click / download sniffing */}
+            {/* Overlay to prevent right-click */}
             <div
               style={{
                 position: "absolute",
@@ -502,7 +285,7 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
               onContextMenu={e => e.preventDefault()}
             />
 
-            {/* Overlay to block Microsoft Office Viewer 'Download' Menu on bottom right */}
+            {/* Block Microsoft Office download button */}
             {embedUrl?.includes("officeapps.live.com") && (
               <div
                 style={{
@@ -578,13 +361,12 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
               No Presentation Yet
             </h2>
             <p style={{ color: "#94A3B8", fontSize: 15, lineHeight: 1.6, marginBottom: 28 }}>
-              Click <strong style={{ color: "#F1F5F9" }}>Edit</strong> to paste your Canva, Google
-              Slides, or any presentation link. It'll appear right here.
+              Click <strong style={{ color: "#F1F5F9" }}>Admin</strong> to add your presentation.
             </p>
             <motion.button
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
-              onClick={() => setShowEdit(true)}
+              onClick={() => setShowAdminModal(true)}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -599,630 +381,22 @@ export default function PPTPageClient({ initialUrl, supabaseUrl, supabaseKey }: 
                 cursor: "pointer",
               }}
             >
-              <Pencil size={15} />
-              Add Presentation Link
+              <Settings size={15} />
+              Admin Settings
             </motion.button>
           </motion.div>
         )}
       </div>
 
-      {/* ── Edit Modal ──────────────────────────────────────────────────────── */}
-      <AnimatePresence>
-        {showEdit && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{
-              position: "fixed",
-              inset: 0,
-              background: "rgba(10,10,20,0.75)",
-              backdropFilter: "blur(6px)",
-              WebkitBackdropFilter: "blur(6px)",
-              zIndex: 100,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 20,
-            }}
-            onClick={e => { if (e.target === e.currentTarget) closeModal(); }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.92, y: 20 }}
-              transition={{ type: "spring", stiffness: 300, damping: 28 }}
-              style={{
-                background: "linear-gradient(135deg, #1E293B, #162032)",
-                border: "1px solid rgba(51,65,85,0.8)",
-                borderRadius: 20,
-                padding: "32px 36px",
-                width: "100%",
-                maxWidth: 480,
-                boxShadow: "0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,197,94,0.05)",
-                position: "relative",
-              }}
-            >
-              {/* Close */}
-              <button
-                id="ppt-modal-close"
-                onClick={closeModal}
-                style={{
-                  position: "absolute",
-                  top: 16,
-                  right: 16,
-                  background: "rgba(51,65,85,0.5)",
-                  border: "none",
-                  borderRadius: 8,
-                  color: "#94A3B8",
-                  cursor: "pointer",
-                  padding: 6,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transition: "color 0.2s, background 0.2s",
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLButtonElement).style.color = "#F1F5F9";
-                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(71,85,105,0.7)";
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLButtonElement).style.color = "#94A3B8";
-                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(51,65,85,0.5)";
-                }}
-              >
-                <X size={16} />
-              </button>
-
-              {/* Header */}
-              <div style={{ marginBottom: 28 }}>
-                <div
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 12,
-                    background: "linear-gradient(135deg, rgba(34,197,94,0.2), rgba(59,130,246,0.2))",
-                    border: "1px solid rgba(34,197,94,0.25)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 16,
-                  }}
-                >
-                  <Lock size={20} color="#22C55E" />
-                </div>
-                <h3
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 700,
-                    color: "#F1F5F9",
-                    margin: 0,
-                    fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  {passwordOk ? "Update Presentation" : "Enter Edit Password"}
-                </h3>
-                <p style={{ color: "#94A3B8", fontSize: 14, marginTop: 6 }}>
-                  {passwordOk
-                    ? "Paste your Canva, Google Slides, or PPTX link below."
-                    : "This area is password-protected. Enter the password to continue."}
-                </p>
-              </div>
-
-              {/* ─── Step 1: Password ─────────────────────────────────────── */}
-              <AnimatePresence mode="wait">
-                {!passwordOk ? (
-                  <motion.div
-                    key="password-step"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
-                  >
-                    <label
-                      htmlFor="ppt-password-input"
-                      style={{ display: "block", fontSize: 13, color: "#94A3B8", marginBottom: 8, fontWeight: 500 }}
-                    >
-                      Password
-                    </label>
-                    <div style={{ position: "relative" }}>
-                      <input
-                        id="ppt-password-input"
-                        type={showPassword ? "text" : "password"}
-                        value={password}
-                        onChange={e => { setPassword(e.target.value); setPasswordError(""); }}
-                        onKeyDown={onPasswordKeyDown}
-                        placeholder="Enter password..."
-                        autoFocus
-                        style={{
-                          width: "100%",
-                          padding: "12px 44px 12px 16px",
-                          background: "rgba(15,23,42,0.7)",
-                          border: `1px solid ${passwordError ? "rgba(239,68,68,0.5)" : "rgba(51,65,85,0.8)"}`,
-                          borderRadius: 10,
-                          color: "#F1F5F9",
-                          fontSize: 15,
-                          outline: "none",
-                          boxSizing: "border-box",
-                          transition: "border-color 0.2s",
-                          fontFamily: "inherit",
-                        }}
-                        onFocus={e => { e.currentTarget.style.borderColor = "rgba(34,197,94,0.5)"; }}
-                        onBlur={e => { e.currentTarget.style.borderColor = passwordError ? "rgba(239,68,68,0.5)" : "rgba(51,65,85,0.8)"; }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(v => !v)}
-                        style={{
-                          position: "absolute",
-                          right: 12,
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          background: "none",
-                          border: "none",
-                          color: "#64748B",
-                          cursor: "pointer",
-                          padding: 4,
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                      </button>
-                    </div>
-
-                    {passwordError && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 6,
-                          marginTop: 8,
-                          color: "#F87171",
-                          fontSize: 13,
-                        }}
-                      >
-                        <AlertCircle size={14} />
-                        {passwordError}
-                      </motion.div>
-                    )}
-
-                    <motion.button
-                      id="ppt-password-submit"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={handlePasswordSubmit}
-                      style={{
-                        marginTop: 18,
-                        width: "100%",
-                        padding: "12px",
-                        borderRadius: 10,
-                        border: "none",
-                        background: "linear-gradient(135deg, #22C55E, #16A34A)",
-                        color: "white",
-                        fontSize: 15,
-                        fontWeight: 600,
-                        cursor: "pointer",
-                        boxShadow: "0 0 20px rgba(34,197,94,0.25)",
-                      }}
-                    >
-                      Unlock
-                    </motion.button>
-                  </motion.div>
-                ) : (
-                  /* ─── Step 2: URL Input ──────────────────────────────────── */
-                  <motion.div
-                    key="url-step"
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                  >
-                    {/* Supported formats hint */}
-                    <div
-                      style={{
-                        padding: "10px 14px",
-                        borderRadius: 8,
-                        background: "rgba(34,197,94,0.08)",
-                        border: "1px solid rgba(34,197,94,0.15)",
-                        marginBottom: 18,
-                        fontSize: 12,
-                        color: "#86EFAC",
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      ✅ Supports: <strong>Canva</strong>, <strong>Google Slides</strong>, <strong>OneDrive URL</strong>, or <strong>Direct Upload</strong>
-                    </div>
-
-                    {/* File Upload Area */}
-                    <label
-                      htmlFor="ppt-file-input"
-                      style={{ display: "block", fontSize: 13, color: "#94A3B8", marginBottom: 8, fontWeight: 500 }}
-                    >
-                      Upload File (.pps, .pptx, .pdf)
-                    </label>
-                    <div style={{ marginBottom: 20 }}>
-                      <label
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          padding: "12px 16px",
-                          background: uploadFile ? "rgba(34,197,94,0.1)" : "rgba(15,23,42,0.7)",
-                          border: `1px dashed ${uploadFile ? "rgba(34,197,94,0.5)" : "rgba(51,65,85,0.8)"}`,
-                          borderRadius: 10,
-                          cursor: "pointer",
-                          transition: "all 0.2s"
-                        }}
-                      >
-                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                           <FileIcon size={20} color={uploadFile ? "#22C55E" : "#64748B"} />
-                           <span style={{ color: uploadFile ? "#F1F5F9" : "#94A3B8", fontSize: 14 }}>
-                             {uploadFile ? uploadFile.name : "Choose a file to upload..."}
-                           </span>
-                        </div>
-                        <input
-                           id="ppt-file-input"
-                           type="file"
-                           accept=".pptx,.pps,.ppsx,.pdf"
-                           onChange={e => {
-                             if (e.target.files && e.target.files[0]) {
-                               setUploadFile(e.target.files[0]);
-                               setNewUrl(""); // clear URL if they picked a file
-                               setSaveError("");
-                             }
-                           }}
-                           style={{ display: "none" }}
-                        />
-                      </label>
-                      {uploadFile && (
-                        <button
-                          onClick={() => setUploadFile(null)}
-                          style={{ background: "none", border: "none", color: "#F87171", fontSize: 12, marginTop: 6, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}
-                        >
-                          <X size={12} /> Remove file
-                        </button>
-                      )}
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "center", margin: "16px 0", gap: 12 }}>
-                      <div style={{ flex: 1, height: 1, background: "rgba(51,65,85,0.5)" }}></div>
-                      <span style={{ color: "#64748B", fontSize: 13, fontWeight: 500, fontFamily: "var(--font-heading)" }}>OR</span>
-                      <div style={{ flex: 1, height: 1, background: "rgba(51,65,85,0.5)" }}></div>
-                    </div>
-
-                    <label
-                      htmlFor="ppt-url-input"
-                      style={{ display: "block", fontSize: 13, color: "#94A3B8", marginBottom: 8, fontWeight: 500 }}
-                    >
-                      Paste Presentation URL
-                    </label>
-                    <div style={{ position: "relative" }}>
-                      <LinkIcon
-                        size={15}
-                        color="#64748B"
-                        style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }}
-                      />
-                      <input
-                        id="ppt-url-input"
-                        type="url"
-                        value={newUrl}
-                        onChange={e => { setNewUrl(e.target.value); setUploadFile(null); setSaveError(""); }}
-                        onKeyDown={onUrlKeyDown}
-                        placeholder="https://www.canva.com/design/..."
-                        style={{
-                          width: "100%",
-                          padding: "12px 16px 12px 40px",
-                          background: "rgba(15,23,42,0.7)",
-                          border: `1px solid ${saveError ? "rgba(239,68,68,0.5)" : "rgba(51,65,85,0.8)"}`,
-                          borderRadius: 10,
-                          color: "#F1F5F9",
-                          fontSize: 14,
-                          outline: "none",
-                          boxSizing: "border-box",
-                          fontFamily: "inherit",
-                        }}
-                        onFocus={e => { e.currentTarget.style.borderColor = "rgba(34,197,94,0.5)"; }}
-                        onBlur={e => { e.currentTarget.style.borderColor = saveError ? "rgba(239,68,68,0.5)" : "rgba(51,65,85,0.8)"; }}
-                      />
-                    </div>
-
-                    {saveError && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 6,
-                          marginTop: 8,
-                          color: "#F87171",
-                          fontSize: 13,
-                        }}
-                      >
-                        <AlertCircle size={14} />
-                        {saveError}
-                      </motion.div>
-                    )}
-
-                    <motion.button
-                      id="ppt-save-btn"
-                      whileHover={{ scale: saveSuccess ? 1 : 1.02 }}
-                      whileTap={{ scale: saveSuccess ? 1 : 0.97 }}
-                      onClick={handleSave}
-                      disabled={saving || saveSuccess}
-                      style={{
-                        marginTop: 18,
-                        width: "100%",
-                        padding: "12px",
-                        borderRadius: 10,
-                        border: "none",
-                        background: saveSuccess
-                          ? "linear-gradient(135deg, #16A34A, #15803D)"
-                          : "linear-gradient(135deg, #22C55E, #16A34A)",
-                        color: "white",
-                        fontSize: 15,
-                        fontWeight: 600,
-                        cursor: saving || saveSuccess ? "not-allowed" : "pointer",
-                        boxShadow: "0 0 20px rgba(34,197,94,0.25)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 8,
-                        opacity: saving ? 0.8 : 1,
-                      }}
-                    >
-                      {saving ? (
-                        <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Saving...</>
-                      ) : saveSuccess ? (
-                        <><CheckCircle size={16} /> Saved!</>
-                      ) : (
-                        "Save & Display"
-                      )}
-                    </motion.button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ── Admin Credentials Modal ────────────────────────────────────────── */}
-      <AnimatePresence>
-        {showAdminModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{
-              position: "fixed",
-              inset: 0,
-              background: "rgba(10,10,20,0.75)",
-              backdropFilter: "blur(6px)",
-              WebkitBackdropFilter: "blur(6px)",
-              zIndex: 100,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 20,
-            }}
-            onClick={e => { if (e.target === e.currentTarget) {
-              setShowAdminModal(false);
-              setAdminPassword("");
-              setNewUsername("");
-              setNewPassword("");
-              setAdminError("");
-            }}}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.92, y: 20 }}
-              transition={{ type: "spring", stiffness: 300, damping: 28 }}
-              style={{
-                background: "linear-gradient(135deg, #1E293B, #162032)",
-                border: "1px solid rgba(51,65,85,0.8)",
-                borderRadius: 20,
-                padding: "32px 36px",
-                width: "100%",
-                maxWidth: 480,
-                boxShadow: "0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,197,94,0.05)",
-                position: "relative",
-              }}
-            >
-              <button
-                onClick={() => {
-                  setShowAdminModal(false);
-                  setAdminPassword("");
-                  setNewUsername("");
-                  setNewPassword("");
-                  setAdminError("");
-                }}
-                style={{
-                  position: "absolute",
-                  top: 16,
-                  right: 16,
-                  background: "rgba(51,65,85,0.5)",
-                  border: "none",
-                  borderRadius: 8,
-                  color: "#94A3B8",
-                  cursor: "pointer",
-                  padding: 6,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <X size={16} />
-              </button>
-
-              <div style={{ marginBottom: 28 }}>
-                <div
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 12,
-                    background: "linear-gradient(135deg, rgba(59,130,246,0.2), rgba(147,51,234,0.2))",
-                    border: "1px solid rgba(59,130,246,0.25)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 16,
-                  }}
-                >
-                  <Settings size={20} color="#3B82F6" />
-                </div>
-                <h3
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 700,
-                    color: "#F1F5F9",
-                    margin: 0,
-                    fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  Update Access Credentials
-                </h3>
-                <p style={{ color: "#94A3B8", fontSize: 14, marginTop: 6 }}>
-                  Change the username and password required to access this page.
-                </p>
-              </div>
-
-              <div style={{ marginBottom: 18 }}>
-                <label style={{ display: "block", fontSize: 13, color: "#94A3B8", marginBottom: 8, fontWeight: 500 }}>
-                  Admin Password (Edit Password)
-                </label>
-                <input
-                  type="password"
-                  value={adminPassword}
-                  onChange={e => { setAdminPassword(e.target.value); setAdminError(""); }}
-                  placeholder="Enter admin password..."
-                  autoFocus
-                  style={{
-                    width: "100%",
-                    padding: "12px 16px",
-                    background: "rgba(15,23,42,0.7)",
-                    border: "1px solid rgba(51,65,85,0.8)",
-                    borderRadius: 10,
-                    color: "#F1F5F9",
-                    fontSize: 15,
-                    outline: "none",
-                    boxSizing: "border-box",
-                    fontFamily: "inherit",
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: 18 }}>
-                <label style={{ display: "block", fontSize: 13, color: "#94A3B8", marginBottom: 8, fontWeight: 500 }}>
-                  New Username
-                </label>
-                <input
-                  type="text"
-                  value={newUsername}
-                  onChange={e => { setNewUsername(e.target.value); setAdminError(""); }}
-                  placeholder="Enter new username..."
-                  style={{
-                    width: "100%",
-                    padding: "12px 16px",
-                    background: "rgba(15,23,42,0.7)",
-                    border: "1px solid rgba(51,65,85,0.8)",
-                    borderRadius: 10,
-                    color: "#F1F5F9",
-                    fontSize: 15,
-                    outline: "none",
-                    boxSizing: "border-box",
-                    fontFamily: "inherit",
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: 18 }}>
-                <label style={{ display: "block", fontSize: 13, color: "#94A3B8", marginBottom: 8, fontWeight: 500 }}>
-                  New Password
-                </label>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={e => { setNewPassword(e.target.value); setAdminError(""); }}
-                  placeholder="Enter new password..."
-                  style={{
-                    width: "100%",
-                    padding: "12px 16px",
-                    background: "rgba(15,23,42,0.7)",
-                    border: "1px solid rgba(51,65,85,0.8)",
-                    borderRadius: 10,
-                    color: "#F1F5F9",
-                    fontSize: 15,
-                    outline: "none",
-                    boxSizing: "border-box",
-                    fontFamily: "inherit",
-                  }}
-                />
-              </div>
-
-              {adminError && (
-                <motion.div
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6,
-                    marginBottom: 18,
-                    color: "#F87171",
-                    fontSize: 13,
-                  }}
-                >
-                  <AlertCircle size={14} />
-                  {adminError}
-                </motion.div>
-              )}
-
-              <motion.button
-                whileHover={{ scale: adminSuccess ? 1 : 1.02 }}
-                whileTap={{ scale: adminSuccess ? 1 : 0.97 }}
-                onClick={handleUpdateCredentials}
-                disabled={updatingCreds || adminSuccess}
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  borderRadius: 10,
-                  border: "none",
-                  background: adminSuccess
-                    ? "linear-gradient(135deg, #16A34A, #15803D)"
-                    : "linear-gradient(135deg, #3B82F6, #2563EB)",
-                  color: "white",
-                  fontSize: 15,
-                  fontWeight: 600,
-                  cursor: updatingCreds || adminSuccess ? "not-allowed" : "pointer",
-                  boxShadow: "0 0 20px rgba(59,130,246,0.25)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 8,
-                }}
-              >
-                {updatingCreds ? (
-                  <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Updating...</>
-                ) : adminSuccess ? (
-                  <><CheckCircle size={16} /> Updated!</>
-                ) : (
-                  "Update Credentials"
-                )}
-              </motion.button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Spin keyframe (for Loader2) */}
-      <style>{`
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      `}</style>
+      {/* ── Admin Modal ─────────────────────────────────────────────────────── */}
+      <AdminModal
+        show={showAdminModal}
+        onClose={() => setShowAdminModal(false)}
+        pptUrl={pptUrl}
+        onPptUrlUpdate={setPptUrl}
+        supabaseUrl={supabaseUrl}
+        supabaseKey={supabaseKey}
+      />
     </div>
   );
 }
