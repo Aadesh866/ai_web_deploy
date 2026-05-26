@@ -53,6 +53,9 @@ export default function AdminModal({
   const [credError, setCredError] = useState("");
   const [credSuccess, setCredSuccess] = useState(false);
   const [updatingCreds, setUpdatingCreds] = useState(false);
+  const [currentUsername, setCurrentUsername] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [loadingCreds, setLoadingCreds] = useState(false);
 
   // Close and reset
   const handleClose = useCallback(() => {
@@ -83,10 +86,29 @@ export default function AdminModal({
     if (res.ok) {
       setAdminUnlocked(true);
       setNewUrl(pptUrl);
+      // Fetch current credentials
+      fetchCurrentCredentials();
     } else {
       setAdminPasswordError("Incorrect admin password. Please try again.");
     }
   }, [adminPassword, pptUrl]);
+
+  // Fetch current credentials
+  const fetchCurrentCredentials = useCallback(async () => {
+    setLoadingCreds(true);
+    try {
+      const res = await fetch("/api/ppt-auth/current");
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentUsername(data.username || "");
+        setCurrentPassword(data.password || "");
+      }
+    } catch {
+      // Silently fail
+    } finally {
+      setLoadingCreds(false);
+    }
+  }, []);
 
   // Save presentation URL
   const handleSave = useCallback(async () => {
@@ -738,6 +760,37 @@ export default function AdminModal({
                       >
                         🔐 Update username and password for page access
                       </div>
+
+                      {/* Current Credentials Display */}
+                      {loadingCreds ? (
+                        <div style={{ padding: "12px", textAlign: "center", color: "#94A3B8", fontSize: 13 }}>
+                          Loading current credentials...
+                        </div>
+                      ) : currentUsername && currentPassword ? (
+                        <div
+                          style={{
+                            padding: "12px 16px",
+                            borderRadius: 8,
+                            background: "rgba(15,23,42,0.7)",
+                            border: "1px solid rgba(51,65,85,0.8)",
+                            marginBottom: 18,
+                          }}
+                        >
+                          <div style={{ fontSize: 12, color: "#64748B", marginBottom: 8, fontWeight: 500 }}>
+                            Current Credentials:
+                          </div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                              <span style={{ fontSize: 12, color: "#94A3B8", minWidth: 70 }}>Username:</span>
+                              <span style={{ fontSize: 13, color: "#F1F5F9", fontFamily: "monospace" }}>{currentUsername}</span>
+                            </div>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                              <span style={{ fontSize: 12, color: "#94A3B8", minWidth: 70 }}>Password:</span>
+                              <span style={{ fontSize: 13, color: "#F1F5F9", fontFamily: "monospace" }}>{currentPassword}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ) : null}
 
                       <div style={{ marginBottom: 18 }}>
                         <label
