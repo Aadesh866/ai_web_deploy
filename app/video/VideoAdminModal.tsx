@@ -11,19 +11,31 @@ import {
   AlertCircle,
   Loader2,
   Settings,
+  Upload,
+  LinkIcon,
+  FileIcon,
+  Video,
 } from "lucide-react";
 
 interface VideoAdminModalProps {
   show: boolean;
   onClose: () => void;
+  onVideoChange: (file: File | null, url: string) => void;
 }
 
-export default function VideoAdminModal({ show, onClose }: VideoAdminModalProps) {
+export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoAdminModalProps) {
   // Admin password state
   const [adminPassword, setAdminPassword] = useState("");
   const [showAdminPassword, setShowAdminPassword] = useState(false);
   const [adminPasswordError, setAdminPasswordError] = useState("");
   const [adminUnlocked, setAdminUnlocked] = useState(false);
+  const [activeTab, setActiveTab] = useState<"video" | "credentials">("video");
+
+  // Video upload state
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [videoUrl, setVideoUrl] = useState("");
+  const [videoError, setVideoError] = useState("");
+  const [videoSuccess, setVideoSuccess] = useState(false);
 
   // Change credentials state
   const [newUsername, setNewUsername] = useState("");
@@ -42,6 +54,11 @@ export default function VideoAdminModal({ show, onClose }: VideoAdminModalProps)
     setAdminPassword("");
     setShowAdminPassword(false);
     setAdminPasswordError("");
+    setActiveTab("video");
+    setUploadFile(null);
+    setVideoUrl("");
+    setVideoError("");
+    setVideoSuccess(false);
     setNewUsername("");
     setNewPassword("");
     setShowNewPassword(false);
@@ -88,6 +105,23 @@ export default function VideoAdminModal({ show, onClose }: VideoAdminModalProps)
       setLoadingCreds(false);
     }
   }, []);
+
+  // Handle video change
+  const handleVideoChange = useCallback(() => {
+    if (!uploadFile && !videoUrl.trim()) {
+      setVideoError("Please select a file or enter a URL");
+      return;
+    }
+    
+    onVideoChange(uploadFile, videoUrl.trim());
+    setVideoSuccess(true);
+    setTimeout(() => {
+      setVideoSuccess(false);
+      setUploadFile(null);
+      setVideoUrl("");
+      handleClose();
+    }, 1500);
+  }, [uploadFile, videoUrl, onVideoChange, handleClose]);
 
   // Update credentials
   const handleUpdateCredentials = useCallback(async () => {
@@ -341,14 +375,320 @@ export default function VideoAdminModal({ show, onClose }: VideoAdminModalProps)
                 </motion.button>
               </motion.div>
             ) : (
-              /* Credentials Panel */
+              /* Admin Panel with Tabs */
               <motion.div
                 key="panel"
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
               >
+                {/* Tabs */}
                 <div
+                  style={{
+                    display: "flex",
+                    gap: 8,
+                    marginBottom: 24,
+                    borderBottom: "1px solid rgba(51,65,85,0.5)",
+                    paddingBottom: 2,
+                  }}
+                >
+                  <button
+                    onClick={() => setActiveTab("video")}
+                    style={{
+                      flex: 1,
+                      padding: "10px 16px",
+                      background:
+                        activeTab === "video"
+                          ? "rgba(34,197,94,0.1)"
+                          : "transparent",
+                      border: "none",
+                      borderBottom:
+                        activeTab === "video"
+                          ? "2px solid #22C55E"
+                          : "2px solid transparent",
+                      color: activeTab === "video" ? "#22C55E" : "#94A3B8",
+                      fontSize: 14,
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      borderRadius: "6px 6px 0 0",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 6,
+                    }}
+                  >
+                    <Video size={14} />
+                    Change Video
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("credentials")}
+                    style={{
+                      flex: 1,
+                      padding: "10px 16px",
+                      background:
+                        activeTab === "credentials"
+                          ? "rgba(59,130,246,0.1)"
+                          : "transparent",
+                      border: "none",
+                      borderBottom:
+                        activeTab === "credentials"
+                          ? "2px solid #3B82F6"
+                          : "2px solid transparent",
+                      color: activeTab === "credentials" ? "#3B82F6" : "#94A3B8",
+                      fontSize: 14,
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      borderRadius: "6px 6px 0 0",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 6,
+                    }}
+                  >
+                    <Lock size={14} />
+                    Access Credentials
+                  </button>
+                </div>
+
+                {/* Tab Content */}
+                <AnimatePresence mode="wait">
+                  {activeTab === "video" ? (
+                    /* Video Upload Tab */
+                    <motion.div
+                      key="video-tab"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                    >
+                      <div
+                        style={{
+                          padding: "10px 14px",
+                          borderRadius: 8,
+                          background: "rgba(34,197,94,0.08)",
+                          border: "1px solid rgba(34,197,94,0.15)",
+                          marginBottom: 18,
+                          fontSize: 12,
+                          color: "#86EFAC",
+                        }}
+                      >
+                        📹 Upload a video file or paste a direct video URL
+                      </div>
+
+                      {/* File Upload */}
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: 13,
+                          color: "#94A3B8",
+                          marginBottom: 8,
+                          fontWeight: 500,
+                        }}
+                      >
+                        Upload Video File
+                      </label>
+                      <div style={{ marginBottom: 20 }}>
+                        <label
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            padding: "12px 16px",
+                            background: uploadFile
+                              ? "rgba(34,197,94,0.1)"
+                              : "rgba(15,23,42,0.7)",
+                            border: `1px dashed ${
+                              uploadFile
+                                ? "rgba(34,197,94,0.5)"
+                                : "rgba(51,65,85,0.8)"
+                            }`,
+                            borderRadius: 10,
+                            cursor: "pointer",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                            <FileIcon
+                              size={20}
+                              color={uploadFile ? "#22C55E" : "#64748B"}
+                            />
+                            <span
+                              style={{
+                                color: uploadFile ? "#F1F5F9" : "#94A3B8",
+                                fontSize: 14,
+                              }}
+                            >
+                              {uploadFile ? uploadFile.name : "Choose video file (MP4, WebM, MOV)"}
+                            </span>
+                          </div>
+                          <input
+                            type="file"
+                            accept="video/*"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                setUploadFile(e.target.files[0]);
+                                setVideoUrl("");
+                                setVideoError("");
+                              }
+                            }}
+                            style={{ display: "none" }}
+                          />
+                        </label>
+                        {uploadFile && (
+                          <button
+                            onClick={() => setUploadFile(null)}
+                            style={{
+                              background: "none",
+                              border: "none",
+                              color: "#F87171",
+                              fontSize: 12,
+                              marginTop: 6,
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 4,
+                            }}
+                          >
+                            <X size={12} /> Remove file
+                          </button>
+                        )}
+                      </div>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "16px 0",
+                          gap: 12,
+                        }}
+                      >
+                        <div
+                          style={{
+                            flex: 1,
+                            height: 1,
+                            background: "rgba(51,65,85,0.5)",
+                          }}
+                        ></div>
+                        <span style={{ color: "#64748B", fontSize: 13 }}>OR</span>
+                        <div
+                          style={{
+                            flex: 1,
+                            height: 1,
+                            background: "rgba(51,65,85,0.5)",
+                          }}
+                        ></div>
+                      </div>
+
+                      {/* URL Input */}
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: 13,
+                          color: "#94A3B8",
+                          marginBottom: 8,
+                          fontWeight: 500,
+                        }}
+                      >
+                        Paste Video URL
+                      </label>
+                      <div style={{ position: "relative" }}>
+                        <LinkIcon
+                          size={15}
+                          color="#64748B"
+                          style={{
+                            position: "absolute",
+                            left: 14,
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                        />
+                        <input
+                          type="url"
+                          value={videoUrl}
+                          onChange={(e) => {
+                            setVideoUrl(e.target.value);
+                            setUploadFile(null);
+                            setVideoError("");
+                          }}
+                          placeholder="https://example.com/video.mp4"
+                          style={{
+                            width: "100%",
+                            padding: "12px 16px 12px 40px",
+                            background: "rgba(15,23,42,0.7)",
+                            border: `1px solid ${
+                              videoError
+                                ? "rgba(239,68,68,0.5)"
+                                : "rgba(51,65,85,0.8)"
+                            }`,
+                            borderRadius: 10,
+                            color: "#F1F5F9",
+                            fontSize: 14,
+                            outline: "none",
+                            boxSizing: "border-box",
+                            fontFamily: "inherit",
+                          }}
+                        />
+                      </div>
+
+                      {videoError && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                            marginTop: 8,
+                            color: "#F87171",
+                            fontSize: 13,
+                          }}
+                        >
+                          <AlertCircle size={14} />
+                          {videoError}
+                        </motion.div>
+                      )}
+
+                      <motion.button
+                        whileHover={{ scale: videoSuccess ? 1 : 1.02 }}
+                        whileTap={{ scale: videoSuccess ? 1 : 0.97 }}
+                        onClick={handleVideoChange}
+                        disabled={videoSuccess}
+                        style={{
+                          marginTop: 18,
+                          width: "100%",
+                          padding: "12px",
+                          borderRadius: 10,
+                          border: "none",
+                          background: videoSuccess
+                            ? "linear-gradient(135deg, #16A34A, #15803D)"
+                            : "linear-gradient(135deg, #22C55E, #16A34A)",
+                          color: "white",
+                          fontSize: 15,
+                          fontWeight: 600,
+                          cursor: videoSuccess ? "not-allowed" : "pointer",
+                          boxShadow: "0 0 20px rgba(34,197,94,0.25)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: 8,
+                        }}
+                      >
+                        {videoSuccess ? (
+                          <>
+                            <CheckCircle size={16} /> Changed!
+                          </>
+                        ) : (
+                          "Change Video"
+                        )}
+                      </motion.button>
+                    </motion.div>
+                  ) : (
+                    /* Credentials Tab */
+                    <motion.div
+                      key="credentials-tab"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                    >
+                      <div
                   style={{
                     padding: "10px 14px",
                     borderRadius: 8,
@@ -547,6 +887,9 @@ export default function VideoAdminModal({ show, onClose }: VideoAdminModalProps)
             )}
           </AnimatePresence>
         </motion.div>
+      )}
+    </AnimatePresence>
+  </motion.div>
 
         <style>{`
           @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

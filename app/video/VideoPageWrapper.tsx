@@ -11,6 +11,8 @@ export default function VideoPageWrapper() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
   const [showAdminModal, setShowAdminModal] = useState(false);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoUrl, setVideoUrl] = useState("");
 
   useEffect(() => {
     // Check if user already has valid auth cookie
@@ -31,6 +33,11 @@ export default function VideoPageWrapper() {
   const handleLogout = async () => {
     await fetch("/api/video-auth", { method: "DELETE" });
     window.location.reload();
+  };
+
+  const handleVideoChange = (file: File | null, url: string) => {
+    setVideoFile(file);
+    setVideoUrl(url);
   };
 
   if (isChecking) {
@@ -114,8 +121,12 @@ export default function VideoPageWrapper() {
         </motion.button>
       </div>
 
-      <VideoClient />
-      <VideoAdminModal show={showAdminModal} onClose={() => setShowAdminModal(false)} />
+      <VideoClient videoFile={videoFile} videoUrl={videoUrl} />
+      <VideoAdminModal 
+        show={showAdminModal} 
+        onClose={() => setShowAdminModal(false)}
+        onVideoChange={handleVideoChange}
+      />
     </div>
   );
 }

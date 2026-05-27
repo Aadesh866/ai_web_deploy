@@ -54,7 +54,12 @@ async function clearVideoFromDB(): Promise<void> {
 }
 
 // ─── Component ───
-export default function VideoClient() {
+interface VideoClientProps {
+  videoFile: File | null;
+  videoUrl: string;
+}
+
+export default function VideoClient({ videoFile: propVideoFile, videoUrl: propVideoUrl }: VideoClientProps) {
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [inputUrl, setInputUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -72,6 +77,23 @@ export default function VideoClient() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const controlsTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ─── Handle video changes from admin panel ───
+  useEffect(() => {
+    if (propVideoFile) {
+      if (videoUrl.startsWith("blob:")) URL.revokeObjectURL(videoUrl);
+      const url = URL.createObjectURL(propVideoFile);
+      setVideoUrl(url);
+      saveVideoToDB(propVideoFile);
+      setIsPlaying(true);
+    } else if (propVideoUrl) {
+      if (videoUrl.startsWith("blob:")) URL.revokeObjectURL(videoUrl);
+      const urlBlob = new Blob([propVideoUrl], { type: "text/plain" });
+      saveVideoToDB(urlBlob);
+      setVideoUrl(propVideoUrl);
+      setIsPlaying(true);
+    }
+  }, [propVideoFile, propVideoUrl]);
 
   // ─── Load persisted video on mount ───
   useEffect(() => {
@@ -267,9 +289,9 @@ export default function VideoClient() {
     <div className="min-h-screen bg-[#0B0F19] flex flex-col items-center justify-center p-4 sm:p-8 font-sans">
       <AnimatePresence mode="wait">
         {!videoUrl ? (
-          /* ───────── Upload UI ───────── */
+          /* ───────── No Video State ───────── */
           <motion.div
-            key="upload-ui"
+            key="no-video"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -279,65 +301,14 @@ export default function VideoClient() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary-brand/10 rounded-full blur-[100px] pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
 
-            <div className="relative z-10 text-center mb-10">
+            <div className="relative z-10 text-center">
               <div className="w-16 h-16 bg-primary-brand/20 text-primary-brand rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
                 <VideoIcon className="w-8 h-8" />
               </div>
-              <h1 className="text-3xl font-bold text-white mb-3">Present a Video</h1>
+              <h1 className="text-3xl font-bold text-white mb-3">No Video Available</h1>
               <p className="text-text-secondary text-sm">
-                Upload a video from your device or paste an external link to begin the presentation. Your video will be saved automatically.
+                Contact your administrator to upload a video presentation.
               </p>
-            </div>
-
-            {error && (
-              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm text-center">
-                {error}
-              </div>
-            )}
-
-            <div className="space-y-6 relative z-10">
-              <div className="relative">
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={handleFileUpload}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
-                  id="video-upload"
-                />
-                <div className="w-full border-2 border-dashed border-border hover:border-primary-brand/50 bg-surface-light rounded-2xl p-8 text-center transition-colors duration-300 group">
-                  <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:bg-primary-brand/20 transition-all">
-                    <Upload className="w-6 h-6 text-text-secondary group-hover:text-primary-brand" />
-                  </div>
-                  <p className="text-white font-semibold mb-1">Click or drag video to upload</p>
-                  <p className="text-xs text-text-secondary">MP4, WebM, MOV — saved automatically</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 text-text-secondary text-sm">
-                <div className="h-[1px] flex-1 bg-border" />
-                <span>OR</span>
-                <div className="h-[1px] flex-1 bg-border" />
-              </div>
-
-              <form onSubmit={handleUrlSubmit} className="relative">
-                <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <LinkIcon className="w-5 h-5 text-text-secondary" />
-                </div>
-                <input
-                  type="url"
-                  value={inputUrl}
-                  onChange={(e) => setInputUrl(e.target.value)}
-                  placeholder="Paste a direct video URL (.mp4, .webm)"
-                  className="w-full bg-surface-light border border-border text-white text-sm rounded-xl py-4 pl-12 pr-32 focus:outline-none focus:border-primary-brand focus:ring-1 focus:ring-primary-brand transition-all placeholder:text-text-secondary"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="absolute inset-y-2 right-2 px-6 bg-primary-brand hover:bg-primary-brand-light text-white text-sm font-semibold rounded-lg transition-colors"
-                >
-                  Load
-                </button>
-              </form>
             </div>
           </motion.div>
         ) : (
@@ -382,26 +353,8 @@ export default function VideoClient() {
               }`}
             >
               {/* Top bar */}
-              <div className="flex items-center justify-between p-4 sm:p-5 bg-gradient-to-b from-black/70 to-transparent pointer-events-auto">
-                <button
-                  onClick={resetVideo}
-                  className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-red-500/80 text-white rounded-full backdrop-blur-md transition-colors"
-                  title="Close & Remove Video"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-
+              <div className="flex items-center justify-end p-4 sm:p-5 bg-gradient-to-b from-black/70 to-transparent pointer-events-auto">
                 <div className="flex items-center gap-2">
-                  {/* Change video button */}
-                  <label className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/25 text-white rounded-full backdrop-blur-md transition-colors cursor-pointer" title="Change Video">
-                    <RefreshCw className="w-4 h-4" />
-                    <input
-                      type="file"
-                      accept="video/*"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                    />
-                  </label>
                   <button
                     onClick={toggleFullscreen}
                     className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/25 text-white rounded-full backdrop-blur-md transition-colors"
