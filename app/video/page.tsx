@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import VideoClient from "./VideoClient";
+import VideoPageWrapper from "./VideoPageWrapper";
 
 export const metadata: Metadata = {
   title: "Video Presentation | Purplehub",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function VideoPage() {
-  return <VideoClient />;
+  return <VideoPageWrapper />;
 }
