@@ -44,6 +44,27 @@ export default function VideoPageWrapper() {
       });
   }, []);
 
+  // Reload video URL when authentication changes
+  useEffect(() => {
+    if (isAuthenticated && !isChecking) {
+      console.log("Authentication changed - reloading video URL");
+      fetch("/api/video-config")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.url) {
+            console.log("Reloaded video URL after auth change:", data.url);
+            setInitialVideoUrl(data.url);
+          } else {
+            console.log("No video URL found after auth change");
+            setInitialVideoUrl("");
+          }
+        })
+        .catch((err) => {
+          console.error("Error reloading video after auth change:", err);
+        });
+    }
+  }, [isAuthenticated, isChecking]);
+
   const handleLogout = async () => {
     await fetch("/api/video-auth", { method: "DELETE" });
     window.location.reload();
