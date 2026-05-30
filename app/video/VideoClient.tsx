@@ -2,17 +2,19 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Maximize, Minimize, Video as VideoIcon, Play, Pause, RotateCcw, RotateCw, Volume2, VolumeX } from "lucide-react";
+import { Maximize, Minimize, Video as VideoIcon, Play, Pause, RotateCcw, RotateCw, Volume2, VolumeX, Settings } from "lucide-react";
+import VideoAdminModal from "./VideoAdminModal";
 
 // ─── Component ───
 interface VideoClientProps {
-  videoUrl: string;
+  initialVideoUrl: string;
 }
 
-export default function VideoClient({ videoUrl: propVideoUrl }: VideoClientProps) {
-  const [videoUrl, setVideoUrl] = useState<string>("");
+export default function VideoClient({ initialVideoUrl }: VideoClientProps) {
+  const [videoUrl, setVideoUrl] = useState<string>(initialVideoUrl);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showAdminModal, setShowAdminModal] = useState(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -29,11 +31,11 @@ export default function VideoClient({ videoUrl: propVideoUrl }: VideoClientProps
 
   // ─── Handle video changes from server ───
   useEffect(() => {
-    if (propVideoUrl) {
-      setVideoUrl(propVideoUrl);
+    if (initialVideoUrl) {
+      setVideoUrl(initialVideoUrl);
       setIsPlaying(true);
     }
-  }, [propVideoUrl]);
+  }, [initialVideoUrl]);
 
   // ─── Playback Controls ───
   const togglePlay = useCallback(() => {
@@ -187,6 +189,15 @@ export default function VideoClient({ videoUrl: propVideoUrl }: VideoClientProps
               <p className="text-text-secondary text-sm">
                 Contact your administrator to upload a video presentation.
               </p>
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => setShowAdminModal(true)}
+                className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-primary-brand/40 bg-primary-brand/10 text-primary-brand text-sm font-semibold cursor-pointer"
+              >
+                <Settings className="w-4 h-4" />
+                Admin Settings
+              </motion.button>
             </div>
           </motion.div>
         ) : (
@@ -233,6 +244,13 @@ export default function VideoClient({ videoUrl: propVideoUrl }: VideoClientProps
               {/* Top bar */}
               <div className="flex items-center justify-end p-4 sm:p-5 bg-gradient-to-b from-black/70 to-transparent pointer-events-auto">
                 <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowAdminModal(true)}
+                    className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/25 text-white rounded-full backdrop-blur-md transition-colors"
+                    title="Admin Settings"
+                  >
+                    <Settings className="w-5 h-5" />
+                  </button>
                   <button
                     onClick={toggleFullscreen}
                     className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/25 text-white rounded-full backdrop-blur-md transition-colors"
@@ -322,6 +340,13 @@ export default function VideoClient({ videoUrl: propVideoUrl }: VideoClientProps
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Admin Modal */}
+      <VideoAdminModal
+        show={showAdminModal}
+        onClose={() => setShowAdminModal(false)}
+        onVideoChange={(file, url) => setVideoUrl(url)}
+      />
     </div>
   );
 }

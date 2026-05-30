@@ -158,7 +158,7 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
         setVideoSuccess(false);
         setUploadFile(null);
         setVideoUrl("");
-      }, 2000);
+      }, 1500);
     } catch (error) {
       setVideoError("Failed to save. Please try again.");
     }

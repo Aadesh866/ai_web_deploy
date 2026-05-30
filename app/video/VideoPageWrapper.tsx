@@ -10,8 +10,7 @@ import { Settings, LogOut } from "lucide-react";
 export default function VideoPageWrapper() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
-  const [showAdminModal, setShowAdminModal] = useState(false);
-  const [videoUrl, setVideoUrl] = useState("");
+  const [initialVideoUrl, setInitialVideoUrl] = useState("");
 
   useEffect(() => {
     // Check if user already has valid auth cookie
@@ -27,7 +26,7 @@ export default function VideoPageWrapper() {
       .then((res) => res?.json())
       .then((data) => {
         if (data?.url) {
-          setVideoUrl(data.url);
+          setInitialVideoUrl(data.url);
         }
       })
       .catch(() => {
@@ -41,22 +40,6 @@ export default function VideoPageWrapper() {
   const handleLogout = async () => {
     await fetch("/api/video-auth", { method: "DELETE" });
     window.location.reload();
-  };
-
-  const handleVideoChange = (file: File | null, url: string) => {
-    setVideoUrl(url);
-    setShowAdminModal(false);
-    // Reload video URL from server after a short delay
-    setTimeout(() => {
-      fetch("/api/video-config")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.url) {
-            setVideoUrl(data.url);
-          }
-        })
-        .catch(() => {});
-    }, 500);
   };
 
   if (isChecking) {
@@ -95,7 +78,7 @@ export default function VideoPageWrapper() {
         <motion.button
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.96 }}
-          onClick={() => setShowAdminModal(true)}
+          onClick={() => {}}
           style={{
             display: "flex",
             alignItems: "center",
@@ -140,12 +123,7 @@ export default function VideoPageWrapper() {
         </motion.button>
       </div>
 
-      <VideoClient videoUrl={videoUrl} />
-      <VideoAdminModal 
-        show={showAdminModal} 
-        onClose={() => setShowAdminModal(false)}
-        onVideoChange={handleVideoChange}
-      />
+      <VideoClient initialVideoUrl={initialVideoUrl} />
     </div>
   );
 }
