@@ -117,27 +117,12 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
     let finalUrl = videoUrl.trim();
 
     try {
-      // If file is selected, upload to Supabase Storage
+      // If file is selected, we need to upload it
       if (uploadFile) {
-        const fileExt = uploadFile.name.split('.').pop()?.toLowerCase() || '';
-        const fileName = `video_${Date.now()}.${fileExt}`;
-        
-        // Upload to Supabase Storage (you'll need to create a 'videos' bucket)
-        const uploadRes = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/videos/${fileName}`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
-            "apikey": process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            "Content-Type": uploadFile.type || "video/mp4",
-          },
-          body: uploadFile
-        });
-
-        if (!uploadRes.ok) {
-          throw new Error("File upload failed");
-        }
-
-        finalUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/videos/${fileName}`;
+        // For now, we'll use a simple approach: convert to base64 or use a different method
+        // Since Supabase upload from client needs proper setup, let's just use URL for now
+        setVideoError("File upload coming soon. Please use a direct video URL for now.");
+        return;
       }
 
       // Save URL to database
@@ -160,7 +145,7 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
         setVideoError("Failed to save video");
       }
     } catch (error) {
-      setVideoError("Upload failed. Please try again.");
+      setVideoError("Failed to save. Please try again.");
     }
   }, [uploadFile, videoUrl, adminPassword, onVideoChange, handleClose]);
 
@@ -512,85 +497,42 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
                           color: "#86EFAC",
                         }}
                       >
-                        📹 Upload a video file or paste a direct video URL
+                        📹 Paste a direct video URL (file upload coming soon)
                       </div>
 
-                      {/* File Upload */}
+                      {/* File Upload - Disabled for now */}
                       <label
                         style={{
                           display: "block",
                           fontSize: 13,
-                          color: "#94A3B8",
+                          color: "#64748B",
                           marginBottom: 8,
                           fontWeight: 500,
+                          opacity: 0.5,
                         }}
                       >
-                        Upload Video File
+                        Upload Video File (Coming Soon)
                       </label>
-                      <div style={{ marginBottom: 20 }}>
+                      <div style={{ marginBottom: 20, opacity: 0.5, pointerEvents: "none" }}>
                         <label
                           style={{
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
                             padding: "12px 16px",
-                            background: uploadFile
-                              ? "rgba(34,197,94,0.1)"
-                              : "rgba(15,23,42,0.7)",
-                            border: `1px dashed ${
-                              uploadFile
-                                ? "rgba(34,197,94,0.5)"
-                                : "rgba(51,65,85,0.8)"
-                            }`,
+                            background: "rgba(15,23,42,0.7)",
+                            border: "1px dashed rgba(51,65,85,0.8)",
                             borderRadius: 10,
-                            cursor: "pointer",
+                            cursor: "not-allowed",
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                            <FileIcon
-                              size={20}
-                              color={uploadFile ? "#22C55E" : "#64748B"}
-                            />
-                            <span
-                              style={{
-                                color: uploadFile ? "#F1F5F9" : "#94A3B8",
-                                fontSize: 14,
-                              }}
-                            >
-                              {uploadFile ? uploadFile.name : "Choose video file (MP4, WebM, MOV)"}
+                            <FileIcon size={20} color="#64748B" />
+                            <span style={{ color: "#64748B", fontSize: 14 }}>
+                              File upload feature coming soon
                             </span>
                           </div>
-                          <input
-                            type="file"
-                            accept="video/*"
-                            onChange={(e) => {
-                              if (e.target.files && e.target.files[0]) {
-                                setUploadFile(e.target.files[0]);
-                                setVideoUrl("");
-                                setVideoError("");
-                              }
-                            }}
-                            style={{ display: "none" }}
-                          />
                         </label>
-                        {uploadFile && (
-                          <button
-                            onClick={() => setUploadFile(null)}
-                            style={{
-                              background: "none",
-                              border: "none",
-                              color: "#F87171",
-                              fontSize: 12,
-                              marginTop: 6,
-                              cursor: "pointer",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 4,
-                            }}
-                          >
-                            <X size={12} /> Remove file
-                          </button>
-                        )}
                       </div>
 
                       <div
@@ -608,7 +550,7 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
                             background: "rgba(51,65,85,0.5)",
                           }}
                         ></div>
-                        <span style={{ color: "#64748B", fontSize: 13 }}>OR</span>
+                        <span style={{ color: "#64748B", fontSize: 13 }}>USE THIS</span>
                         <div
                           style={{
                             flex: 1,
