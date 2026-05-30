@@ -700,44 +700,58 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
                         </motion.div>
                       )}
 
+                      {videoUploading && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 8,
+                            marginTop: 18,
+                            padding: "12px 16px",
+                            borderRadius: 8,
+                            background: "rgba(59,130,246,0.1)",
+                            border: "1px solid rgba(59,130,246,0.3)",
+                            color: "#93C5FD",
+                            fontSize: 14,
+                          }}
+                        >
+                          <Loader2
+                            size={16}
+                            style={{ animation: "spin 1s linear infinite" }}
+                          />
+                          {uploadFile ? "Uploading video..." : "Processing..."}
+                        </motion.div>
+                      )}
+
                       <motion.button
-                        whileHover={{ scale: videoSuccess || videoUploading ? 1 : 1.02 }}
-                        whileTap={{ scale: videoSuccess || videoUploading ? 1 : 0.97 }}
+                        whileHover={{ scale: videoSuccess ? 1 : 1.02 }}
+                        whileTap={{ scale: videoSuccess ? 1 : 0.97 }}
                         onClick={handleVideoChange}
                         disabled={videoSuccess || videoUploading}
                         style={{
-                          marginTop: 18,
+                          marginTop: videoUploading ? 12 : 18,
                           width: "100%",
                           padding: "12px",
                           borderRadius: 10,
                           border: "none",
                           background: videoSuccess
                             ? "linear-gradient(135deg, #16A34A, #15803D)"
-                            : videoUploading
-                            ? "linear-gradient(135deg, #3B82F6, #2563EB)"
                             : "linear-gradient(135deg, #22C55E, #16A34A)",
                           color: "white",
                           fontSize: 15,
                           fontWeight: 600,
                           cursor: videoSuccess || videoUploading ? "not-allowed" : "pointer",
-                          boxShadow: videoUploading 
-                            ? "0 0 20px rgba(59,130,246,0.25)"
-                            : "0 0 20px rgba(34,197,94,0.25)",
+                          boxShadow: "0 0 20px rgba(34,197,94,0.25)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           gap: 8,
+                          opacity: videoUploading ? 0.7 : 1,
                         }}
                       >
-                        {videoUploading ? (
-                          <>
-                            <Loader2
-                              size={16}
-                              style={{ animation: "spin 1s linear infinite" }}
-                            />
-                            {uploadFile ? "Uploading..." : "Processing..."}
-                          </>
-                        ) : videoSuccess ? (
+                        {videoSuccess ? (
                           <>
                             <CheckCircle size={16} /> Changed!
                           </>
