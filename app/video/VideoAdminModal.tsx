@@ -36,6 +36,7 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
   const [videoUrl, setVideoUrl] = useState("");
   const [videoError, setVideoError] = useState("");
   const [videoSuccess, setVideoSuccess] = useState(false);
+  const [videoUploading, setVideoUploading] = useState(false);
 
   // Change credentials state
   const [newUsername, setNewUsername] = useState("");
@@ -59,6 +60,7 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
     setVideoUrl("");
     setVideoError("");
     setVideoSuccess(false);
+    setVideoUploading(false);
     setNewUsername("");
     setNewPassword("");
     setShowNewPassword(false);
@@ -115,6 +117,7 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
     
     setVideoSuccess(false);
     setVideoError("");
+    setVideoUploading(true);
 
     try {
       let finalUrl = videoUrl.trim();
@@ -169,6 +172,8 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
     } catch (error) {
       console.error("Video change error:", error);
       setVideoError("Failed to save. Please try again.");
+    } finally {
+      setVideoUploading(false);
     }
   }, [uploadFile, videoUrl, adminPassword, onVideoChange]);
 
@@ -696,10 +701,10 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
                       )}
 
                       <motion.button
-                        whileHover={{ scale: videoSuccess ? 1 : 1.02 }}
-                        whileTap={{ scale: videoSuccess ? 1 : 0.97 }}
+                        whileHover={{ scale: videoSuccess || videoUploading ? 1 : 1.02 }}
+                        whileTap={{ scale: videoSuccess || videoUploading ? 1 : 0.97 }}
                         onClick={handleVideoChange}
-                        disabled={videoSuccess}
+                        disabled={videoSuccess || videoUploading}
                         style={{
                           marginTop: 18,
                           width: "100%",
@@ -708,19 +713,31 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
                           border: "none",
                           background: videoSuccess
                             ? "linear-gradient(135deg, #16A34A, #15803D)"
+                            : videoUploading
+                            ? "linear-gradient(135deg, #3B82F6, #2563EB)"
                             : "linear-gradient(135deg, #22C55E, #16A34A)",
                           color: "white",
                           fontSize: 15,
                           fontWeight: 600,
-                          cursor: videoSuccess ? "not-allowed" : "pointer",
-                          boxShadow: "0 0 20px rgba(34,197,94,0.25)",
+                          cursor: videoSuccess || videoUploading ? "not-allowed" : "pointer",
+                          boxShadow: videoUploading 
+                            ? "0 0 20px rgba(59,130,246,0.25)"
+                            : "0 0 20px rgba(34,197,94,0.25)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           gap: 8,
                         }}
                       >
-                        {videoSuccess ? (
+                        {videoUploading ? (
+                          <>
+                            <Loader2
+                              size={16}
+                              style={{ animation: "spin 1s linear infinite" }}
+                            />
+                            {uploadFile ? "Uploading..." : "Processing..."}
+                          </>
+                        ) : videoSuccess ? (
                           <>
                             <CheckCircle size={16} /> Changed!
                           </>
