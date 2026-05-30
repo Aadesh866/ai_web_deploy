@@ -45,8 +45,18 @@ export default function VideoPageWrapper() {
 
   const handleVideoChange = (file: File | null, url: string) => {
     setVideoUrl(url);
-    // Force reload to show new video
-    window.location.reload();
+    setShowAdminModal(false);
+    // Reload video URL from server after a short delay
+    setTimeout(() => {
+      fetch("/api/video-config")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.url) {
+            setVideoUrl(data.url);
+          }
+        })
+        .catch(() => {});
+    }, 500);
   };
 
   if (isChecking) {
