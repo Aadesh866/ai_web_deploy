@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-// In-memory session store (resets on server restart/refresh)
+// In-memory session store (gets cleared frequently)
 const activeSessions = new Set<string>();
 
 const headers = {
@@ -15,18 +15,11 @@ const headers = {
 
 // GET: Check if user is authenticated
 export async function GET() {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("video_auth_token");
+  // Simple: clear all sessions on every GET request to force re-login
+  activeSessions.clear();
   
-  console.log("GET /api/video-auth - Cookie present:", !!authToken);
-  
-  if (!authToken || !activeSessions.has(authToken.value)) {
-    console.log("GET /api/video-auth - Session invalid or expired");
-    return NextResponse.json({ authenticated: false }, { status: 401 });
-  }
-
-  console.log("GET /api/video-auth - Session valid");
-  return NextResponse.json({ authenticated: true });
+  console.log("GET /api/video-auth - All sessions cleared, forcing re-login");
+  return NextResponse.json({ authenticated: false }, { status: 401 });
 }
 
 // POST: Verify credentials and set auth cookie
