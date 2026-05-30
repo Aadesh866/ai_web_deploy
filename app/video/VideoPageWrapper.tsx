@@ -23,13 +23,20 @@ export default function VideoPageWrapper() {
         }
         throw new Error("Not authenticated");
       })
-      .then((res) => res?.json())
+      .then((res) => {
+        if (!res) return null;
+        return res.json();
+      })
       .then((data) => {
         if (data?.url) {
+          console.log("Loaded video URL:", data.url);
           setInitialVideoUrl(data.url);
+        } else {
+          console.log("No video URL found in database");
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error("Error loading video:", err);
         // Not authenticated or failed to load video
       })
       .finally(() => {
@@ -63,67 +70,6 @@ export default function VideoPageWrapper() {
   }
 
   return (
-    <div style={{ position: "relative" }}>
-      {/* Admin & Logout Buttons - Fixed Position */}
-      <div
-        style={{
-          position: "fixed",
-          top: 20,
-          right: 20,
-          zIndex: 50,
-          display: "flex",
-          gap: 12,
-        }}
-      >
-        <motion.button
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={() => {}}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            padding: "9px 18px",
-            borderRadius: 10,
-            border: "1px solid rgba(51,65,85,0.8)",
-            background: "rgba(30,41,59,0.9)",
-            backdropFilter: "blur(12px)",
-            color: "#94A3B8",
-            fontSize: 14,
-            fontWeight: 500,
-            cursor: "pointer",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-          }}
-        >
-          <Settings size={15} />
-          Admin
-        </motion.button>
-
-        <motion.button
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={handleLogout}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            padding: "9px 18px",
-            borderRadius: 10,
-            border: "1px solid rgba(239,68,68,0.3)",
-            background: "rgba(127,29,29,0.5)",
-            backdropFilter: "blur(12px)",
-            color: "#F87171",
-            fontSize: 14,
-            fontWeight: 500,
-            cursor: "pointer",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-          }}
-        >
-          <LogOut size={15} />
-        </motion.button>
-      </div>
-
-      <VideoClient initialVideoUrl={initialVideoUrl} />
-    </div>
+    <VideoClient initialVideoUrl={initialVideoUrl} />
   );
 }

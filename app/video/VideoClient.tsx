@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Maximize, Minimize, Video as VideoIcon, Play, Pause, RotateCcw, RotateCw, Volume2, VolumeX, Settings } from "lucide-react";
+import { Maximize, Minimize, Video as VideoIcon, Play, Pause, RotateCcw, RotateCw, Volume2, VolumeX, Settings, LogOut } from "lucide-react";
 import VideoAdminModal from "./VideoAdminModal";
 
 // ─── Component ───
@@ -69,6 +69,11 @@ export default function VideoClient({ initialVideoUrl }: VideoClientProps) {
     } else {
       document.exitFullscreen().catch(() => {});
     }
+  }, []);
+
+  const handleLogout = useCallback(async () => {
+    await fetch("/api/video-auth", { method: "DELETE" });
+    window.location.reload();
   }, []);
 
   const cyclePlaybackRate = useCallback(() => {
@@ -250,6 +255,13 @@ export default function VideoClient({ initialVideoUrl }: VideoClientProps) {
                     title="Admin Settings"
                   >
                     <Settings className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="w-10 h-10 flex items-center justify-center bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-full backdrop-blur-md transition-colors"
+                    title="Logout"
+                  >
+                    <LogOut className="w-5 h-5" />
                   </button>
                   <button
                     onClick={toggleFullscreen}

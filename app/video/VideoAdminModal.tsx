@@ -121,6 +121,7 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
 
       // If file is selected, upload it via API
       if (uploadFile) {
+        console.log("Uploading file:", uploadFile.name);
         const formData = new FormData();
         formData.append("file", uploadFile);
         formData.append("password", adminPassword);
@@ -133,13 +134,16 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
         const uploadData = await uploadRes.json();
 
         if (!uploadRes.ok) {
+          console.error("Upload failed:", uploadData.error);
           setVideoError(uploadData.error || "Upload failed");
           return;
         }
 
         finalUrl = uploadData.url;
+        console.log("File uploaded successfully:", finalUrl);
       } else {
         // Just URL, save it directly
+        console.log("Saving video URL:", finalUrl);
         const res = await fetch("/api/video-config", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -147,11 +151,14 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
         });
 
         if (!res.ok) {
+          console.error("Failed to save video URL");
           setVideoError("Failed to save video URL");
           return;
         }
+        console.log("Video URL saved successfully");
       }
 
+      console.log("Calling onVideoChange with URL:", finalUrl);
       onVideoChange(null, finalUrl);
       setVideoSuccess(true);
       setTimeout(() => {
@@ -160,9 +167,10 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
         setVideoUrl("");
       }, 1500);
     } catch (error) {
+      console.error("Video change error:", error);
       setVideoError("Failed to save. Please try again.");
     }
-  }, [uploadFile, videoUrl, adminPassword, onVideoChange, handleClose]);
+  }, [uploadFile, videoUrl, adminPassword, onVideoChange]);
 
   // Update credentials
   const handleUpdateCredentials = useCallback(async () => {
