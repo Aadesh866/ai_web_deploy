@@ -45,6 +45,8 @@ export default function VideoPageWrapper() {
 
   const handleVideoChange = (file: File | null, url: string) => {
     setVideoUrl(url);
+    // Force reload to show new video
+    window.location.reload();
   };
 
   if (isChecking) {
