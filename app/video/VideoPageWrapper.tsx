@@ -44,10 +44,10 @@ export default function VideoPageWrapper() {
       });
   }, []);
 
-  // Reload video URL when authentication changes
+  // Reload video URL when authentication changes (only if not preloaded)
   useEffect(() => {
-    if (isAuthenticated && !isChecking) {
-      console.log("Authentication changed - reloading video URL");
+    if (isAuthenticated && !isChecking && !initialVideoUrl) {
+      console.log("Authentication changed - reloading video URL (no preload)");
       fetch("/api/video-config")
         .then((res) => res.json())
         .then((data) => {
@@ -63,7 +63,7 @@ export default function VideoPageWrapper() {
           console.error("Error reloading video after auth change:", err);
         });
     }
-  }, [isAuthenticated, isChecking]);
+  }, [isAuthenticated, isChecking, initialVideoUrl]);
 
   const handleLogout = async () => {
     await fetch("/api/video-auth", { method: "DELETE" });
@@ -87,7 +87,13 @@ export default function VideoPageWrapper() {
   }
 
   if (!isAuthenticated) {
-    return <VideoLoginScreen onAuthenticated={() => setIsAuthenticated(true)} />;
+    return <VideoLoginScreen onAuthenticated={(preloadedVideoUrl) => {
+      setIsAuthenticated(true);
+      if (preloadedVideoUrl) {
+        console.log("Using preloaded video URL:", preloadedVideoUrl);
+        setInitialVideoUrl(preloadedVideoUrl);
+      }
+    }} />;
   }
 
   return (

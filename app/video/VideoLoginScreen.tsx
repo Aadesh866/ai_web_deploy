@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Lock, User, Eye, EyeOff, AlertCircle, Loader2, LogIn, Video } from "lucide-react";
 
 interface VideoLoginScreenProps {
-  onAuthenticated: () => void;
+  onAuthenticated: (videoUrl?: string) => void;
 }
 
 export default function VideoLoginScreen({ onAuthenticated }: VideoLoginScreenProps) {
@@ -32,7 +32,17 @@ export default function VideoLoginScreen({ onAuthenticated }: VideoLoginScreenPr
       });
 
       if (res.ok) {
-        onAuthenticated();
+        // Immediately fetch video URL after successful login
+        try {
+          const videoRes = await fetch("/api/video-config");
+          const videoData = await videoRes.json();
+          const videoUrl = videoData?.url || "";
+          console.log("Preloaded video URL during login:", videoUrl);
+          onAuthenticated(videoUrl);
+        } catch (error) {
+          console.error("Failed to preload video URL:", error);
+          onAuthenticated(); // Fallback to normal flow
+        }
       } else {
         setError("Invalid username or password");
       }
