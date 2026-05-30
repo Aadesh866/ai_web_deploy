@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/videos/${fileName}`;
 
     // Save URL to database
-    await fetch(`${SUPABASE_URL}/rest/v1/video_config?id=eq.main`, {
+    const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/video_config?id=eq.main`, {
       method: "PATCH",
       headers: {
         apikey: SUPABASE_KEY,
@@ -66,6 +66,16 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({ video_url: publicUrl }),
     });
 
+    if (!dbRes.ok) {
+      const dbError = await dbRes.text();
+      console.error("Database save error:", dbError);
+      return NextResponse.json(
+        { error: "Video uploaded but failed to save URL to database. Check RLS policies." },
+        { status: 500 }
+      );
+    }
+
+    console.log("Video URL saved to database:", publicUrl);
     return NextResponse.json({ success: true, url: publicUrl });
   } catch (error) {
     console.error("Upload error:", error);

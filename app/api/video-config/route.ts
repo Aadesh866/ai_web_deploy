@@ -17,9 +17,19 @@ export async function GET() {
       `${SUPABASE_URL}/rest/v1/video_config?id=eq.main&select=video_url`,
       { headers, cache: "no-store" }
     );
+    
+    if (!res.ok) {
+      const error = await res.text();
+      console.error("Failed to fetch video config:", error);
+      return NextResponse.json({ url: "" });
+    }
+    
     const data = await res.json();
-    return NextResponse.json({ url: data[0]?.video_url || "" });
-  } catch {
+    const videoUrl = data[0]?.video_url || "";
+    console.log("GET /api/video-config - returning URL:", videoUrl);
+    return NextResponse.json({ url: videoUrl });
+  } catch (error) {
+    console.error("GET /api/video-config error:", error);
     return NextResponse.json({ url: "" });
   }
 }
@@ -34,14 +44,22 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/video_config?id=eq.main`, {
+    const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/video_config?id=eq.main`, {
       method: "PATCH",
       headers: { ...headers, Prefer: "return=minimal" },
       body: JSON.stringify({ video_url: url }),
     });
 
+    if (!updateRes.ok) {
+      const error = await updateRes.text();
+      console.error("Failed to update video URL:", error);
+      return NextResponse.json({ error: "Failed to update video" }, { status: 500 });
+    }
+
+    console.log("POST /api/video-config - saved URL:", url);
     return NextResponse.json({ success: true, url });
   } catch (error) {
+    console.error("POST /api/video-config error:", error);
     return NextResponse.json({ error: "Failed to update video" }, { status: 500 });
   }
 }
