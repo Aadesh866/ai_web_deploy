@@ -4,6 +4,9 @@ import { cookies } from "next/headers";
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
+// In-memory session store (resets on server restart/refresh)
+const activeSessions = new Set<string>();
+
 const headers = {
   apikey: SUPABASE_KEY,
   Authorization: `Bearer ${SUPABASE_KEY}`,
@@ -17,10 +20,12 @@ export async function GET() {
   
   console.log("GET /api/video-auth - Cookie present:", !!authToken);
   
-  if (!authToken) {
+  if (!authToken || !activeSessions.has(authToken.value)) {
+    console.log("GET /api/video-auth - Session invalid or expired");
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }
 
+  console.log("GET /api/video-auth - Session valid");
   return NextResponse.json({ authenticated: true });
 }
 
@@ -67,17 +72,19 @@ export async function POST(req: NextRequest) {
     const storedPassword = data[0]?.access_password || "Video@2026";
 
     if (username === storedUsername && password === storedPassword) {
-      // Create auth token
+      // Create auth token and add to active sessions
       const token = Buffer.from(`${username}:${Date.now()}`).toString("base64");
+      activeSessions.add(token);
       
-      console.log("POST /api/video-auth - Setting cookie for user:", username);
+      console.log("POST /api/video-auth - Setting session for user:", username);
+      console.log("POST /api/video-auth - Active sessions:", activeSessions.size);
       
       const response = NextResponse.json({ success: true });
       response.cookies.set("video_auth_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
-        maxAge: 60 * 60 * 24, // 24 hours
+        // Session cookie - expires when tab closes or server restarts
         path: "/",
       });
 
@@ -92,6 +99,14 @@ export async function POST(req: NextRequest) {
 
 // DELETE: Logout
 export async function DELETE() {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("video_auth_token");
+  
+  if (authToken) {
+    activeSessions.delete(authToken.value);
+    console.log("DELETE /api/video-auth - Removed session, remaining:", activeSessions.size);
+  }
+  
   const response = NextResponse.json({ success: true });
   response.cookies.delete("video_auth_token");
   return response;
