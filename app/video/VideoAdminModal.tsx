@@ -114,36 +114,52 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
     }
     
     setVideoSuccess(false);
-    let finalUrl = videoUrl.trim();
+    setVideoError("");
 
     try {
-      // If file is selected, we need to upload it
+      let finalUrl = videoUrl.trim();
+
+      // If file is selected, upload it via API
       if (uploadFile) {
-        // For now, we'll use a simple approach: convert to base64 or use a different method
-        // Since Supabase upload from client needs proper setup, let's just use URL for now
-        setVideoError("File upload coming soon. Please use a direct video URL for now.");
-        return;
-      }
+        const formData = new FormData();
+        formData.append("file", uploadFile);
+        formData.append("password", adminPassword);
 
-      // Save URL to database
-      const res = await fetch("/api/video-config", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: adminPassword, url: finalUrl }),
-      });
+        const uploadRes = await fetch("/api/video-upload", {
+          method: "POST",
+          body: formData,
+        });
 
-      if (res.ok) {
-        onVideoChange(null, finalUrl);
-        setVideoSuccess(true);
-        setTimeout(() => {
-          setVideoSuccess(false);
-          setUploadFile(null);
-          setVideoUrl("");
-          handleClose();
-        }, 1500);
+        const uploadData = await uploadRes.json();
+
+        if (!uploadRes.ok) {
+          setVideoError(uploadData.error || "Upload failed");
+          return;
+        }
+
+        finalUrl = uploadData.url;
       } else {
-        setVideoError("Failed to save video");
+        // Just URL, save it directly
+        const res = await fetch("/api/video-config", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: adminPassword, url: finalUrl }),
+        });
+
+        if (!res.ok) {
+          setVideoError("Failed to save video URL");
+          return;
+        }
       }
+
+      onVideoChange(null, finalUrl);
+      setVideoSuccess(true);
+      setTimeout(() => {
+        setVideoSuccess(false);
+        setUploadFile(null);
+        setVideoUrl("");
+        handleClose();
+      }, 1500);
     } catch (error) {
       setVideoError("Failed to save. Please try again.");
     }
@@ -497,42 +513,85 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
                           color: "#86EFAC",
                         }}
                       >
-                        📹 Paste a direct video URL (file upload coming soon)
+                        📹 Upload a video file or paste a direct video URL
                       </div>
 
-                      {/* File Upload - Disabled for now */}
+                      {/* File Upload */}
                       <label
                         style={{
                           display: "block",
                           fontSize: 13,
-                          color: "#64748B",
+                          color: "#94A3B8",
                           marginBottom: 8,
                           fontWeight: 500,
-                          opacity: 0.5,
                         }}
                       >
-                        Upload Video File (Coming Soon)
+                        Upload Video File
                       </label>
-                      <div style={{ marginBottom: 20, opacity: 0.5, pointerEvents: "none" }}>
+                      <div style={{ marginBottom: 20 }}>
                         <label
                           style={{
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
                             padding: "12px 16px",
-                            background: "rgba(15,23,42,0.7)",
-                            border: "1px dashed rgba(51,65,85,0.8)",
+                            background: uploadFile
+                              ? "rgba(34,197,94,0.1)"
+                              : "rgba(15,23,42,0.7)",
+                            border: `1px dashed ${
+                              uploadFile
+                                ? "rgba(34,197,94,0.5)"
+                                : "rgba(51,65,85,0.8)"
+                            }`,
                             borderRadius: 10,
-                            cursor: "not-allowed",
+                            cursor: "pointer",
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                            <FileIcon size={20} color="#64748B" />
-                            <span style={{ color: "#64748B", fontSize: 14 }}>
-                              File upload feature coming soon
+                            <FileIcon
+                              size={20}
+                              color={uploadFile ? "#22C55E" : "#64748B"}
+                            />
+                            <span
+                              style={{
+                                color: uploadFile ? "#F1F5F9" : "#94A3B8",
+                                fontSize: 14,
+                              }}
+                            >
+                              {uploadFile ? uploadFile.name : "Choose video file (MP4, WebM, MOV)"}
                             </span>
                           </div>
+                          <input
+                            type="file"
+                            accept="video/*"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                setUploadFile(e.target.files[0]);
+                                setVideoUrl("");
+                                setVideoError("");
+                              }
+                            }}
+                            style={{ display: "none" }}
+                          />
                         </label>
+                        {uploadFile && (
+                          <button
+                            onClick={() => setUploadFile(null)}
+                            style={{
+                              background: "none",
+                              border: "none",
+                              color: "#F87171",
+                              fontSize: 12,
+                              marginTop: 6,
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 4,
+                            }}
+                          >
+                            <X size={12} /> Remove file
+                          </button>
+                        )}
                       </div>
 
                       <div
@@ -550,7 +609,7 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
                             background: "rgba(51,65,85,0.5)",
                           }}
                         ></div>
-                        <span style={{ color: "#64748B", fontSize: 13 }}>USE THIS</span>
+                        <span style={{ color: "#64748B", fontSize: 13 }}>OR</span>
                         <div
                           style={{
                             flex: 1,
