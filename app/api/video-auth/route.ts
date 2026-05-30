@@ -15,6 +15,8 @@ export async function GET() {
   const cookieStore = await cookies();
   const authToken = cookieStore.get("video_auth_token");
   
+  console.log("GET /api/video-auth - Cookie present:", !!authToken);
+  
   if (!authToken) {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }
@@ -68,11 +70,13 @@ export async function POST(req: NextRequest) {
       // Create auth token
       const token = Buffer.from(`${username}:${Date.now()}`).toString("base64");
       
+      console.log("POST /api/video-auth - Setting cookie for user:", username);
+      
       const response = NextResponse.json({ success: true });
       response.cookies.set("video_auth_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "lax",
         maxAge: 60 * 60 * 24, // 24 hours
         path: "/video",
       });
