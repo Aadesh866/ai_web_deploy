@@ -1,69 +1,18 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback, ChangeEvent } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload, Link as LinkIcon, Maximize, Minimize, X, Video as VideoIcon, Play, Pause, RotateCcw, RotateCw, Volume2, VolumeX, RefreshCw } from "lucide-react";
-
-// ─── IndexedDB helpers for video persistence ───
-const DB_NAME = "purplehub_video";
-const STORE_NAME = "videos";
-const VIDEO_KEY = "current_video";
-
-function openDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = () => {
-      const db = req.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME);
-      }
-    };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
-}
-
-async function saveVideoToDB(blob: Blob): Promise<void> {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    tx.objectStore(STORE_NAME).put(blob, VIDEO_KEY);
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
-async function loadVideoFromDB(): Promise<Blob | null> {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, "readonly");
-    const req = tx.objectStore(STORE_NAME).get(VIDEO_KEY);
-    req.onsuccess = () => resolve(req.result ?? null);
-    req.onerror = () => reject(req.error);
-  });
-}
-
-async function clearVideoFromDB(): Promise<void> {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    tx.objectStore(STORE_NAME).delete(VIDEO_KEY);
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
+import { Maximize, Minimize, Video as VideoIcon, Play, Pause, RotateCcw, RotateCw, Volume2, VolumeX } from "lucide-react";
 
 // ─── Component ───
 interface VideoClientProps {
-  videoFile: File | null;
   videoUrl: string;
 }
 
-export default function VideoClient({ videoFile: propVideoFile, videoUrl: propVideoUrl }: VideoClientProps) {
+export default function VideoClient({ videoUrl: propVideoUrl }: VideoClientProps) {
   const [videoUrl, setVideoUrl] = useState<string>("");
-  const [inputUrl, setInputUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -78,70 +27,13 @@ export default function VideoClient({ videoFile: propVideoFile, videoUrl: propVi
   const containerRef = useRef<HTMLDivElement>(null);
   const controlsTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // ─── Handle video changes from admin panel ───
+  // ─── Handle video changes from server ───
   useEffect(() => {
-    if (propVideoFile) {
-      if (videoUrl.startsWith("blob:")) URL.revokeObjectURL(videoUrl);
-      const url = URL.createObjectURL(propVideoFile);
-      setVideoUrl(url);
-      saveVideoToDB(propVideoFile);
-      setIsPlaying(true);
-    } else if (propVideoUrl) {
-      if (videoUrl.startsWith("blob:")) URL.revokeObjectURL(videoUrl);
-      const urlBlob = new Blob([propVideoUrl], { type: "text/plain" });
-      saveVideoToDB(urlBlob);
+    if (propVideoUrl) {
       setVideoUrl(propVideoUrl);
       setIsPlaying(true);
     }
-  }, [propVideoFile, propVideoUrl]);
-
-  // ─── Load persisted video on mount ───
-  useEffect(() => {
-    (async () => {
-      try {
-        const blob = await loadVideoFromDB();
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          setVideoUrl(url);
-        }
-      } catch {
-        // No saved video, that's fine
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, []);
-
-  // ─── File Upload ───
-  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith("video/")) {
-      setError("Please upload a valid video file (MP4, WebM, MOV).");
-      return;
-    }
-    // Revoke old blob
-    if (videoUrl.startsWith("blob:")) URL.revokeObjectURL(videoUrl);
-    // Save to IndexedDB for persistence
-    await saveVideoToDB(file);
-    const url = URL.createObjectURL(file);
-    setVideoUrl(url);
-    setError(null);
-    setIsPlaying(true);
-  };
-
-  // ─── URL Submit ───
-  const handleUrlSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputUrl.trim()) return;
-    if (videoUrl.startsWith("blob:")) URL.revokeObjectURL(videoUrl);
-    // For external URLs, save the URL string in IndexedDB as a text blob
-    const urlBlob = new Blob([inputUrl.trim()], { type: "text/plain" });
-    await saveVideoToDB(urlBlob);
-    setVideoUrl(inputUrl.trim());
-    setError(null);
-    setIsPlaying(true);
-  };
+  }, [propVideoUrl]);
 
   // ─── Playback Controls ───
   const togglePlay = useCallback(() => {
@@ -254,20 +146,6 @@ export default function VideoClient({ videoFile: propVideoFile, videoUrl: propVi
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [videoUrl, togglePlay, skip, toggleMute, toggleFullscreen, resetControlsTimer]);
-
-  const resetVideo = async () => {
-    if (videoUrl.startsWith("blob:")) URL.revokeObjectURL(videoUrl);
-    await clearVideoFromDB();
-    setVideoUrl("");
-    setInputUrl("");
-    setIsPlaying(false);
-    setError(null);
-    setProgress(0);
-    setCurrentTime(0);
-    setDuration(0);
-    setPlaybackRate(1);
-    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
-  };
 
   const formatTime = (s: number) => {
     if (!s || !isFinite(s)) return "0:00";

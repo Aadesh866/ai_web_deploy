@@ -107,21 +107,62 @@ export default function VideoAdminModal({ show, onClose, onVideoChange }: VideoA
   }, []);
 
   // Handle video change
-  const handleVideoChange = useCallback(() => {
+  const handleVideoChange = useCallback(async () => {
     if (!uploadFile && !videoUrl.trim()) {
       setVideoError("Please select a file or enter a URL");
       return;
     }
     
-    onVideoChange(uploadFile, videoUrl.trim());
-    setVideoSuccess(true);
-    setTimeout(() => {
-      setVideoSuccess(false);
-      setUploadFile(null);
-      setVideoUrl("");
-      handleClose();
-    }, 1500);
-  }, [uploadFile, videoUrl, onVideoChange, handleClose]);
+    setVideoSuccess(false);
+    let finalUrl = videoUrl.trim();
+
+    try {
+      // If file is selected, upload to Supabase Storage
+      if (uploadFile) {
+        const fileExt = uploadFile.name.split('.').pop()?.toLowerCase() || '';
+        const fileName = `video_${Date.now()}.${fileExt}`;
+        
+        // Upload to Supabase Storage (you'll need to create a 'videos' bucket)
+        const uploadRes = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/videos/${fileName}`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+            "apikey": process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            "Content-Type": uploadFile.type || "video/mp4",
+          },
+          body: uploadFile
+        });
+
+        if (!uploadRes.ok) {
+          throw new Error("File upload failed");
+        }
+
+        finalUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/videos/${fileName}`;
+      }
+
+      // Save URL to database
+      const res = await fetch("/api/video-config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: adminPassword, url: finalUrl }),
+      });
+
+      if (res.ok) {
+        onVideoChange(null, finalUrl);
+        setVideoSuccess(true);
+        setTimeout(() => {
+          setVideoSuccess(false);
+          setUploadFile(null);
+          setVideoUrl("");
+          handleClose();
+        }, 1500);
+      } else {
+        setVideoError("Failed to save video");
+      }
+    } catch (error) {
+      setVideoError("Upload failed. Please try again.");
+    }
+  }, [uploadFile, videoUrl, adminPassword, onVideoChange, handleClose]);
 
   // Update credentials
   const handleUpdateCredentials = useCallback(async () => {

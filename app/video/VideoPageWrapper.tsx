@@ -11,7 +11,6 @@ export default function VideoPageWrapper() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
   const [showAdminModal, setShowAdminModal] = useState(false);
-  const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState("");
 
   useEffect(() => {
@@ -20,10 +19,19 @@ export default function VideoPageWrapper() {
       .then((res) => {
         if (res.ok) {
           setIsAuthenticated(true);
+          // Load video URL from server
+          return fetch("/api/video-config");
+        }
+        throw new Error("Not authenticated");
+      })
+      .then((res) => res?.json())
+      .then((data) => {
+        if (data?.url) {
+          setVideoUrl(data.url);
         }
       })
       .catch(() => {
-        // Not authenticated
+        // Not authenticated or failed to load video
       })
       .finally(() => {
         setIsChecking(false);
@@ -36,7 +44,6 @@ export default function VideoPageWrapper() {
   };
 
   const handleVideoChange = (file: File | null, url: string) => {
-    setVideoFile(file);
     setVideoUrl(url);
   };
 
@@ -121,7 +128,7 @@ export default function VideoPageWrapper() {
         </motion.button>
       </div>
 
-      <VideoClient videoFile={videoFile} videoUrl={videoUrl} />
+      <VideoClient videoUrl={videoUrl} />
       <VideoAdminModal 
         show={showAdminModal} 
         onClose={() => setShowAdminModal(false)}
