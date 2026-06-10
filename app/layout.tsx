@@ -29,6 +29,14 @@ export const metadata: Metadata = {
     "The performance intelligence platform built for how work actually happens today. Continuous feedback, AI-powered insights, and data-driven talent decisions.",
   keywords:
     "performance management, AI, continuous feedback, HR tech, talent management, employee performance",
+  icons: {
+    icon: [
+      { url: '/favicon.ico?v=4', sizes: 'any' },
+      { url: '/icon.png?v=4', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico?v=4',
+    apple: '/icon.png?v=4',
+  },
   openGraph: {
     title: "Purplehub | AI-Powered Performance Management Platform",
     description:
@@ -46,8 +54,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        {/* Favicon — loaded inline so it's available from the very first byte */}
-        <link rel="icon" href="/favicon.png" type="image/png" />
         {/* Google Analytics 4 */}
         <script
           async
