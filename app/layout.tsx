@@ -46,6 +46,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        {/* Favicon — loaded inline so it's available from the very first byte */}
+        <link rel="icon" href="/favicon.png" type="image/png" />
         {/* Google Analytics 4 */}
         <script
           async
