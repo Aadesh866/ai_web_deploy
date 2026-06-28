@@ -410,6 +410,10 @@ export default function ContactPageClient() {
                                             <MapPin className="w-4 h-4 text-primary-brand mt-0.5" />
                                             Bengaluru, India
                                         </div>
+                                        <div className="flex items-start gap-3 text-sm text-text-secondary">
+                                            <MapPin className="w-4 h-4 text-primary-brand mt-0.5" />
+                                            30 N Gould St, STE R, Sheridan, WY 82801, USA
+                                        </div>
                                     </div>
                                     <div className="flex gap-3 mt-5">
                                         {[Twitter, Linkedin].map((Icon, i) => (

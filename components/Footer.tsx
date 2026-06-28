@@ -127,6 +127,10 @@ export default function Footer() {
                                 <MapPin className="w-4 h-4 text-primary-brand flex-shrink-0 mt-0.5" />
                                 Bangalore, India
                             </li>
+                            <li className="flex items-start gap-3 text-gray-400 text-sm">
+                                <MapPin className="w-4 h-4 text-primary-brand flex-shrink-0 mt-0.5" />
+                                30 N Gould St, STE R, Sheridan, WY 82801, USA
+                            </li>
                         </ul>
                     </div>
                 </div>

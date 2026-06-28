@@ -331,6 +331,9 @@ export default function TermsOfServicePage() {
                                 <p>
                                     <strong className="text-white">Address:</strong> Purplehub Technologies Private Limited, Bangalore, India
                                 </p>
+                                <p>
+                                    <strong className="text-white">Registered Address:</strong> 30 N Gould St, STE R, Sheridan, WY 82801, USA
+                                </p>
                             </div>
                         </div>
                     </div>
