@@ -407,11 +407,11 @@ export default function ContactPageClient() {
                                             +91 8904096161
                                         </div>
                                         <div className="flex items-start gap-3 text-sm text-text-secondary">
-                                            <MapPin className="w-4 h-4 text-primary-brand mt-0.5" />
+                                            <MapPin className="w-4 h-4 text-primary-brand flex-shrink-0 mt-0.5" />
                                             Bengaluru, India
                                         </div>
                                         <div className="flex items-start gap-3 text-sm text-text-secondary">
-                                            <MapPin className="w-4 h-4 text-primary-brand mt-0.5" />
+                                            <MapPin className="w-4 h-4 text-primary-brand flex-shrink-0 mt-0.5" />
                                             30 N Gould St, STE R, Sheridan, WY 82801, USA
                                         </div>
                                     </div>
