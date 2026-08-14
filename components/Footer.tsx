@@ -143,7 +143,7 @@ export default function Footer() {
                         © {new Date().getFullYear()} Purplehub. All rights reserved.
                     </p>
                     <p className="text-gray-500 text-sm flex items-center gap-1.5">
-                        Made by <Zap className="w-3.5 h-3.5 text-primary-brand" /> <a href="https://rizeeweb.com" target="_blank" rel="noopener noreferrer" className="text-primary-brand font-semibold hover:underline">Rizeeweb</a>
+                        Made by <Zap className="w-3.5 h-3.5 text-primary-brand" /> <a href="https://rizeeweb.in" target="_blank" rel="noopener noreferrer" className="text-primary-brand font-semibold hover:underline">Rizeeweb</a>
                     </p>
                 </div>
             </div>
